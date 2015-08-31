@@ -26,4 +26,19 @@ router bgp 6643
  template peer-session PEER-SESSION-PUBLIC-PEER
   version 4
  exit-peer-session
-
+ !
+ template peer-session PEER-SESSION-AS3549
+  inherit peer-session PEER-SESSION-TRANSIT
+  remote-as 3549
+ !
+ no bgp default ipv4-unicast
+ !
+ ! need to remove the old peer
+ no neighbor 189.125.5.93
+ !
+ neighbor 189.125.5.93 inherit peer-session PEER-SESSION-AS3549
+ !
+ address-family ipv4
+  neighbor 189.125.5.93 activate
+  neighbor 189.125.5.93 inherit peer-policy PEER-POLICY-TRANSIT-IPv4
+!
