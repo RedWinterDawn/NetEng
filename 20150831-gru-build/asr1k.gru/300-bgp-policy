@@ -1,7 +1,7 @@
 router bgp 6643
  template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
-  prefix-list bogons-in BGP-BOGONS-IPv4-IN in
-  prefix-list BGP_TO_TRANSIT BGP-EBGP-PEER-OUT out
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-EBGP-PEER-OUT out
   next-hop-self
   allowas-in 10
   ! disabled due to memory limitations

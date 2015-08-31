@@ -1,4 +1,4 @@
-interface Tunnnel1000
+interface Tunnel1000
  description :t=JT:j=opscontrol-vpn:v=OPSCONTROL:d=DMVPN for opscontrol:
  vrf forwarding OPSCONTROL
  shutdown
@@ -8,7 +8,8 @@ interface Tunnnel1000
  ip ospf network point-to-multipoint
  ip ospf dead-interval 5
  ip ospf hello-interval 1
- ip ospf 1 cost 5000
+ ip ospf 1 area 0
+ ip ospf cost 5000
  tunnel source Loopback1
  tunnel mode gre multipoint
  tunnel key 1

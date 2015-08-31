@@ -15,9 +15,9 @@ ip prefix-list BGP-BOGONS-IPv4-IN seq 1000 permit 0.0.0.0/0 le 32
 !
 !
 ip prefix-list REDIST-STATIC-TO-BGP-IPv4 description :d=Static routes to be injected into BGP:
-ip prefix-list REDIST-STATIC-TO-BGP-IPv4 permit 5 199.36.249.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 5 permit 199.36.249.0/24
 !
-ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 remark :d=Connected routes to be injected into BGP:
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 description :d=Connected routes to be injected into BGP:
 
 
 
