@@ -1,0 +1,42 @@
+interface Tunnnel1000
+ description :t=JT:j=v4compat-vpn:v=INTERNAL:d=DMVPN for v4compat:
+ vrf forwarding INTERNAL
+ shutdown
+ ip address 10.255.5.27 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip ospf network point-to-multipoint
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf 4 cost 5000
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel key 4 
+ ! NHRP config
+ ! pvu
+ ip nhrp map multicast 199.87.123.3
+ ip nhrp map 10.255.5.17 199.87.123.3
+ ! dfw
+ ip nhrp map multicast 199.36.251.3
+ ip nhrp map 10.255.5.18 199.36.251.3
+ ! lax
+ ip nhrp map multicast 162.250.60.3
+ ip nhrp map 10.255.5.19 162.250.60.3
+ ! nyc
+ ip nhrp map multicast 162.250.61.3
+ ip nhrp map 10.255.5.20 162.250.61.3
+ ! chi
+ ip nhrp map multicast 199.36.250.3
+ ip nhrp map 10.255.5.21 199.36.250.3
+ ! atl
+ ip nhrp map multicast 162.250.62.3
+ ip nhrp map 10.255.5.22 162.250.62.3
+ ! geg
+ ip nhrp map multicast 162.250.63.3
+ ip nhrp map 10.255.5.23 162.250.63.3
+ ! lon
+ ip nhrp map multicast 199.87.122.3
+ ip nhrp map 10.255.5.24 199.87.122.3
+ ! ord
+ ip nhrp map multicast 199.87.121.3
+ ip nhrp map 10.255.5.25 199.87.121.3

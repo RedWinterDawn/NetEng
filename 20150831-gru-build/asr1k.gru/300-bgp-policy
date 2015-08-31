@@ -1,0 +1,29 @@
+router bgp 6643
+ template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
+  prefix-list bogons-in BGP-BOGONS-IPv4-IN in
+  prefix-list BGP_TO_TRANSIT BGP-EBGP-PEER-OUT out
+  next-hop-self
+  allowas-in 10
+  ! disabled due to memory limitations
+  ! soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-TRANSIT-IPv4
+  route-map BGP-TRANSIT-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-BOGONS-IPv4-IN in
+  allowas-in 10
+  next-hop-self
+  ! again disabled
+  ! soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-session PEER-SESSION-TRANSIT
+  version 4
+ exit-peer-session
+ !
+ !
+ template peer-session PEER-SESSION-PUBLIC-PEER
+  version 4
+ exit-peer-session
+

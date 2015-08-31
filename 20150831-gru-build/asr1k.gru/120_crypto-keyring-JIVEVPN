@@ -1,0 +1,21 @@
+crypto keyring keyring-JIVEVPN
+  local-address Loopback1
+  ! pvu
+  pre-shared-key address 199.87.123.3 key toadd
+  ! dfw
+  pre-shared-key address 199.36.251.3 key toadd
+  ! lax
+  pre-shared-key address 162.250.60.3 key toadd
+  ! nyc
+  pre-shared-key address 162.250.61.3 key toadd
+  ! chi
+  pre-shared-key address 199.36.250.3 key toadd
+  ! ord
+  pre-shared-key address 199.87.121.3 key toadd
+  ! atl
+  pre-shared-key address 162.250.62.3 key toadd
+  ! geg
+  pre-shared-key address 162.250.63.3 key toadd
+  ! lon
+  pre-shared-key address 199.87.122.3 key toadd
+!

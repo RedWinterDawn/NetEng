@@ -1,0 +1,2 @@
+crypto ipsec transform-set ipsec-trans-JIVEVPN esp-aes esp-sha-hmac
+ mode tunnel
