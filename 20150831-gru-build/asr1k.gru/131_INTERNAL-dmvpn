@@ -48,3 +48,9 @@ interface Tunnel4000
  ! ord
  ip nhrp map multicast 199.87.121.3
  ip nhrp map 10.255.5.25 199.87.121.3
+ ! canyon park - ops 
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 10.255.5.30 199.192.165.194
+ ! hq
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 10.255.5.31 199.87.120.14 

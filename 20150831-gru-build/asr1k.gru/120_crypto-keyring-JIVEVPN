@@ -9,7 +9,7 @@ crypto keyring keyring-JIVEVPN
   ! nyc
   pre-shared-key address 162.250.61.3 key 7triavAkpee
   ! chi
-  pre-shared-key address 199.36.250.3 key 7triavAkpee
+  pre-shared-key address 199.36.250.242 key 7triavAkpee
   ! ord
   pre-shared-key address 199.87.121.3 key 7triavAkpee
   ! atl
@@ -18,4 +18,8 @@ crypto keyring keyring-JIVEVPN
   pre-shared-key address 162.250.63.3 key 7triavAkpee
   ! lon
   pre-shared-key address 199.87.122.3 key 7triavAkpee
+  ! ops - canyon park
+  pre-shared-key address 199.192.165.194 key 7triavAkpee
+  ! corp 
+  pre-shared-key address 199.87.120.14 key 7triavAkpee
 !

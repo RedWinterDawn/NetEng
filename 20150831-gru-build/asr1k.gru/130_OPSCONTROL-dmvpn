@@ -34,8 +34,8 @@ interface Tunnel1000
  ip nhrp map multicast 162.250.61.3
  ip nhrp map 172.16.255.20 162.250.61.3
  ! chi
- ip nhrp map multicast 199.36.250.3
- ip nhrp map 172.16.255.21 199.36.250.3
+ ip nhrp map multicast 199.36.250.242
+ ip nhrp map 172.16.255.21 199.36.250.242
  ! atl
  ip nhrp map multicast 162.250.62.3
  ip nhrp map 172.16.255.22 162.250.62.3
@@ -48,3 +48,9 @@ interface Tunnel1000
  ! ord
  ip nhrp map multicast 199.87.121.3
  ip nhrp map 172.16.255.25 199.87.121.3
+ ! corp - canyon park
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 172.16.255.30 199.192.165.194
+ ! hq office
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 172.16.255.31 199.87.120.14
