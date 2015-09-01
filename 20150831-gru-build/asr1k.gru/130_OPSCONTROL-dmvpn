@@ -13,7 +13,8 @@ interface Tunnel1000
  tunnel source Loopback1
  tunnel mode gre multipoint
  tunnel key 1
- tunnel protection ipsec profile ipsec-JIVEVPN
+ tunnel protection ipsec profile ipsec-JIVEVPN shared
+ ip nhrp network-id 1
  ! NHRP config
  ! pvu
  ip nhrp map multicast 199.87.123.3
