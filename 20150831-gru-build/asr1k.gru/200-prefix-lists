@@ -13,11 +13,18 @@ ip prefix-list BGP-BOGONS-IPv4-IN seq 106 deny 192.168.0.0/16 le 32
 ip prefix-list BGP-BOGONS-IPv4-IN seq 107 deny 224.0.0.0/3 le 32
 ip prefix-list BGP-BOGONS-IPv4-IN seq 1000 permit 0.0.0.0/0 le 32
 !
+ip prefix-list BGP-DEFAULT-ONLY-IPv4-IN description :d=permit only 0.0.0.0/0:
+ip prefix-list BGP-DEFAULT-ONLY-IPv4-IN seq 5 permit 0.0.0.0/0
+
+!
 !
 ip prefix-list REDIST-STATIC-TO-BGP-IPv4 description :d=Static routes to be injected into BGP:
 ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 5 permit 199.36.249.0/24
 !
 ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 description :d=Connected routes to be injected into BGP:
+!
+ip prefix-list BGP-PUBLIC-PEER-IPv4-OUT description :d=Prefixes to announce to public peers:
+ip prefix-list BGP-PUBLIC-PEER-IPv4-OUT seq 5 permit 199.36.249.0/24
 
 
 

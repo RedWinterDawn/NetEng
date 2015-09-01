@@ -1,7 +1,7 @@
 router bgp 6643
  template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
   prefix-list BGP-BOGONS-IPv4-IN in
-  prefix-list BGP-EBGP-PEER-OUT out
+  prefix-list BGP-PUBLIC-PEER-IPv4-OUT out
   next-hop-self
   allowas-in 10
   ! disabled due to memory limitations
@@ -12,10 +12,20 @@ router bgp 6643
   route-map BGP-TRANSIT-IPv4-IN in
   route-map BGP-TRANSIT-IPv4-OUT out
   prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
   allowas-in 10
   next-hop-self
   ! again disabled
   ! soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
+  route-map BGP-TRANSIT-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-DEFAULT-ONLY-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
+  allowas-in 10
+  next-hop-self
  exit-peer-policy
  !
  template peer-session PEER-SESSION-TRANSIT
@@ -37,8 +47,10 @@ router bgp 6643
  no neighbor 189.125.5.93
  !
  neighbor 189.125.5.93 inherit peer-session PEER-SESSION-AS3549
+ neighbor 189.125.5.93 shut
  !
  address-family ipv4
   neighbor 189.125.5.93 activate
-  neighbor 189.125.5.93 inherit peer-policy PEER-POLICY-TRANSIT-IPv4
+  neighbor 189.125.5.93 inherit peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
+  redistribute static route-map REDIST-STATIC-TO-BGP-IPv4
 !
