@@ -1,0 +1,21 @@
+! create entry in keyring
+crypto keyring keyring-JIVEVPN
+ pre-shared-key address 199.36.249.3 key 7triavAkpee
+!
+crypto isakmp profile isakmp-JIVEVPN
+  match identity address 199.36.249.3 255.255.255.255
+!
+interface Tunnel1000
+ ip nhrp map multicast 199.36.249.3
+ ip nhrp map 172.16.255.27 199.36.249.3
+!
+interface Tunnel4000
+ ip nhrp map multicast 199.36.249.3
+ ip nhrp map 10.255.5.27 199.36.249.3
+!
+router ospf 4 vrf internal
+ neighbor 10.255.5.27 cost 5000
+!
+router ospf 1 vrf internal
+ neighbor 172.16.255.27 cost 5000
+!
