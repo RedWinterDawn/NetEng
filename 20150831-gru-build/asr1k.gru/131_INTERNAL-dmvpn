@@ -10,6 +10,11 @@ interface Tunnel4000
  ip ospf hello-interval 1
  ip ospf 4 area 0 
  ip ospf cost 5000
+ !
+ ! CAUTION: mtu-ignore is only required because of inconsistent config
+ ! through the network. IP MTU on a DMVPN tunnel should be set to 1400b
+ !
+ ip ospf mtu-ignore
  tunnel source Loopback1
  tunnel mode gre multipoint
  tunnel key 4 
