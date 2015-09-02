@@ -51,6 +51,8 @@ router bgp 6643
  neighbor 189.125.5.93 shut
  !
  address-family ipv4
+  ! allow ECMP across two peers
+  maximum-paths 2
   neighbor 189.125.5.93 activate
   neighbor 189.125.5.93 inherit peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
   redistribute static route-map REDIST-STATIC-TO-BGP-IPv4
