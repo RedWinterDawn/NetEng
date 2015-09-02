@@ -1,0 +1,14 @@
+router bgp 6643
+ template peer-session PEER-SESSION-AS16735
+  inherit peer-session PEER-SESSION-TRANSIT
+  remote-as 16735
+ !
+ !
+ neighbor 189.112.165.138 inherit peer-session PEER-SESSION-AS16735
+ neighbor 189.112.165.138 description :f=t:p=AG:a=16735:d=Algar Transit:
+ neighbor 189.112.165.138 shutdown
+ !
+ address-family ipv4
+  neighbor 189.112.165.138 activate
+  neighbor 189.112.165.138 inherit peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
+!

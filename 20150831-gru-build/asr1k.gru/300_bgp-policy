@@ -47,6 +47,7 @@ router bgp 6643
  no neighbor 189.125.5.93
  !
  neighbor 189.125.5.93 inherit peer-session PEER-SESSION-AS3549
+ neighbor 189.125.5.93 description :f=t:p=L3:a=3549:d=Level3 Transit:
  neighbor 189.125.5.93 shut
  !
  address-family ipv4
