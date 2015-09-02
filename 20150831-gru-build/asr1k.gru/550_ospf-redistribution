@@ -1,10 +1,15 @@
-ip prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 description :d=Connected routes to be injected into OSPF:
+ip prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 description :v=OPSCONTROL:d=Connected routes to be injected into OSPF:
 ip prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 seq 5 permit 172.27.5.0/24
 ip prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 seq 10 permit 172.27.8.0/24
 ip prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 seq 25 permit 172.27.9.0/24
 !
 route-map OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 permit 10
+ description :v=OPSCONTROL:d=IPv4 prefixes to be redistributed in OSPF:
  match ip address prefix-list OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4
+exit
+!
+route-map OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 deny 1000
+ description :v=OPSCONTROL:d=explicit deny:
 exit
 !
 router ospf 1 vrf OPSCONTROL
