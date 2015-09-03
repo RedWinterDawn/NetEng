@@ -1,0 +1,5 @@
+interface GigabitEthernet0/0/0
+ description :f=t:t=EP:p=L3:d=Transit link to Level3:
+ no ip redirects
+ no ip unreachables
+ no mop enabled 
