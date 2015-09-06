@@ -1,4 +1,4 @@
-version 15.4
+version 15.5
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no platform punt-keepalive disable-kernel-core
@@ -6,6 +6,8 @@ no platform punt-keepalive disable-kernel-core
 hostname asr1k
 !
 boot-start-marker
+boot system flash asr1001x-universalk9.03.15.01.S.155-2.S1-std.SPA.bin
+boot system flash bootflash:asr1001x-universalk9.03.15.01.S.155-2.S1-std.SPA.bin
 boot-end-marker
 !
 !
@@ -60,6 +62,7 @@ archive
   hidekeys
  path bootflash:/jive-cfg-archive
 !
+username admin privilege 15 secret 5 $1$eaeW$YlOBx/PfkZqytBj6tbLxQ1
 !
 redundancy
  mode none
@@ -86,6 +89,7 @@ ip ssh pubkey-chain
    key-hash ssh-rsa CB1A2A9558428A0532D9CC508B52D299 mpl@jive.com
   username rjs
    key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+!
 !
 !
 !
@@ -133,8 +137,7 @@ interface GigabitEthernet0/0/5
 !
 interface GigabitEthernet0
  vrf forwarding Mgmt-intf
- no ip address
- shutdown
+ ip address 172.26.0.1 255.255.255.0
  negotiation auto
 !
 ip forward-protocol nd
@@ -151,6 +154,7 @@ ip access-list standard login-SSH
  permit 199.87.120.0 0.0.3.255
  permit 10.0.0.0 0.255.255.255
  permit 199.192.165.192 0.0.0.7
+ permit 172.16.0.0 0.15.255.255
 !
 !
 !
@@ -159,17 +163,44 @@ control-plane
 !
 !
 line con 0
+ exec-timeout 0 0
+ privilege level 15
+ transport preferred none
+ transport output none
  stopbits 1
 line aux 0
+ exec-timeout 0 1
+ no exec
+ transport input telnet
+ transport output none
  stopbits 1
 line vty 0 4
  access-class login-SSH in vrf-also
- login
+ privilege level 15
+ login local
+ transport preferred none
+ transport input telnet ssh
+ transport output telnet ssh
 line vty 5 15
  access-class login-SSH in vrf-also
- login
+ privilege level 15
+ login local
+ transport preferred none
+ transport input ssh
+ transport output ssh
 !
+ntp source GigabitEthernet0/0/0
+ntp server 3.us.pool.ntp.org
+ntp server 0.us.pool.ntp.org
+ntp server ntp1.level3.net
+ntp server 1.us.pool.ntp.org
+ntp server 2.us.pool.ntp.org
+ntp server clock.nyc.he.net
+ntp server ntp2.level3.net
+event manager applet CLIaccounting
+ event cli pattern ".*" sync no skip no
+ action 1.0 syslog priority informational msg "$_cli_msg"
+ action 2.0 set _exit_status "1"
 !
 end
-
 
