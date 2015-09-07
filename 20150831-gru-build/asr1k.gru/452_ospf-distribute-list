@@ -1,0 +1,17 @@
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN description :v=OPSCONTROL:d=Prefix list indicating v4compat prefixes to accept via OSPF:
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 5 permit 10.101.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 10 permit 10.131.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 15 permit 10.117.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 20 permit 10.118.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 25 permit 10.119.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 30 permit 10.120.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 35 permit 10.121.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 40 permit 10.122.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 45 permit 10.123.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 50 permit 10.124.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 55 permit 10.132.0.0/24
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 60 permit 10.103.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 65 permit 10.104.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 70 permit 10.125.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 75 permit 10.130.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 80 permit 10.127.0.0/16
