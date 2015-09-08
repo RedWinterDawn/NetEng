@@ -1,0 +1,16 @@
+!
+ip prefix-list OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4 description :v=OPSCONTROL:d=Static routes to be injected into OSPF:
+ip prefix-list OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4 seq 10 permit 172.27.0.0/24
+!
+!
+route-map OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4 permit 10
+ description :v=OPSCONTROL:d=IPv4 prefixes to be redistributed in OSPF:
+ match ip address prefix-list OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4
+!
+route-map OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4 deny 1000
+ description :v=OPSCONTROL:d=explicit deny:
+!
+i
+router ospf 1 vrf OPSCONTROL
+redistribute static subnets route-map OPSCONTROL-REDIST-STATIC-TO-OSPF-IPv4
+!

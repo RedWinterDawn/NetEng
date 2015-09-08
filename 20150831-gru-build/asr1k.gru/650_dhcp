@@ -1,6 +1,0 @@
-ip dhcp pool 0
-vrf Mgmt-intf
-network 172.27.0.0 255.255.255.0
-default-router 172.27.0.1
-ip dhcp excluded-address vrf Mgmt-intf 172.27.0.1 172.27.0.3
-ip dhcp excluded-address vrf Mgmt-intf 172.27.0.5 172.27.0.254
