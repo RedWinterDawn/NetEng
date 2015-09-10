@@ -6,7 +6,7 @@ subnet 172.27.0.0 netmask 255.255.255.0 {
   option routers 172.27.0.1;
   option domain-name "ipmi-2.gru-1a.dc.ftw.jiveip.net";
 
-  next-server 172.16.0.136;
+  next-server 172.27.0.136;
   option domain-name-servers 8.8.8.8;
 
   on commit {
