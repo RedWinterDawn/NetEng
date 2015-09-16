@@ -78,7 +78,7 @@ interface Tunnel13
  ip virtual-reassembly
 !
 interface Tunnel14
- description N. Virginia 2
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 2:
  vrf forwarding INTERNAL
  ip address 169.254.255.190 255.255.255.252
  ip tcp adjust-mss 1387
