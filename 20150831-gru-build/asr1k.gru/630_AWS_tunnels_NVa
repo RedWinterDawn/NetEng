@@ -4,7 +4,7 @@
 !!!!!!!!!!!!!!!!!!!!!
 
 !
-crypto keyring Amazon_AWS
+crypto keyring AMAZON_AWS
   local-address 199.36.249.3
   pre-shared-key address 54.240.202.251 key iTs5LPl0X.Zvshg9R5iSr.rS6dbLhZIe
   pre-shared-key address 54.240.202.249 key 3wrmX8A3sePd5f4NgwfwxDZzMgXg6p3o
@@ -18,7 +18,7 @@ crypto isakmp policy 200
  hash sha
 exit
 !
-crypto isakmp policy 201
+crypto isakmp policy 210
   encryption aes 128
   authentication pre-share
   group 2
