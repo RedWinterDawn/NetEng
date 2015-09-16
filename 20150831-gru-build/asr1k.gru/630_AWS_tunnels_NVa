@@ -67,7 +67,7 @@ crypto ipsec fragmentation before-encryption
 
 !
 interface Tunnel13
- description N. Virginia
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 1:
  vrf forwarding INTERNAL
  ip address 169.254.255.186 255.255.255.252
  ip tcp adjust-mss 1387
