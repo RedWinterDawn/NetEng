@@ -1,1 +1,91 @@
+!!!!!!!!!!!!!!!!!!!!!
+! IKE Configuration !
+!!!!!!!!!!!!!!!!!!!!!
 
+!
+crypto keyring keyring-AMAZON-AWS
+  local-address 199.36.249.3
+  pre-shared-key address 54.240.202.251 key iTs5LPl0X.Zvshg9R5iSr.rS6dbLhZIe
+  pre-shared-key address 54.240.202.249 key 3wrmX8A3sePd5f4NgwfwxDZzMgXg6p3o
+!
+!
+crypto isakmp policy 200
+ encr aes
+ authentication pre-share
+ group 2
+ lifetime 28800
+ hash sha
+exit
+!
+crypto isakmp policy 210
+  encryption aes 128
+  authentication pre-share
+  group 2
+  lifetime 28800
+  hash sha
+exit
+!
+crypto isakmp profile isakmp-AMAZON-AWS
+   keyring-AMAZON-AWS
+   match identity address 54.240.202.251 255.255.255.255
+   match identity address 54.240.202.249 255.255.255.255
+   local-address 199.36.249.3
+!
+
+!!!!!!!!!!!!!!!!!!!!!!!
+! IPSec Configuration !
+!!!!!!!!!!!!!!!!!!!!!!!
+
+!
+crypto ipsec-trans-AMAZON-AWS esp-aes 128 esp-sha-hmac
+ mode tunnel
+!
+!
+crypto ipsec profile ipsec-AMAZON-AWS
+ set transform-set ipsec-trans-AMAZON-AWS
+ set pfs group2
+ set security-association lifetime seconds 3600
+!
+
+
+!
+crypto ipsec df-bit clear
+!
+crypto isakmp keepalive 10 10 on-demand
+!
+crypto ipsec security-association replay window-size 128
+!
+crypto ipsec fragmentation before-encryption
+!
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Tunnel int configurations !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!
+interface Tunnel13
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 1:
+ vrf forwarding INTERNAL
+ ip mtu 1400
+ ip address 169.254.255.186 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 199.36.249.3
+ tunnel mode ipsec ipv4
+ tunnel destination 54.240.202.251
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual-reassembly
+!
+interface Tunnel14
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 2:
+ vrf forwarding INTERNAL
+ ip mtu 1400
+ ip address 169.254.255.190 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 199.36.249.3
+ tunnel mode ipsec ipv4
+ tunnel destination 54.240.202.249
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual-reassembly
+!
