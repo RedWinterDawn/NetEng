@@ -89,3 +89,8 @@ interface Tunnel12
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
+
+
+!!!!!!!!!!!!!!!!!!!!!
+! BGP Configuration !
+!!!!!!!!!!!!!!!!!!!!!
