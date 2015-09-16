@@ -42,7 +42,7 @@ crypto ipsec-trans-AMAZON-AWS esp-aes 128 esp-sha-hmac
  mode tunnel
 !
 !
-crypto ipsec profile Amazon_AWS
+crypto ipsec profile ipsec-AMAZON-AWS
  set transform-set Amazon_AWS
  set pfs group2
  set security-association lifetime seconds 3600
