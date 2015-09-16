@@ -66,26 +66,26 @@ crypto ipsec fragmentation before-encryption
 
 !
 interface Tunnel13
- description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 1:
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North California AWS Tunnel 1:
  vrf forwarding INTERNAL
  ip mtu 1400
- ip address 169.254.255.186 255.255.255.252
+ ip address 169.254.253.2 255.255.255.252
  ip tcp adjust-mss 1387
  tunnel source 199.36.249.3
  tunnel mode ipsec ipv4
- tunnel destination 54.240.202.251
+ tunnel destination 204.246.160.78
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
 interface Tunnel14
- description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North Virginia AWS Tunnel 2:
+ description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North California AWS Tunnel 2:
  vrf forwarding INTERNAL
  ip mtu 1400
- ip address 169.254.255.190 255.255.255.252
+ ip address 169.254.253.6 255.255.255.252
  ip tcp adjust-mss 1387
  tunnel source 199.36.249.3
  tunnel mode ipsec ipv4
- tunnel destination 54.240.202.249
+ tunnel destination 204.246.163.62
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
