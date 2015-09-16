@@ -1,5 +1,5 @@
 !
-ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT description :v=INTERNAL:d=Prefix list allowing v4compat prefixes from AWS via BGP:
+ip prefix-list BGP-INTERNAL-AWS-IPv4-IN description :v=INTERNAL:d=Prefix list allowing v4compat prefixes from AWS via BGP:
 ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 10 permit 10.103.0.0/16
 ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 11 permit 10.104.0.0/16
 !
