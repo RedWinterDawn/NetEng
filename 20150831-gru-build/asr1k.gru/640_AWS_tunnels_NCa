@@ -27,8 +27,8 @@ exit
 !
 crypto isakmp profile isakmp-AMAZON-AWS
    keyring-AMAZON-AWS
-   match identity address 54.240.202.251 255.255.255.255
-   match identity address 54.240.202.249 255.255.255.255
+   match identity address 204.246.160.78 255.255.255.255
+   match identity address 204.246.163.62 255.255.255.255
    local-address 199.36.249.3
 !
 
