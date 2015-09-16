@@ -6,7 +6,7 @@
 crypto keyring keyring-AMAZON-AWS
   local-address 199.36.249.3
   pre-shared-key address 204.246.160.78 key gTTgp1SCCWJWi3eJObzLnApTzjsZmTgE 
-  pre-shared-key address 204.246.163.62 key 3wrmX8A3sePd5f4NgwfwxDZzMgXg6p3o  << incorrect
+  pre-shared-key address 204.246.163.62 key UA8LvYIX7_Ae8geO6J7quILbTOyFmBbn
 !
 !
 crypto isakmp policy 200
