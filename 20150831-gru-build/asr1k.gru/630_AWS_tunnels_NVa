@@ -38,7 +38,7 @@ crypto isakmp profile isakmp-AMAZON-AWS
 !!!!!!!!!!!!!!!!!!!!!!!
 
 !
-crypto ipsec transform-set Amazon-AWS esp-aes 128 esp-sha-hmac
+crypto ipsec-trans-AMAZON-AWS esp-aes 128 esp-sha-hmac
  mode tunnel
 !
 !
