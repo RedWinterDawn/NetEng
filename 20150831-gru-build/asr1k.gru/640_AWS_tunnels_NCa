@@ -65,7 +65,7 @@ crypto ipsec fragmentation before-encryption
 
 
 !
-interface Tunnel13
+interface Tunnel11
  description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North California AWS Tunnel 1:
  vrf forwarding INTERNAL
  ip mtu 1400
@@ -77,7 +77,7 @@ interface Tunnel13
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
-interface Tunnel14
+interface Tunnel12
  description :t=ET:p=AZ:v=INTERNAL:j=internal-vpn:d=North California AWS Tunnel 2:
  vrf forwarding INTERNAL
  ip mtu 1400
