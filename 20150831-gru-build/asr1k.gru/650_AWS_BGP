@@ -1,0 +1,32 @@
+!
+ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT description :v=INTERNAL:d=Prefix list allowing v4compat prefixes from AWS via BGP:
+ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 10 permit 10.103.0.0/16
+ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 11 permit 10.104.0.0/16
+!
+ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT description :v=INTERNAL:d=Prefix list allowing v4compat prefix to be advertised to AWS via BGP:
+ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT seq 5 permit 10.127.0.0/16
+!
+!
+router bgp 6643
+ template peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
+  prefix-list BGP-INTERNAL-AWS-IPv4-IN in
+  prefix-list BGP-INTERNAL-AWS-IPv4-OUT out
+  next-hop-self
+ exit-peer-policy
+ !
+ address-family ipv4 vrf INTERNAL
+  network 10.127.0.0 mask 255.255.0.0
+  neighbor 169.254.255.185 remote-as 7224
+  neighbor 169.254.255.185 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
+  neighbor 169.254.255.185 activate
+  neighbor 169.254.255.189 remote-as 7224
+  neighbor 169.254.255.189 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
+  neighbor 169.254.255.189 activate
+  neighbor 169.254.253.1 remote-as 7224
+  neighbor 169.254.253.1 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
+  neighbor 169.254.253.1 activate
+  neighbor 169.254.253.5 remote-as 7224
+  neighbor 169.254.253.5 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
+  neighbor 169.254.253.5 activate
+ exit-address-family
+!
