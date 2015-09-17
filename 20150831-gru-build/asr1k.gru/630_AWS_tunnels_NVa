@@ -10,14 +10,6 @@ crypto keyring keyring-AMAZON-AWS
   pre-shared-key address 54.240.202.249 key 3wrmX8A3sePd5f4NgwfwxDZzMgXg6p3o
 !
 !
-crypto isakmp policy 200
- encr aes
- authentication pre-share
- group 2
- lifetime 28800
- hash sha
-exit
-!
 crypto isakmp policy 210
   encryption aes 128
   authentication pre-share
@@ -90,8 +82,3 @@ interface Tunnel14
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
-
-
-!!!!!!!!!!!!!!!!!!!!!
-! BGP Configuration !
-!!!!!!!!!!!!!!!!!!!!!
