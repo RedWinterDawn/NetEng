@@ -21,8 +21,8 @@ router bgp 6643
   next-hop-self
  exit-peer-policy
  !
- address-family ipv4 vrf INTERNAL
-  redistribute vrf INTERNAL static route-map INTERNAL-REDIST-STATIC-TO-BGP-IPv4
+ address-family ipv4 unicast vrf INTERNAL
+  redistribute static route-map INTERNAL-REDIST-STATIC-TO-BGP-IPv4
   neighbor 169.254.255.185 remote-as 7224
   neighbor 169.254.255.185 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
   neighbor 169.254.255.185 activate
