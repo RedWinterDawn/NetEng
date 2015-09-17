@@ -6,6 +6,13 @@ ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 11 permit 10.104.0.0/16
 ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT description :v=INTERNAL:d=Prefix list allowing v4compat prefix to be advertised to AWS via BGP:
 ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT seq 5 permit 10.127.0.0/16
 !
+ip prefix-list INTERNAL-REDIST-STATIC-TO-BGP-IPv4 description :d=Static routes to be injected into BGP:
+ip prefix-list INTERNAL-REDIST-STATIC-TO-BGP-IPv4 seq 5 permit 10.127.0.0/24
+!
+route-map INTERNAL-REDIST-STATIC-TO-BGP-IPv4 permit 10
+ match ip address prefix-list INTERNAL-REDIST-STATIC-TO-BGP-IPv4
+ match tag 100
+!
 !
 router bgp 6643
  template peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
@@ -15,7 +22,7 @@ router bgp 6643
  exit-peer-policy
  !
  address-family ipv4 vrf INTERNAL
-  network 10.127.0.0 mask 255.255.0.0
+  redistribute vrf INTERNAL static route-map INTERNAL-REDIST-STATIC-TO-BGP-IPv4
   neighbor 169.254.255.185 remote-as 7224
   neighbor 169.254.255.185 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
   neighbor 169.254.255.185 activate
@@ -29,4 +36,7 @@ router bgp 6643
   neighbor 169.254.253.5 inherit peer-policy PEER-POLICY-INTERNAL-AWS-IPv4
   neighbor 169.254.253.5 activate
  exit-address-family
+!
+!
+ip route vrf INTERNAL 10.127.0.0 255.255.0.0 Null0 250 tag 100 name INTERNAL-ORIGINATE-LOCAL
 !
