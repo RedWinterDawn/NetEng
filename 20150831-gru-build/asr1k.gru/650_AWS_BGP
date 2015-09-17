@@ -11,6 +11,7 @@ ip prefix-list INTERNAL-REDIST-CONNECTED-TO-BGP-IPv4 seq 5 permit 10.127.0.0/16
 !
 route-map INTERNAL-REDIST-CONNECTED-TO-BGP-IPv4 permit 10
  match ip address prefix-list INTERNAL-REDIST-CONNECTED-TO-BGP-IPv4
+route-map INTERNAL-REDIST-CONNECTED-TO-BGP-IPv4 deny 1000
 !
 !
 router bgp 6643
