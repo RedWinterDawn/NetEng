@@ -4,58 +4,12 @@
 
 !
 crypto keyring keyring-AMAZON-AWS
-  local-address 199.36.249.3
   pre-shared-key address 204.246.160.78 key gTTgp1SCCWJWi3eJObzLnApTzjsZmTgE 
   pre-shared-key address 204.246.163.62 key UA8LvYIX7_Ae8geO6J7quILbTOyFmBbn
 !
-!
-crypto isakmp policy 200
- encr aes
- authentication pre-share
- group 2
- lifetime 28800
- hash sha
-exit
-!
-crypto isakmp policy 210
-  encryption aes 128
-  authentication pre-share
-  group 2
-  lifetime 28800
-  hash sha
-exit
-!
 crypto isakmp profile isakmp-AMAZON-AWS
-   keyring-AMAZON-AWS
    match identity address 204.246.160.78 255.255.255.255
    match identity address 204.246.163.62 255.255.255.255
-   local-address 199.36.249.3
-!
-
-!!!!!!!!!!!!!!!!!!!!!!!
-! IPSec Configuration !
-!!!!!!!!!!!!!!!!!!!!!!!
-
-!
-crypto ipsec-trans-AMAZON-AWS esp-aes 128 esp-sha-hmac
- mode tunnel
-!
-!
-crypto ipsec profile ipsec-AMAZON-AWS
- set transform-set ipsec-trans-AMAZON-AWS
- set pfs group2
- set security-association lifetime seconds 3600
-!
-
-
-!
-crypto ipsec df-bit clear
-!
-crypto isakmp keepalive 10 10 on-demand
-!
-crypto ipsec security-association replay window-size 128
-!
-crypto ipsec fragmentation before-encryption
 !
 
 
@@ -89,8 +43,3 @@ interface Tunnel12
  tunnel protection ipsec profile ipsec-AMAZON-AWS
  ip virtual-reassembly
 !
-
-
-!!!!!!!!!!!!!!!!!!!!!
-! BGP Configuration !
-!!!!!!!!!!!!!!!!!!!!!
