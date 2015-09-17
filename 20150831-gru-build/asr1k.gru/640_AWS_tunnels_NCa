@@ -4,7 +4,7 @@
 
 !
 crypto keyring keyring-AMAZON-AWS
-  pre-shared-key address 204.246.160.78 key gTTgp1SCCWJWi3eJObzLnApTzjsZmTgE 
+  pre-shared-key address 204.246.160.78 key gTTgp1SCCWJWi3eJObzLnApTzjsZmTgE
   pre-shared-key address 204.246.163.62 key UA8LvYIX7_Ae8geO6J7quILbTOyFmBbn
 !
 crypto isakmp profile isakmp-AMAZON-AWS
