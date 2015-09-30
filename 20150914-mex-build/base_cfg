@@ -149,6 +149,10 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
+!
+ip route 0.0.0.0 0.0.0.0 200.53.96.225 name DEFAULT-GATEWAY 
+!
+!
 ip access-list standard login-SSH
  permit 172.27.0.1
  permit 172.31.1.15
