@@ -106,7 +106,11 @@ interface TenGigabitEthernet0/0/1
  shutdown
 !
 interface GigabitEthernet0/0/0
- no ip address
+description :d=???:
+ip address 200.53.96.226 255.255.255.252
+no ip redirects
+no ip unreachables
+ntp disable 
  shutdown
  negotiation auto
 !
