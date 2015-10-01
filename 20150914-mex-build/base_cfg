@@ -112,7 +112,8 @@ no ip redirects
 no ip unreachables
 ntp disable 
  shutdown
- negotiation auto
+speed 100
+no negotiation auto
 !
 interface GigabitEthernet0/0/1
  no ip address
