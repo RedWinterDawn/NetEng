@@ -1,3 +1,0 @@
-ip domain name mex-1a.dc.ftw.jiveip.net
-ip name-server 8.8.8.8
-no ip domain lookup
