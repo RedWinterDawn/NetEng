@@ -1,0 +1,16 @@
+vrf definition INTERNAL
+ description :d=v4 Internal Network (10/8):
+ rd 6643:1270
+ address-family ipv4
+ exit-address-family
+ address-family ipv6
+ exit-address-family
+!
+vrf definition OPSCONTROL
+ rd 6643:4270
+ description :d=Server Management Network (not for production):
+ address-family ipv4
+ exit-address-family
+ address-family ipv6
+ exit-address-family
+!
