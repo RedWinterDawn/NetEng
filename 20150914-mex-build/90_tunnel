@@ -1,0 +1,82 @@
+interface Tunnel1000
+ description :t=JT:j=opscontrol-vpn:v=OPSCONTROL:d=DMVPN for opscontrol:
+ vrf forwarding OPSCONTROL
+ ip address 172.16.255.26 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map multicast 199.87.123.3
+ ip nhrp map 172.16.255.17 199.87.123.3
+ ip nhrp map multicast 199.36.251.3
+ ip nhrp map 172.16.255.18 199.36.251.3
+ ip nhrp map multicast 162.250.60.3
+ ip nhrp map 172.16.255.19 162.250.60.3
+ ip nhrp map multicast 162.250.61.3
+ ip nhrp map 172.16.255.20 162.250.61.3
+ ip nhrp map multicast 162.250.62.3
+ ip nhrp map 172.16.255.22 162.250.62.3
+ ip nhrp map multicast 162.250.63.3
+ ip nhrp map 172.16.255.23 162.250.63.3
+ ip nhrp map multicast 199.87.122.3
+ ip nhrp map 172.16.255.24 199.87.122.3
+ ip nhrp map multicast 199.87.121.3
+ ip nhrp map 172.16.255.25 199.87.121.3
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 172.16.255.30 199.192.165.194
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 172.16.255.31 199.87.120.14
+ ip nhrp map multicast 199.36.250.242
+ ip nhrp map 172.16.255.21 199.36.250.242
+ ip nhrp network-id 1
+ ip ospf network point-to-multipoint
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf mtu-ignore
+ ip ospf 1 area 0
+ ip ospf cost 5000
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel protection ipsec profile ipsec-JIVEVPN shared
+ ip virtual-reassembly
+!
+interface Tunnel4000
+ description :t=JT:j=v4compat-vpn:v=INTERNAL:d=DMVPN for v4compat:
+ vrf forwarding INTERNAL
+ ip address 10.255.5.26 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map multicast 199.87.123.3
+ ip nhrp map 10.255.5.17 199.87.123.3
+ ip nhrp map multicast 199.36.251.3
+ ip nhrp map 10.255.5.18 199.36.251.3
+ ip nhrp map multicast 162.250.60.3
+ ip nhrp map 10.255.5.19 162.250.60.3
+ ip nhrp map multicast 162.250.61.3
+ ip nhrp map 10.255.5.20 162.250.61.3
+ ip nhrp map multicast 162.250.62.3
+ ip nhrp map 10.255.5.22 162.250.62.3
+ ip nhrp map multicast 162.250.63.3
+ ip nhrp map 10.255.5.23 162.250.63.3
+ ip nhrp map multicast 199.87.122.3
+ ip nhrp map 10.255.5.24 199.87.122.3
+ ip nhrp map multicast 199.87.121.3
+ ip nhrp map 10.255.5.25 199.87.121.3
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 10.255.5.30 199.192.165.194
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 10.255.5.31 199.87.120.14
+ ip nhrp map multicast 199.36.250.242
+ ip nhrp map 10.255.5.21 199.36.250.242
+ ip nhrp network-id 4
+ ip ospf network point-to-multipoint
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf mtu-ignore
+ ip ospf 4 area 0
+ ip ospf cost 5000
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel key 4
+ tunnel protection ipsec profile ipsec-JIVEVPN shared
+ ip virtual-reassembly
+!
