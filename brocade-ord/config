@@ -95,6 +95,9 @@ ip as-path access-list 5 seq 10 deny .*
 ip as-path access-list 10 seq 5 permit _701_
 ip as-path access-list 10 seq 50 deny .*
 !
+ip as-path access-list 15 seq 5 deny _26375_
+ip as-path access-list 15 seq 50 permit .*
+!
 ip community-list extended COMCAST_INTERNAL seq 5 permit ^7922:1...$
 !
 ip community-list extended COMCAST_CUSTOMERS seq 5 permit ^7922:2...$
@@ -443,6 +446,7 @@ router bgp
  neighbor 10.80.0.26 allowas-in 10
  neighbor 10.80.0.26 prefix-list iBGP_ORD_IN_2 in
  neighbor 10.80.0.26 prefix-list iBGP_ORD_OUT_2 out
+ neighbor 10.80.0.26 route-map in ORD_ASR2_Routes_IN 
  neighbor 69.31.110.149 allowas-in 10
  neighbor 69.31.110.149 prefix-list BOGONS in
  neighbor 69.31.110.149 prefix-list nLayer_OUT out
@@ -654,6 +658,8 @@ route-map nLayer_Routes_OUT permit 1
  set as-path prepend  6643 6643
 !
 route-map ORD_ASR2_Routes_IN permit 5
+ match as-path 15    
+!
 !
 !
 !
