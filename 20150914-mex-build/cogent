@@ -9,7 +9,5 @@ asr1k/mex-1a# sh int giga0/0/1 | i media
 !
 interface GigabitEthernet0/0/1
 ip address 38.78.4.226 255.255.255.248
-speed 100
 negotiation auto
-mtu 1900
 !
