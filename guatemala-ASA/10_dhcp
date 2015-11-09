@@ -1,0 +1,8 @@
+dhcpd address 10.23.0.100-10.23.0.200 inside
+dhcpd dns 8.8.8.8 8.8.4.4 interface inside
+dhcpd enable inside
+!
+dhcpd address 10.23.1.100-10.23.1.200 VOICE
+dhcpd dns 8.8.8.8 8.8.4.4 interface VOICE
+dhcpd enable VOICE
+!
