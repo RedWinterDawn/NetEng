@@ -1,12 +1,28 @@
-dhcpd address 10.23.0.100-10.23.0.200 inside
-dhcpd dns 8.8.8.8 8.8.4.4 interface inside
+!
+interface Ethernet0/1
+ description DATA_VLAN
+ nameif inside
+ security-level 100
+ ip address 10.23.0.1 255.255.255.0
+!
+interface Ethernet0/2
+ description VOICE_VLAN
+ nameif VOICE
+ security-level 100
+ ip address 10.23.1.1 255.255.255.0
+!
+
+
+
+
 dhcpd lease 43200
 dhcpd ping_timeout 750
+!
+dhcpd address 10.23.0.100-10.23.0.200 inside
+dhcpd dns 8.8.8.8 8.8.4.4 interface inside
 dhcpd enable inside
 !
 dhcpd address 10.23.1.100-10.23.1.200 VOICE
 dhcpd dns 8.8.8.8 8.8.4.4 interface VOICE
-dhcpd lease 43200
-dhcpd ping_timeout 750
 dhcpd enable VOICE
 !
