@@ -1,8 +1,10 @@
 dhcpd address 10.23.0.100-10.23.0.200 inside
 dhcpd dns 8.8.8.8 8.8.4.4 interface inside
+dhcpd lease 43200
 dhcpd enable inside
 !
 dhcpd address 10.23.1.100-10.23.1.200 VOICE
 dhcpd dns 8.8.8.8 8.8.4.4 interface VOICE
+dhcpd lease 43200
 dhcpd enable VOICE
 !
