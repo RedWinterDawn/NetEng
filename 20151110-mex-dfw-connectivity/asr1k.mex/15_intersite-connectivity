@@ -1,0 +1,17 @@
+interface GigabitEthernet 0/0/2.701
+    description :t=JI:p=CG:r=asr1k.dfw-1a:i=g0/0/2.701:d=inter-site p2p to MEX:
+    encapsulation dot1q 701
+    ip address 208.34.103.1 255.255.255.254
+    ! Interface MTU is 9000 supported by Cogent.
+    mpls mtu 9000
+    ! IP MTU set to 8988 room for 3 labels
+    ip mtu 8988
+    ip ospf network point-to-multipoint
+    ip ospf dead-interval 5
+    ip ospf hello-interval 1
+    ip ospf retransmit-interval 1
+    ip ospf 6643 area 0
+    ip ospf cost 10
+    mpls ip
+
+    

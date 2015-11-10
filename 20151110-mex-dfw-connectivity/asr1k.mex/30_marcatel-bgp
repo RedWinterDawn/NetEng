@@ -1,0 +1,8 @@
+router bgp 6643
+    address-family ipv4 unicast vrf MEX-PUBLIC
+        neighbor 200.53.96.225 inherit peer-session MEX-PUBLIC-PEER-SESSION-AS19332
+        neighbor 200.53.96.225 shutdown
+        neighbor 200.53.96.225 inherit peer-policy MEX-PUBLIC-PEER-POLICY-TRANSIT-IPv4
+    exit-address-family
+exit
+        

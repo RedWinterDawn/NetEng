@@ -1,0 +1,11 @@
+vrf definition MEX-PUBLIC
+    rd 6643:7002
+    address-family ipv4
+        route-target export 6643:7000
+        route-target import 6643:7000
+    exit-address-family
+    address-family ipv4
+        route-target export 6643:7000
+        route-target import 6643:7000
+    exit-address-family
+!

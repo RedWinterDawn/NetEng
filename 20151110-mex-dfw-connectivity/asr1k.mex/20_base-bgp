@@ -1,0 +1,29 @@
+router bgp 6643
+    no bgp enforce-first-as
+    bgp log-neighbor-changes
+    bgp graceful-restart
+    bgp graceful-restart restart-time 120
+    bgp graceful-restart stalepath-time 120
+    bgp maxas-limit 24
+    no bgp default ipv4-unicast
+    !
+    template peer-policy MEX-PUBLIC-PEER-POLICY-TRANSIT-IPv4
+        route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN in
+        route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out
+        prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-IN in
+        prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out
+        allowas-in 10
+        next-hop-self
+    exit-peer-policy
+    !
+    template peer-session PEER-SESSION-TRANSIT
+        version 4
+    exit-peer-session
+    !
+    template peer-session MEX-PUBLIC-PEER-SESSION-AS19332
+        inherit peer-session PEER-SESSION-TRANSIT
+        remote-as 19332
+    !
+!
+    
+        
