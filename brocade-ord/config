@@ -641,11 +641,9 @@ route-map iBGP_Routes_IN permit 2
 route-map iBGP_Routes_OUT permit 10
  match ip address prefix-list iBGP_OUT
 !
-route-map Level3_Routes_IN permit 6
- match ip address prefix-list PREPEND_LEVEL3_NYC_DFW
- set as-path prepend  6643 6643 6643 6643
 route-map Level3_Routes_IN permit 10
- set as-path prepend  6643 6643
+ match as-path 15
+ set as-path prepend 6643 6643 6643 6643
 !
 route-map nLayer_Routes_IN deny 1
 route-map nLayer_Routes_IN permit 2
