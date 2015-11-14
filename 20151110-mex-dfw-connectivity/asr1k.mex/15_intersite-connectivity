@@ -6,7 +6,7 @@ interface GigabitEthernet 0/0/2.701
     mpls mtu 9000
     ! IP MTU set to 8988 room for 3 labels
     ip mtu 8988
-    ip ospf network point-to-multipoint
+    ip ospf network point-to-point
     ip ospf dead-interval 5
     ip ospf hello-interval 1
     ip ospf retransmit-interval 1

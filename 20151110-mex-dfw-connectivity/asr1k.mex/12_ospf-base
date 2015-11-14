@@ -1,6 +1,6 @@
 router ospf 6643
     ! explicitly specify router-id
-    router-id 208.34.81.1
+    router-id 208.34.80.1
     ! enable incremental SPF
     ispf
     ! standard Jive timers
@@ -18,4 +18,6 @@ router ospf 6643
     ! 
     mpls traffic-eng area 0
     mpls traffic-eng router-id loopback0
+    passive-interface default
+    no passive-interface GigabitEthernet0/0/2.701
 exit
