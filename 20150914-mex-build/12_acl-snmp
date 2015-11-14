@@ -1,0 +1,6 @@
+ip access-list standard snmp-read
+ permit 10.101.24.1
+ permit 172.31.9.42
+ permit 172.31.1.10
+ permit 172.31.1.11
+ permit 172.30.8.0 0.0.0.255
