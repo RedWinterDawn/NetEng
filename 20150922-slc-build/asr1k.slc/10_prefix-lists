@@ -33,5 +33,6 @@ ip prefix-list v4compat seq 55 permit 10.132.0.0/24
 ip prefix-list v4compat seq 60 permit 10.103.0.0/16
 ip prefix-list v4compat seq 65 permit 10.104.0.0/16
 ip prefix-list v4compat seq 70 permit 10.125.0.0/16
-ip prefix-list v4compat seq 71 permit 10.128.0.0/16
-ip prefix-list v4compat seq 75 permit 10.130.0.0/16
+ip prefix-list v4compat seq 75 permit 10.127.0.0/16
+ip prefix-list v4compat seq 80 permit 10.128.0.0/16
+ip prefix-list v4compat seq 85 permit 10.130.0.0/16
