@@ -1,7 +1,0 @@
-ip dhcp pool 0
-network 10.0.0.0 255.255.255.0
-dns-server 
-interface GigabitEthernet0/0/0
- ip address dhcp
- duplex auto
- speed auto 

@@ -13,6 +13,6 @@ route-map OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4 deny 1000
 exit
 !
 router ospf 1 vrf OPSCONTROL
- redistribute connected route-map OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4
+ redistribute connected subnets route-map OPSCONTROL-REDIST-CONNECTED-TO-OSPF-IPv4
 exit
 
