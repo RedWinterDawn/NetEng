@@ -1,0 +1,42 @@
+router bgp 6643
+    template peer-session JIVE-IBGP-PEER-SESSION
+        remote-as 6643
+        update-source Loopback0
+    exit-peer-session
+    template peer-policy BGP-DENY-EVERYTHING-IPv4
+        route-map BGP-DENY-EVERYTHING-IPv4 in
+        route-map BGP-DENY-EVERYTHING-IPv4 out
+        prefix-list BGP-DENY-EVERYTHING-IPv4 in
+        prefix-list BGP-DENY-EVERYTHING-IPv4 out
+    exit-peer-policy
+    template peer-policy BGP-DENY-EVERYTHING-IPv6
+        route-map BGP-DENY-EVERYTHING-IPv6 in
+        route-map BGP-DENY-EVERYTHING-IPv6 out
+        prefix-list BGP-DENY-EVERYTHING-IPv6 in
+        prefix-list BGP-DENY-EVERYTHING-IPv6 out
+    exit-peer-policy
+    !
+    neighbor 199.36.251.1 inherit peer-session JIVE-IBGP-PEER-SESSION
+    neighbor 199.36.251.1 description :r=asr1k.dfw-1a:d=iBGP session to DFW:
+    neighbor 199.36.251.1 shutdown
+    !
+    address-family ipv4 unicast
+        neighbor 199.36.251.1 activate
+        neighbor 199.36.251.1 inherit peer-policy BGP-DENY-EVERYTHING-IPv4
+    exit-address-family
+    !
+    address-family ipv6 unicast
+        neighbor 199.36.251.1 activate
+        neighbor 199.36.251.1 inherit peer-policy BGP-DENY-EVERYTHING-IPv6
+    exit-address-family
+    !
+    address-family vpnv4 unicast
+        neighbor 199.36.251.1 activate
+        neighbor 199.36.251.1 send-community both
+    exit-address-family
+    !
+    address-family vpnv6 unicast
+        neighbor 199.36.251.1 activate
+        neighbor 199.36.251.1 send-community both
+    !
+exit

@@ -1,0 +1,11 @@
+! assign labels on a per-nexthop basis, not a per-prefix basis (cuts label allocation down)
+mpls label mode all-vrfs protocol all-afs per-ce
+
+! assign ldp rather than tdp as the label allocation proto - legacy
+mpls label protocol ldp
+
+! set mpls router-id
+mpls ldp router-id loopback0 force 
+
+! use explicit-null labels rather than php
+mpls ldp explicit-null

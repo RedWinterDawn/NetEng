@@ -1,0 +1,22 @@
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN permit 10
+ description :d=Routing policy applied to inbound transit routes:
+exit
+!
+!
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT permit 10
+ description :d=Permit only Jive prefixes to be announced to transit:
+ match ip address prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT
+exit
+!
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT deny 1000
+ description :d=Explicit deny:
+exit
+!
+
+route-map BGP-DENY-EVERYTHING-IPv4 deny 5
+    match ip address prefix-list BGP-DENY-EVERYTHING-IPv4
+exit
+
+route-map BGP-DENY-EVERYTHING-IPv6 deny 5
+    match ip address prefix-list BGP-DENY-EVERYTHING-IPv6
+exit

@@ -1,0 +1,8 @@
+ip route 0.0.0.0 0.0.0.0 209.41.87.193
+!ip route 199.36.249.0 255.255.255.0 Null0
+
+ip route 208.34.81.0 255.255.255.0 Null0
+
+!ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.30.0.1
+
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.28.0.1

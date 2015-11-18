@@ -1,0 +1,18 @@
+! inbound permit only default
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN permit 10
+ description :d=allow only default route currently:
+ match ip address prefix-list MEX-PUBLIC-BGP-DEFAULT-ONLY-IPv4-IN
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN deny 1000
+ description :d=explicit deny:
+exit
+!
+!
+router bgp 6643
+ address-family ipv4 unicast vrf MEX-PUBLIC
+  neighbor 200.56.224.248 prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out
+  neighbor 200.56.224.248 prefix-list MEX-PUBLIC-BGP-BOGONS-IPv4-IN in
+  neighbor 200.56.224.248 route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN in
+  neighbor 200.56.224.248 route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out 
+  neighbor 200.56.224.248 description :p=MT:v=MEX-PUBLIC:a=19332:e=infocor@marcatel.net:d=Marcatel IP Transit:
+ exit
+exit

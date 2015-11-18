@@ -1,0 +1,4 @@
+logging buffered 16384 informational
+logging origin-id string asr1k.mex-1a
+logging host 172.30.8.7 transport tcp port 5514 sequence-num-session
+logging source-interface lo2 vrf OPSCONTROL

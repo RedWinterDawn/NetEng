@@ -1,0 +1,11 @@
+route-map BGP-TRANSIT-IPv4-IN permit 10
+ ! set metrics equal to allow multipath
+ ! set MED to 0 for all inbound
+ set metric 0
+ ! set origin to incomplete
+ set origin incomplete
+!
+router bgp 6643
+ ! allow loadbalancing across multiple ASN
+ bgp bestpath as-path multipath-relax
+!

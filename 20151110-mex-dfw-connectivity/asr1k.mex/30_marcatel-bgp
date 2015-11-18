@@ -1,0 +1,10 @@
+! marcatel changed to ebgp multihop
+router bgp 6643
+ address-family ipv4 uni vrf MEX-PUBLIC
+  neighbor 200.56.224.248 remote-as 19332
+  neighbor 200.56.224.248 ebgp-multihop 5
+  neighbor 200.56.224.248 password m@rcat31
+  neighbor 200.56.224.248 activate
+  neighbor 200.56.224.248 route-map BGP-DENY-EVERYTHING-IPv4 in
+  neighbor 200.56.224.248 route-map BGP-DENY-EVERYTHING-IPv4 out
+!

@@ -1,0 +1,8 @@
+ip prefix-list MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4 description :d=Static routes to be injected into BGP:
+ip prefix-list MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4 seq 5 permit 208.34.80.0/24
+!
+ip prefix-list MEX-PUBLIC-REDIST-CONNECTED-TO-BGP-IPv4 description :d=Connected routes to be injected into BGP:
+!
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 deny 0.0.0.0/0 le 32
+!
+ipv6 prefix-list BGP-DENY-EVERYTHING-IPv6 deny ::/0 le 128

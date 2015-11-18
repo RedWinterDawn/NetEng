@@ -1,0 +1,16 @@
+ip route vrf MEX-PUBLIC 208.34.80.0 255.255.255.0 Null0 tag 100 name TEMP-PULL-UP-MEX
+
+route-map MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4 permit 10
+ description :d=announce public prefixes to MEX:
+ match ip address prefix-list MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4
+ match tag 100
+!
+route-map  MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4 deny 999
+ description :d=explicit deny:
+exit
+
+router bgp 6643
+ address-family ipv4 uni vrf MEX-PUBLIC
+   redistribute static route-map MEX-PUBLIC-REDIST-STATIC-TO-BGP-IPv4
+ exit
+exit

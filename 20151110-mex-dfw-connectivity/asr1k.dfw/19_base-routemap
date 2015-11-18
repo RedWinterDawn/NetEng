@@ -1,0 +1,8 @@
+route-map BGP-DENY-EVERYTHING-IPv4 deny 5
+    match ip address prefix-list BGP-DENY-EVERYTHING-IPv4
+exit
+
+route-map BGP-DENY-EVERYTHING-IPv6 deny 5
+    match ip address prefix-list BGP-DENY-EVERYTHING-IPv6
+exit
+
