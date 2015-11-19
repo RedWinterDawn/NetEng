@@ -1,0 +1,13 @@
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/slc-1a/
+ write-memory
+ time-period 60 
+
+
+
+
