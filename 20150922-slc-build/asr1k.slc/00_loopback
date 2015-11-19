@@ -1,3 +1,4 @@
+!
 interface Loopback0
  description :d=Public Loopback (Jive PI address space):
  ip address 208.34.81.1 255.255.255.255
@@ -7,3 +8,4 @@ interface Loopback1
  description :d=Public VPN Termination Loopback (Jive PI address space):
  ip address 208.34.81.3 255.255.255.255
  ntp disable
+!
