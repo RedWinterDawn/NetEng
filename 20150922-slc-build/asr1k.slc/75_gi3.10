@@ -1,0 +1,6 @@
+!
+interface GigabitEthernet0/0/3.10
+ description :d=Public Addressing for Jive infrastructure:
+ encapsulation dot1Q 10
+ ip unnumbered Loopback0
+!
