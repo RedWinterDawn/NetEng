@@ -1,0 +1,8 @@
+router bgp 6643
+ template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-PUBLIC-PEER-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+ exit-peer-policy
+ !
