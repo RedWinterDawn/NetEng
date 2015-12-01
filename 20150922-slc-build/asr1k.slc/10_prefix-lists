@@ -7,6 +7,8 @@ ip prefix-list BGP_TO_TRANSIT description Prefixes to announce to transits over 
 ip prefix-list BGP_TO_TRANSIT seq 10 permit 208.34.81.0/24
 !ip prefix-list BGP_TO_TRANSIT seq 10 permit 199.36.249.0/24
 !
+!ip prefix-list BGP-PUBLIC-PEER-IPv4-OUT description 
+!ip prefix-list BGP-PUBLIC-PEER-IPv4-OUT seq 200 permit 
 !
 ip prefix-list BGP-BOGONS-IPv4-IN description :d=Denies internet bogon routes:
 ip prefix-list BGP-BOGONS-IPv4-IN seq 100 deny 0.0.0.0/8 le 32
