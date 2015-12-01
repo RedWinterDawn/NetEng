@@ -127,8 +127,8 @@ snmp-server enable traps rf
 snmp-server enable traps transceiver all
 snmp-server enable traps mpls vpn
 snmp-server enable traps mpls rfc vpn
-snmp-server host 10.101.24.1 vrf internal informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-ctid event-manager cpu ipsla ipsec isakmp
-snmp-server host 172.31.1.83 vrf opscontrol informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-copy config config-ctid event-manager cpu ipsla ipsec isakmp
+snmp-server host 10.101.24.1 vrf INTERNAL informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-ctid event-manager cpu ipsla ipsec isakmp
+snmp-server host 172.31.1.83 vrf OPSCONTROL informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-copy config config-ctid event-manager cpu ipsla ipsec isakmp
 snmp-server inform retries 10 pending 1000
 snmp ifmib ifalias long
 snmp ifmib ifindex persist
