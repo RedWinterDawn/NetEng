@@ -1,38 +1,43 @@
-ip prefix-list BGP_FROM_AWS seq 10 permit 10.103.0.0/16
-ip prefix-list BGP_FROM_AWS seq 11 permit 10.104.0.0/16
+ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 10 permit 10.103.0.0/16
+ip prefix-list BGP-INTERNAL-AWS-IPv4-IN seq 11 permit 10.104.0.0/16
 !
-ip prefix-list BGP_TO_AWS seq 5 permit 10.128.0.0/16
+ip prefix-list BGP-INTERNAL-AWS-IPv4-OUT seq 5 permit 10.128.0.0/16
 !
 ip prefix-list BGP_TO_TRANSIT description Prefixes to announce to transits over BGP
 ip prefix-list BGP_TO_TRANSIT seq 10 permit 208.34.81.0/24
 !ip prefix-list BGP_TO_TRANSIT seq 10 permit 199.36.249.0/24
 !
 !
-ip prefix-list bogons-in description Denies internet bogon routes
-ip prefix-list bogons-in seq 100 deny 0.0.0.0/8 le 32
-ip prefix-list bogons-in seq 101 deny 10.0.0.0/8 le 32
-ip prefix-list bogons-in seq 102 deny 127.0.0.0/8 le 32
-ip prefix-list bogons-in seq 103 deny 169.254.0.0/16 le 32
-ip prefix-list bogons-in seq 104 deny 172.16.0.0/12 le 32
-ip prefix-list bogons-in seq 105 deny 192.0.2.0/24 le 32
-ip prefix-list bogons-in seq 106 deny 192.168.0.0/16 le 32
-ip prefix-list bogons-in seq 107 deny 224.0.0.0/3 le 32
-ip prefix-list bogons-in seq 1000 permit 0.0.0.0/0 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN description :d=Denies internet bogon routes:
+ip prefix-list BGP-BOGONS-IPv4-IN seq 100 deny 0.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 101 deny 10.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 102 deny 127.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 103 deny 169.254.0.0/16 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 104 deny 172.16.0.0/12 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 105 deny 192.0.2.0/24 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 106 deny 192.168.0.0/16 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 107 deny 224.0.0.0/3 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 1000 permit 0.0.0.0/0 le 32
 !
-ip prefix-list v4compat seq 5 permit 10.101.0.0/16
-ip prefix-list v4compat seq 10 permit 10.131.0.0/16
-ip prefix-list v4compat seq 15 permit 10.117.0.0/16
-ip prefix-list v4compat seq 20 permit 10.118.0.0/16
-ip prefix-list v4compat seq 25 permit 10.119.0.0/16
-ip prefix-list v4compat seq 30 permit 10.120.0.0/16
-ip prefix-list v4compat seq 35 permit 10.121.0.0/16
-ip prefix-list v4compat seq 40 permit 10.122.0.0/16
-ip prefix-list v4compat seq 45 permit 10.123.0.0/16
-ip prefix-list v4compat seq 50 permit 10.124.0.0/16
-ip prefix-list v4compat seq 55 permit 10.132.0.0/24
-ip prefix-list v4compat seq 60 permit 10.103.0.0/16
-ip prefix-list v4compat seq 65 permit 10.104.0.0/16
-ip prefix-list v4compat seq 70 permit 10.125.0.0/16
-ip prefix-list v4compat seq 75 permit 10.127.0.0/16
-ip prefix-list v4compat seq 80 permit 10.128.0.0/16
-ip prefix-list v4compat seq 85 permit 10.130.0.0/16
+!
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN description :v=OPSCONTROL:d=Prefix list indicating v4compat prefixes to accept via OSPF:
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 5 permit 10.101.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 10 permit 10.131.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 15 permit 10.117.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 20 permit 10.118.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 25 permit 10.119.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 30 permit 10.120.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 35 permit 10.121.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 40 permit 10.122.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 45 permit 10.123.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 50 permit 10.124.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 55 permit 10.132.0.0/24
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 60 permit 10.103.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 65 permit 10.104.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 70 permit 10.125.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 75 permit 10.130.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 80 permit 10.127.0.0/16
+ip prefix-list OPSCONTROL-OSPF-V4COMPAT-IPv4-IN seq 71 permit 10.128.0.0/16
+!
+
+
