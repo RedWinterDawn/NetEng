@@ -1,6 +1,7 @@
-ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.30.0.1 name MGMT-VRF-DEFAULT
-
-
+!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.28.0.1 name MGMT-VRF-DEFAULT
+!
+!
 vrf definition Mgmt-intf
  description :d=Management Network:
 
