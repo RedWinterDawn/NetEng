@@ -17,7 +17,9 @@ interface Loopback2
 !
 !
 interface Loopback3
+ description :d=shutting down due to dup address int VPLS:
  ip address 10.255.10.28 255.255.255.255
+ shutdown
 end
 
 
