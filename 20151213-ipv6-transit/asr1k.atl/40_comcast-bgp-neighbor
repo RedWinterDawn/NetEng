@@ -1,0 +1,8 @@
+router bgp 6643
+ neighbor 2001:559::8fd inherit peer-session PEER-SESSION-AS7922
+ neighbor 2001:559::8fd description :f=t:p=CC:a=7922:d=Comcast IPv6 Transit:
+ address-family ipv6 unicast
+  neighbor 2001:559::8fd activate
+  neighbor 2001:559::8fd inherit peer-policy PEER-POLICY-COMCAST-IPv6
+ exit
+exit

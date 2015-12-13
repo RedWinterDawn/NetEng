@@ -1,0 +1,12 @@
+! Taken from Gert Doring's recommendations
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 3ffe::/16 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 2001:db8::/32 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN permit 2001::/32
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 2001::/32 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN permit 2002::/16
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 2002::/16 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 0000::/8 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny fe00::/9 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny ff00::/8 le 128
+ipv6 prefix-list BGP-BOGONS-IPv6-IN permit 2000::/3 le 48
+ipv6 prefix-list BGP-BOGONS-IPv6-IN deny 0::/0 le 128

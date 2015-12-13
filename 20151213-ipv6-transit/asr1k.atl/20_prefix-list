@@ -1,0 +1,7 @@
+ipv6 prefix-list BGP-TRANSIT-IPv6-OUT description :d=Prefixes to announce to IPv6 transit providers via BGP:
+ipv6 prefix-list BGP-TRANSIT-IPv6-OUT seq 5 permit 2606:CB00:FF16::/48
+ipv6 prefix-list BGP-TRANSIT-IPv6-OUT seq 10 permit 2606:cb00:16::/48
+
+ipv6 prefix-list REDIST-STATIC-TO-BGP-IPv6 description :d=IPv6 Prefixes to redistribute from static to BGP:
+ipv6 prefix-list REDIST-STATIC-TO-BGP-IPv6 seq 5 permit 2606:CB00:FF16::/48
+ipv6 prefix-list REDIST-STATIC-TO-BGP-IPv6 seq 10 permit 2606:cb00:16::/48

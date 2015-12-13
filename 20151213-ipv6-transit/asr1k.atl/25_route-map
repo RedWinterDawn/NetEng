@@ -1,0 +1,10 @@
+route-map REDIST-STATIC-TO-BGP-IPv6 permit 10
+ description :d=Permit only specified prefixes to be redistributed from static to BGP:
+ match ipv6 address prefix-list REDIST-STATIC-TO-BGP-IPv6
+ match tag 100
+exit
+
+route-map BGP-TRANSIT-IPv6-OUT permit 10
+ description :d=Permit only Jive prefixes to be announced to transit:
+ match ipv6 address prefix-list BGP-TRANSIT-IPv6-OUT
+exit
