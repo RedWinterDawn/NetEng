@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.geg->asr1k.mex VPLS link on asr1k.geg
+router ospf 4 vrf internal
+ neighbor 10.255.10.26 cost 454
+exit
+!
+!
+!
+! configuration for asr1k.geg->asr1k.mex DMVPN link on asr1k.geg
+router ospf 4 vrf internal
+ neighbor 10.255.5.26 cost 654
+exit
+!

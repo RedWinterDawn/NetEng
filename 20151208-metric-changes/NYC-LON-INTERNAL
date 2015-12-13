@@ -1,0 +1,5 @@
+! configuration for asr1k.nyc->asr1k.lon DMVPN link on asr1k.nyc
+router ospf 4 vrf internal
+ neighbor 10.254.10.24 cost 855
+exit
+!

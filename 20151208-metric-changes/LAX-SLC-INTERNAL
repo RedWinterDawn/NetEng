@@ -1,0 +1,7 @@
+!
+!
+! configuration for asr1k.lax->asr1k.slc DMVPN link on asr1k.lax
+router ospf 4 vrf internal
+ neighbor 10.255.5.28 cost 5894
+exit
+!
