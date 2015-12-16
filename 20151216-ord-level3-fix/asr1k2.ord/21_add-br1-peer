@@ -1,0 +1,7 @@
+router bgp 6643
+ neighbor 10.80.0.25 inherit peer-session PEER-SESSION-JIVE-IBGP
+ neighbor 10.80.0.25 description :r=br1.chi:d=iBGP session to BR1 in DFT:
+ address-family ipv4 unicast
+  neighbor 10.80.0.25 inherit peer-policy PEER-POLICY-JIVE-IBGP-IPv4
+ exit-address-family
+exit

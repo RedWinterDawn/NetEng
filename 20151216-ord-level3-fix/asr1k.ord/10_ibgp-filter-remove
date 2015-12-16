@@ -1,0 +1,6 @@
+router bgp 6643
+ address-family ipv4 unicast
+  no neighbor 10.80.0.17 route-map ibgp-asr2-in in
+  no neighbor 10.80.0.17 route-map ibgp-asr2-out out
+ exit-address-family
+exit
