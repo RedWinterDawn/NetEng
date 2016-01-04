@@ -52,7 +52,7 @@ interface Tunnel1000
  ip ospf mtu-ignore
  ip ospf 1 area 0
  ip ospf cost 5000
- tunnel source Loopback1
+ tunnel source GigabitEthernet0/0/3.2000
  tunnel mode gre multipoint
  tunnel key 1
  tunnel protection ipsec profile ipsec-JIVEVPN shared

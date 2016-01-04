@@ -1,7 +1,7 @@
 crypto isakmp profile isakmp-JIVEVPN
   keyring keyring-JIVEVPN
   keepalive 10 retry 2
-  local-address Loopback1
+  local-address GigabitEthernet0/0/3.2000
 ! GRU-1A
   match identity address 199.36.249.3 255.255.255.255
 ! GEG-1A

@@ -1,5 +1,5 @@
 crypto keyring keyring-JIVEVPN
-  local-address Loopback1
+ local-address GigabitEthernet0/0/3.2000
  ! GRU-1A
  pre-shared-key address 199.36.249.3 key placekApAuv8
  ! GEG-1A
