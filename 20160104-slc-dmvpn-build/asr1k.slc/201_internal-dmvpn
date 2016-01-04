@@ -39,8 +39,8 @@ interface Tunnel4000
  ip nhrp map 10.255.5.19 162.250.60.3
  ip nhrp map multicast 162.250.60.3
  ! ATL-1A
- ip nhrp map 10.255.5.22 162.250.62.1
- ip nhrp map multicast 162.250.62.1
+ ip nhrp map 10.255.5.22 162.250.62.3
+ ip nhrp map multicast 162.250.62.3
  ! CHI-1A
  ip nhrp map 10.255.5.21 199.36.250.242
  ip nhrp map multicast 199.36.250.242

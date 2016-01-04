@@ -25,7 +25,7 @@ crypto isakmp profile isakmp-JIVEVPN
 ! LAX-1A
   match identity address 162.250.60.3 255.255.255.255
 ! ATL-1A
-  match identity address 162.250.62.1 255.255.255.255
+  match identity address 162.250.62.3 255.255.255.255
 ! CHI-1A
   match identity address 199.36.250.242 255.255.255.255
 exit

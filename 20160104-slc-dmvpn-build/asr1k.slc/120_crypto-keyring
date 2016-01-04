@@ -23,7 +23,7 @@ crypto keyring keyring-JIVEVPN
  ! LAX-1A
  pre-shared-key address 162.250.60.3 key placekApAuv8
  ! ATL-1A
- pre-shared-key address 162.250.62.1 key placekApAuv8
+ pre-shared-key address 162.250.62.3 key placekApAuv8
  ! CHI-1A
  pre-shared-key address 199.36.250.242 key placekApAuv8
 exit
