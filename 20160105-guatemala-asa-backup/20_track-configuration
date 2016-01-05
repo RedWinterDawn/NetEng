@@ -1,5 +1,5 @@
 sla monitor 100
- type echo protocol ipIcmpEcho <ISPGW> interface outside
+ type echo protocol ipIcmpEcho 190.148.254.25 interface outside 
  num-packets 3
  frequency 10
 !
