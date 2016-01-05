@@ -1,0 +1,8 @@
+sla monitor 100
+ type echo protocol ipIcmpEcho <ISPGW> interface outside
+ num-packets 3
+ frequency 10
+!
+sla monitor schedule 100 life forever start-time now
+!
+track 1 rtr 100 reachability

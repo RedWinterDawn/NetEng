@@ -1,0 +1,9 @@
+interface Ethernet 0/3
+ description :d=To secondary ISP:
+ nameif secondaryisp
+ security-level 0
+ ip address <TODO> <TODO>
+!
+!
+route secondaryisp 0.0.0.0 0.0.0.0 <ISPGW> 254
+global (secondaryisp) 1 interface
