@@ -44,3 +44,5 @@ interface Tunnel50
   tunnel protection ipsec profile ipsec-INCONTACT
   ip virtual-reassembly
 exit
+
+ip route 216.20.237.0 255.255.255.0 Tunnel50 name INCONTACT-ENCRYPTION-DOMAIN
