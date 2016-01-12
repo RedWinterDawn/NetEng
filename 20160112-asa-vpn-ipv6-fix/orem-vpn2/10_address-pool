@@ -1,0 +1,1 @@
+ipv6 local pool vpn_users 2001:db8::10/64 16384

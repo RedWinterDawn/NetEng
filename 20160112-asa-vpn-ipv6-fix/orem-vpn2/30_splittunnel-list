@@ -1,0 +1,2 @@
+access-list vpn_splittunnel_ext extended permit ip any 10.0.0.0 255.0.0.0
+access-list vpn_splittunnel_ext extneded permit ip any 2001:db8::/64 
