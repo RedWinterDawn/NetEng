@@ -1,0 +1,5 @@
+group-policy IT attributes
+ ipv6-split-tunnel-policy tunnelspecified
+ split-tunnel-network-list value vpn_splittunnel
+ no split-tunnel-network-list value vpn_splittunnel_ext
+exit
