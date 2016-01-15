@@ -1,0 +1,28 @@
+!
+interface Tunnel13
+ description :t=ET:p=AZ:v=INTERNAL:d=North Virginia AWS Tunnel 1:
+ vrf forwarding INTERNAL
+ ip address 169.254.255.22 255.255.255.252
+ shutdown
+ ip tcp adjust-mss 1387
+ tunnel source 209.41.89.196
+ tunnel mode ipsec ipv4
+ tunnel destination 54.240.202.251
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual-reassembly
+!
+interface Tunnel14
+ description :t=ET:p=AZ:v=INTERNAL:d=North Virginia AWS Tunnel 2:
+ vrf forwarding INTERNAL
+ ip address 169.254.255.18 255.255.255.252
+ shutdown
+ ip tcp adjust-mss 1387
+ tunnel source  209.41.89.196
+ tunnel mode ipsec ipv4
+ tunnel destination 54.240.217.166
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual re-assembly
+!
+
+
+
