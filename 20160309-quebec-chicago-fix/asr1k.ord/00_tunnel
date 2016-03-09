@@ -1,0 +1,6 @@
+interface Tunnel201
+ description :r=cpe.quebec:d=GRE tunnel - workaround to Videotron tcp/5060 issue:
+ ip address 208.34.103.6 255.255.255.254
+ tunnel source Loopback1
+ tunnel destination 69.70.114.2
+end
