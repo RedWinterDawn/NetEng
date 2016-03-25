@@ -1,0 +1,100 @@
+No service pad
+Service timestamps debug datetime msec
+Service timestamps log datetime msec
+No service password-encryption
+!
+Hostname  c1921.gru-1a
+!
+Boot-start-marker
+Boot-end-marker
+!
+Logging message-counter syslog
+!
+No aaa new-model
+!
+No ipv6 cef
+Ip source -route
+Ip cef
+!
+!
+!
+!
+Multilink bundle-name authenticated
+!
+!
+Archive
+	Log config 
+	 Logging enable
+	 Logging size 200
+	 Notify syslog contenttype plaintext
+	 Hidekeys
+	Path http://172.31.1.10/cisco.php/c1921.gru-1a/
+	Write memory
+	Time-period 60
+!
+!
+!
+!
+Interface GigabitEthernet0/0
+	Description Mgmt-intf
+	Ip address 172.27.0.1 255.255.255.0
+	Ip helper-address 172.31.1.10
+	Shutdown
+	Duplex auto
+	Speed auto
+!
+Interface GigabitEthernet0/1
+	No ip address
+	Shutdown
+	Duplex auto
+	Speed auto
+!
+interface GigabitEthernet0/1.5
+ description V5 Management LAN (SG Native)
+ encapsulation dot1Q 5
+ ip address 172.27.5.2 255.255.255.0
+!
+interface GigabitEthernet0/1.10
+ description Public Internet
+ encapsulation dot1Q 10
+ ip address 199.36.249.2 255.255.255.0
+ no cdp enable
+!
+!
+Ip forward-protocol nd
+!
+No ip http server
+!
+!
+!
+snmp-server community jive RO
+snmp-server community opscontrol RO snmp-read
+snmp-server location GRU-PROD
+snmp-server contact noc@jive.com
+snmp-server chassis-id c1901.gru
+snmp-server enable traps entity-sensor threshold
+snmp-server enable traps vstack operation
+access-list 23 permit 10.10.10.0 0.0.0.7
+!
+!
+Control plane
+!
+!
+Line con 0
+Line aux 0
+No exec
+Transport input ssh
+Stopbits 1 
+!
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+Line vty 0 4
+!
+Scheduler allocate 20000 1000
+end
+
