@@ -66,6 +66,12 @@ Ip forward-protocol nd
 No ip http server
 !
 !
+ip dns view default
+ domain timeout 1
+ domain retry 0
+ip route 0.0.0.0 0.0.0.0 199.36.249.1
+ip route 172.16.0.0 255.240.0.0 172.27.5.1
+ip route 172.27.0.0 255.255.0.0 Null0
 !
 snmp-server community jive RO
 snmp-server community opscontrol RO snmp-read
