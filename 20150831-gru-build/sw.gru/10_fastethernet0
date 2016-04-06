@@ -1,7 +1,0 @@
-!
-interface FastEthernet0
- ip address 172.27.0.3 255.255.255.240
- shutdown
- no ip route-cache cef
- no ip route-cache
-!
