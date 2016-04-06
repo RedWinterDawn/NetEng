@@ -1,0 +1,9 @@
+interface Ethernet 0/3
+ description :d=To secondary ISP Claro:
+ nameif backup
+ security-level 0
+ ip address 190.148.254.27 255.255.255.248
+!
+!
+route secondaryisp 0.0.0.0 0.0.0.0 190.148.254.25 254
+global backup 1 interface

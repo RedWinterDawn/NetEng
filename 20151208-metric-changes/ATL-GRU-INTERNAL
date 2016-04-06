@@ -1,0 +1,5 @@
+! configuration for asr1k.atl->asr1k.gru DMVPN link on asr1k.atl
+router ospf 4 vrf internal
+ neighbor 10.254.10.27 cost 6550
+exit
+!

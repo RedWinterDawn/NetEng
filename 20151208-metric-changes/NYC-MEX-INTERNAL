@@ -1,0 +1,10 @@
+! configuration for asr1k.nyc->asr1k.mex VPLS link on asr1k.nyc
+router ospf 4 vrf internal
+ neighbor 10.255.10.26 cost 436
+exit
+!
+! configuration for asr1k.nyc->asr1k.mex DMVPN link on asr1k.nyc
+router ospf 4 vrf internal
+ neighbor 10.254.10.26 cost 636
+exit
+!

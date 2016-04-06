@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.dfw->asr1k.atl VPLS link on asr1k.dfw
+router ospf 4 vrf internal
+ neighbor 10.255.10.22 cost 217
+exit
+!
+!
+!
+! configuration for asr1k.dfw->asr1k.atl DMVPN link on asr1k.dfw
+router ospf 4 vrf internal
+ neighbor 10.255.5.22 cost 417
+exit
+!

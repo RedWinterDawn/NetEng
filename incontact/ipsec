@@ -1,0 +1,87 @@
+DFW::
+
+!
+crypto keyring incontact
+  local-address Loopback1
+  pre-shared-key address 207.166.107.62 key YfW&4FWq
+!
+crypto isakmp profile incontact
+   keyring incontact
+   match identity address 207.166.107.62 255.255.255.255
+   keepalive 10 retry 2
+   local-address Loopback1
+!
+crypto ipsec transform-set incontact esp-aes esp-sha-hmac
+ mode tunnel
+!
+crypto ipsec profile incontact
+ description :d=IPSEC profile for incontact:
+ set security-association lifetime seconds 28800
+ set transform-set incontact
+ set pfs group2
+!
+
+!
+interface Tunnel50
+ description :d=incontact - DFW:
+ ip unnumbered Loopback1
+ no ip redirects
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 207.166.107.62
+ tunnel protection ipsec profile incontact
+ ip virtual-reassembly
+!
+
+----------
+
+asr1k/dfw-1a#sh crypto ipsec profile incontact
+IPSEC profile incontact
+	Security association lifetime: 4608000 kilobytes/3600 seconds
+	Responder-Only (Y/N): N
+	PFS (Y/N): Y
+	DH group:  group2
+	Mixed-mode : Disabled
+	Transform sets={
+		incontact:  { esp-aes esp-sha-hmac  } ,
+	}
+
+!
+ip route 216.20.235.33 255.255.255.255 Tunnel50 name INCONTACT-ENCRYPTION-DOMAIN
+!
+
+
+LAX::
+
+!
+crypto keyring incontact
+  local-address Loopback1
+  pre-shared-key address 207.166.95.222 key YfW&4FWq
+!
+crypto isakmp profile incontact
+   keyring incontact
+   match identity address 207.166.95.222 255.255.255.255
+   local-address Loopback1
+!
+crypto ipsec transform-set incontact esp-aes esp-sha-hmac
+ mode tunnel
+!
+crypto ipsec profile incontact
+ description :d=IPSEC profile for incontact:
+ set security-association lifetime seconds 28800
+ set transform-set incontact
+ set pfs group2
+!
+
+!
+interface Tunnel50 
+ description :d=incontact - LA:
+ ip unnumbered Loopback1
+ no ip redirects
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 207.166.97.62
+ tunnel protection ipsec profile incontact
+ ip virtual-reassembly
+!
+ip route 216.20.237.33 255.255.255.255 Tunnel50 name INCONTACT-ENCRYPTION-DOMAIN

@@ -1,0 +1,5 @@
+router bgp 6643
+ address-family ipv6 unicast
+   redistribute static route-map REDIST-STATIC-TO-BGP-IPv6
+ exit
+exit

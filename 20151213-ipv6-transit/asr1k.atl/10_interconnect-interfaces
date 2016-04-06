@@ -1,0 +1,4 @@
+interface GigabitEthernet0/0/0.105
+    ipv6 address 2001:559::8fe/64
+exit
+

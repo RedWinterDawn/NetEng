@@ -1,0 +1,7 @@
+!
+!
+! configuration for asr1k.corp->asr1k.atl DMVPN link on asr1k.corp
+router ospf 4 vrf internal
+ neighbor 10.255.5.22 cost 6053
+exit
+!

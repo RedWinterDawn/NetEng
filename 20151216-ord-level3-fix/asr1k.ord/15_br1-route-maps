@@ -1,0 +1,6 @@
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 description :d=Deny all routes via BGP:
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 permit 0.0.0/0 le 32
+
+route-map BGP-DENY-EVERYTHING-IPv4 deny 5
+  match ip address prefix-list BGP-DENY-EVERYTHING-IPv4
+exit

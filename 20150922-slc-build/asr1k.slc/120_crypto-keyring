@@ -1,0 +1,29 @@
+crypto keyring keyring-JIVEVPN
+  local-address Loopback1
+ ! GRU-1A
+ pre-shared-key address 199.36.249.3 key symmEavuv5
+ ! GEG-1A
+ pre-shared-key address 162.250.63.3 key symmEavuv5
+ ! PVU-1A
+ pre-shared-key address 199.87.123.3 key symmEavuv5
+ ! ORD-1A
+ pre-shared-key address 199.87.121.3 key symmEavuv5
+ ! NYC-1A
+ pre-shared-key address 162.250.61.3 key symmEavuv5
+ ! OPS-1A
+ pre-shared-key address 199.192.165.194 key symmEavuv5
+ ! LON-1A
+ pre-shared-key address 199.87.122.3 key symmEavuv5
+ ! DFW-1A
+ pre-shared-key address 199.36.251.3 key symmEavuv5
+ ! CORP-1A
+ pre-shared-key address 199.87.120.14 key symmEavuv5
+ ! MEX-1A
+ pre-shared-key address 208.34.80.3 key symmEavuv5
+ ! LAX-1A
+ pre-shared-key address 162.250.60.3 key symmEavuv5
+ ! ATL-1A
+ pre-shared-key address 162.250.62.1 key symmEavuv5
+ ! CHI-1A
+ pre-shared-key address 199.36.250.242 key symmEavuv5
+exit

@@ -1,0 +1,8 @@
+interface Tunnel1000
+  ip nhrp map 172.16.255.28 208.34.81.3
+  ip nhrp map multicast 208.34.81.3
+exit
+interface Tunnel4000
+  ip nhrp map 10.255.5.28 208.34.81.3
+  ip nhrp map multicast 208.34.81.3
+exit

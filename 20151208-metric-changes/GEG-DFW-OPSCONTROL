@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.geg->asr1k.dfw VPLS link on asr1k.geg
+router ospf 1 vrf opscontrol
+ neighbor 172.16.254.18 cost 337
+exit
+!
+!
+!
+! configuration for asr1k.geg->asr1k.dfw DMVPN link on asr1k.geg
+router ospf 1 vrf opscontrol
+ neighbor 172.16.255.18 cost 537
+exit
+!

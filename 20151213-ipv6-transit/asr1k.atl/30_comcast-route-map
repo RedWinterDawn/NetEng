@@ -1,0 +1,19 @@
+route-map BGP-COMCAST-IPv6-IN permit 10
+  description :d=Set Comcast internal routes to be local peer route preference:
+  match community AS7922-COMCAST-CUSTOMERS
+  set local-preference 210
+!
+route-map BGP-COMCAST-IPv6-IN permit 20
+ description :d=Set Comcast customer routes to be local peer route preference:
+ match community AS7922-COMCAST-INTERNAL
+ set local-preference 210
+!
+route-map BGP-COMCAST-IPv6-IN permit 100
+ description :d=Accept other routes from Comcast:
+ set local-preference 180
+!
+
+route-map BGP-TRANSIT-IPv6-OUT permit 10
+ description :d=Permit only Jive prefixes to be announced to transit:
+ match ipv6 address prefix-list BGP-TRANSIT-IPv6-OUT
+!

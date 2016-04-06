@@ -1,0 +1,7 @@
+!
+!
+! configuration for asr1k.gru->asr1k.chi DMVPN link on asr1k.gru
+router ospf 1 vrf opscontrol
+ neighbor 172.16.255.21 cost 6640
+exit
+!

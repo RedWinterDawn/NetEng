@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.chi->asr1k.pvu VPLS link on asr1k.chi
+router ospf 4 vrf internal
+ neighbor 10.255.10.17 cost 5803
+exit
+!
+!
+!
+! configuration for asr1k.chi->asr1k.pvu DMVPN link on asr1k.chi
+router ospf 4 vrf internal
+ neighbor 10.255.5.17 cost 6003
+exit
+!

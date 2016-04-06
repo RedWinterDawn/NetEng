@@ -1,0 +1,93 @@
+no ip route 1.0.0.0/8 10.80.0.2
+!
+! why is this here?
+!
+no ip route 1.1.1.1/32 10.1.1.1
+no ip route 2.0.0.0/8 10.80.0.2
+no ip route 5.0.0.0/8 10.80.0.26
+!
+! is this still required?
+!
+ip route 10.0.0.0/8 10.1.1.1
+!
+! these routes are all for the connected subnet...
+!
+ip route 10.2.2.0/30 ve 10 name iBGP
+ip route 10.2.2.2/32 ethernet 1/3
+ip route 10.2.2.2/32 ve 10
+!
+! this is the same (but more specific) of the 10/8 above 
+! 
+ip route 10.8.0.0/14 10.1.1.1
+ip route 10.101.0.0/16 10.1.1.1
+! 
+! to_s2.40 ?
+!
+ip route 10.101.24.1/32 10.1.1.10
+ip route 10.101.24.2/32 10.1.1.10
+ip route 10.101.27.1/32 10.1.1.10
+!
+! Duplicate more specifics
+!
+ip route 10.129.1.0/29 10.1.1.1
+ip route 10.129.1.254/32 10.1.1.1
+!
+! asr1k does not have routes to any of these prefixes in DFZ
+!
+no ip route 10.154.0.0/15 10.80.0.2
+no ip route 10.158.0.0/16 10.80.0.2
+no ip route 10.164.0.0/16 10.80.0.2
+no ip route 10.174.0.0/15 10.80.0.2
+!
+! unknown
+!
+ip route 10.200.1.0/24 10.1.1.1
+!
+! more specifics that can be removed
+!
+no ip route 23.0.0.0/8 10.80.0.26
+no ip route 24.0.0.0/8 10.80.0.26
+no ip route 27.0.0.0/8 10.80.0.26
+!
+! Routes within customers VRF, these will
+! follow the more specifics in iBGP on either
+! of the ASRs
+!
+no ip route 38.76.96.0/24 10.80.0.2
+no ip route 38.76.96.16/30 10.80.0.2
+no ip route 38.76.98.12/30 10.80.0.2
+no ip route 38.76.110.120/29 10.80.0.2
+no ip route 40.129.80.172/30 10.80.0.2
+!
+! To down nLayer neighbor, one address in a
+! residential Comcast subnet
+no ip route 50.160.23.143/32 69.31.110.149
+! unknown in XO
+no ip route 64.55.228.4/30 10.80.0.2
+! MPLS route - more specific
+no ip route 65.126.215.148/30 10.80.0.2
+! unknown in NC Educational - null routed
+ip route 152.26.14.2/32 null0
+! Airespring route - will follow the more specific advertised between asr1k + asr1k2
+no ip route 162.219.216.120/29 10.80.0.2
+! Airespring routes - more specific in iBGP
+no ip route 162.219.217.96/30 10.80.0.2
+no ip route 173.245.43.184/30 10.80.0.2
+! fraud source
+no ip route 178.33.167.206/32 null0
+! aggregate to remove
+no ip route 192.0.0.0/8 10.80.0.26
+! fraud source
+no ip route 192.96.201.135/32 null0
+! Jive aggregate that is not announced
+ip route 199.36.248.0/22 null0
+ip route 199.36.250.0/25 10.1.1.1
+! null route for internal?
+ip route 199.36.250.117/32 null0
+ip route 199.36.250.128/30 10.1.1.1
+ip route 199.36.250.160/30 10.1.1.1
+! route to down nLayer
+no ip route 199.87.120.153/32 69.31.110.149
+no ip route 206.78.0.0/16 10.80.0.2
+no ip route 207.101.142.48/30 10.80.0.2
+no ip route 216.149.107.200/30 10.80.0.2

@@ -1,0 +1,5 @@
+! configuration for asr1k.ord->asr1k.corp DMVPN link on asr1k.ord
+router ospf 4 vrf internal
+ neighbor 10.254.10.31 cost 6000
+exit
+!

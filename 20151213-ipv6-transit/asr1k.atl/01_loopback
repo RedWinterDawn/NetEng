@@ -1,0 +1,9 @@
+interface Loopback0
+    description :d=Public loopback (Jive PI address space):
+    ipv6 address 2606:CB00:FF16::1/128
+exit
+interface Loopback1
+    description :d=Public VPN tunnel termination (Jive PI address space):
+    ipv6 address 2606:CB00:FF16::3/128
+exit
+

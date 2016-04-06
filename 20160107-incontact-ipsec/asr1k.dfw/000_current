@@ -1,0 +1,46 @@
+!
+! Crypto keyring configuration
+!
+crypto keyring incontact
+  local-address Loopback1
+  pre-shared-key address 207.166.107.62 key YfW&4FWq
+exit
+!
+! ISAKMP configuration
+!
+crypto isakmp profile incontact
+   keyring incontact
+   match identity address 207.166.107.62 255.255.255.255
+   keepalive 10 retry 2
+   local-address Loopback1
+exit
+!
+! Transform set
+!
+crypto ipsec transform-set incontact esp-aes esp-sha-hmac
+ mode tunnel
+exit
+!
+! IPSEC Profile
+!
+crypto ipsec profile incontact
+ description incontact
+ set transform-set incontact
+ set pfs group2
+exit
+!
+!
+! Tunnel configuration
+!
+interface Tunnel50
+ description incontact - DFW
+ ip unnumbered Loopback1
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 207.166.107.62
+ tunnel protection ipsec profile incontact
+ ip virtual-reassembly
+exit
+!
+! ip route
+ip route 216.20.235.33 255.255.255.255 Tunnel50

@@ -1,0 +1,13 @@
+router ospf 1 vrf OPSCONTROL
+ router-id 172.16.255.28
+ ispf
+ prefix-suppression
+ timers throttle spf 10 100 1000
+ timers throttle lsa 10 100 1000
+ timers lsa arrival 50
+ timers pacing flood 5
+ timers pacing retransmission 60
+ passive-interface default
+ no passive-interface Loopback2
+ maximum-paths 1
+!
