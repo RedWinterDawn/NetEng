@@ -1,0 +1,6 @@
+interface Tunnel201
+ no tunnel protection ipsec profile ipsec-JIVE-QUEBEC-ORD shared
+!
+no crypto ipsec profile ipsec-JIVE-QUEBEC-ORD
+no crypto ipsec transform-set ipsec-trans-JIVE-QUEBEC-ORD esp-aes esp-sha-hmac
+no crypto iskamp profile isakmp-JIVE-QUEBEC-ORD
