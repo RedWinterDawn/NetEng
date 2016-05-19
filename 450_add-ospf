@@ -1,6 +1,0 @@
-router ospf 1 vrf OPSCONTROL
- no passive-interface Tunnel1000
-
-router ospf 4 vrf INTERNAL
- no passive-interface Tunnel4000
-

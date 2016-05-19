@@ -1,2 +1,0 @@
-crypto ipsec profile ipsec-JIVEVPN
- set transform-set ipsec-trans-JIVEVPN

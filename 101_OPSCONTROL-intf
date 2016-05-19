@@ -1,6 +1,0 @@
-interface Loopback2
- description :v=OPSCONTROL:d=OpsControl Network Loopback:
- vrf forwarding OPSCONTROL
- ip address 172.27.255.1 255.255.255.255
- ntp disable
-!

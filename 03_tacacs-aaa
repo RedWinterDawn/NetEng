@@ -1,6 +1,0 @@
-aaa local authentication default authorization default
-!
-aaa authentication login default group NETENG-AUTH local
-aaa authorization exec default group NETENG-AUTH local
-aaa accounting commands 0 default start-stop group NETENG-AUTH
-aaa accounting commands 15 default start-stop group NETENG-AUTH
