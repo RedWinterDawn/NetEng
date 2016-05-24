@@ -1,2 +1,0 @@
-! change static route default to be high admin distance
-ip route 0.0.0.0 0.0.0.0 189.112.165.138 250 name INFRA-FALLBACK-DEFAULT

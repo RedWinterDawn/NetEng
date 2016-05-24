@@ -1,0 +1,21 @@
+crypto keyring keyring-JIVE-QUEBEC-ORD
+  local-address Loopback1
+  pre-shared-key address 69.70.114.2 key <INSERTKEY>
+!
+crypto iskamp profile isakmp-JIVE-QUEBEC-ORD
+ keyring keyring-JIVE-QUEBEC-ORD
+ match identity address 69.70.114.2
+ keepalive 10 retry 2
+ local-address Loopback1
+!
+!
+crypto ipsec transform-set ipsec-trans-JIVE-QUEBEC-ORD esp-aes esp-sha-hmac
+ mode tunnel
+!
+crypto ipsec profile ipsec-JIVE-QUEBEC-ORD
+ set transform-set ipsec-trans-JIVE-QUEBEC-ORD
+!
+!
+interface Tunnel201
+ tunnel protection ipsec profile ipsec-JIVE-QUEBEC-ORD shared
+!
