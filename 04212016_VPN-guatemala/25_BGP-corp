@@ -31,8 +31,8 @@ router bgp 6643
 !
 !
 ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN description :d=Prefixes to accept from Jive Guatemala peers:
-ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 5 permit 10.24.0.0/24
-ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 10 permit 10.24.1.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 5 permit 10.23.0.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 10 permit 10.23.1.0/24
 !
 ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT description :d=Prefixes to advertise to Jive Guatemala peers:
 ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 5 permit 10.199.0.0/16
