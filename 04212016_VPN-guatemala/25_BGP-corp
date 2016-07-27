@@ -25,11 +25,21 @@ router bgp 6643
  !
 !
 ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN description :d=Prefixes to accept from Jive Guatemala peers:
-ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 5 permit 10.23.0.0/24
-ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 10 permit 10.23.1.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 10 permit 10.23.2.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 15 permit 10.23.5.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 20 permit 10.23.10.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 25 permit 10.23.20.0/23
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 30 permit 10.23.30.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 35 permit 10.23.50.0/24
 !
 ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT description :d=Prefixes to advertise to Jive Guatemala peers:
-ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 5 permit 10.199.0.0/16
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 5 permit 10.3.0.0/16
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 10 permit 10.20.20.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 15 permit 10.20.150.0/23
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 20 permit 10.132.0.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 25 permit 10.103.0.0/23
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 30 permit 10.104.0.0/23
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 35 permit 10.199.0.0/16
 !
 !
 route-map BGP-JIVE-GUATEMALA-IPv4-IN permit 5
