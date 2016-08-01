@@ -1,0 +1,80 @@
+!
+! Prefix list for global VRF to BGP
+!
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 seq 5 permit 10.23.5.0/24
+
+!
+! Prefix list for INTERNAL-VOICE VRF to BGP
+!
+ip prefix-list INTERNAL-VOICE-REDIST-CONNECTED-TO-BGP-IPv4 seq 5 permit 10.23.20.0/24
+
+!
+! import/export route-maps
+!
+route-map REDIST-CONNECTED-TO-BGP-IPv4 permit 5
+ description :d=Prefixes to redistribute to BGP from connected:
+ match ip address prefix-list REDIST-CONNECTED-TO-BGP-IPv4
+exit
+route-map REDIST-CONNECTED-TO-BGP-IPv4 deny 999
+ description :d=Explicit deny:
+exit
+!
+route-map INTERNAL-VOICE-REDIST-CONNECTED-TO-BGP-IPv4  permit 5
+ description :v=INTERNAL-VOICE:d=Prefixes to redistribute to BGP from connected:
+ match ip address prefix-list INTERNAL-VOICE-REDIST-CONNECTED-TO-BGP-IPv4
+exit
+
+!
+! additional VRF config
+!
+vrf definition INTERNAL-VOICE
+ rd 6643:25001
+ ad ipv4 unicast
+  route-target import 6643:25001
+  route-target export 6643:25001
+ exit
+exit
+
+!
+! BGP config
+!
+router bgp 6643
+ ad ipv4 uni
+  redist connected route-map REDIST-CONNECTED-TO-BGP-IPv4
+ exit
+ ad ipv4 uni vrf INTERNAL-VOICE
+  redist connected route-map INTERNAL-VOICE-REDIST-CONNECTED-TO-BGP-IPv4
+ exit
+exit
+
+!
+! VRF import/export policy
+!
+ip prefix-list INTERNAL-VOICE-IMPORT-IPv4 seq 5 permit 10.23.5.0/24
+ip prefix-list INTERNAL-VOICE-EXPORT-IPv4 seq 5 permit 10.23.20.0/24
+!
+route-map INTERNAL-VOICE-IMPORT-IPv4 permit 5
+ match ip address prefix-list INTERNAL-VOICE-IMPORT-IPv4
+exit
+!
+route-map INTERNAL-VOICE-EXPORT-IPv4 permit 5
+ match ip address prefix-list INTERNAL-VOICE-EXPORT-IPv4
+exit
+
+!
+! VRF import/export
+! 
+vrf definition INTERNAL-VOICE
+ ad ipv4 uni
+  import ipv4 uni map INTERNAL-VOICE-IMPORT-IPv4
+  export ipv4 uni map INTERNAL-VOICE-EXPORT-IPv4
+ exit
+exit
+
+!
+! add internal voice NAT config
+! 
+access-list 1 permit 10.23.20.0 0.0.0.255
+access-list 2 permit 10.23.20.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet0/1 vrf INTERNAL-VOICE overload
+ip nat inside source list 2 interface GigabitEthernet0/2 vrf INTERNAL-VOICE overload
