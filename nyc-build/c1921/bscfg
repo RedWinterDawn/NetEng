@@ -1,0 +1,292 @@
+!
+! Last configuration change at 15:59:10 UTC Tue Aug 25 2015 by sgridley
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service internal
+!
+hostname c1921.nyc-1a
+!
+boot-start-marker
+boot system flash:c1900-universalk9-mz.SPA.153-2.T.bin
+boot-end-marker
+!
+!
+vrf definition LTE
+ !
+ address-family ipv4
+ exit-address-family
+!
+logging buffered 51200 warnings
+!
+aaa new-model
+!
+!
+aaa authentication login sslvpn local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+ip cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain retry 0
+ip domain timeout 1
+ip domain name oob.nyc-1a.dc.ftw.jiveip.net
+ip inspect WAAS flush-timeout 10
+login on-failure log
+login on-success log
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+chat-script lte "" "AT!CALL1" TIMEOUT 60 "OK"
+!
+crypto pki trustpoint self
+ enrollment selfsigned
+ fqdn oob.nyc.dc.ftw.jiveip.net
+ subject-name cn=IOS-Self-Signed-Certificate
+ revocation-check none
+ rsakeypair self 1024 2048
+!
+!
+crypto pki certificate chain self
+ certificate self-signed 08
+  3082036E 30820256 A0030201 02020108 300D0609 2A864886 F70D0101 05050030
+  50312430 22060355 0403131B 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 61746531 28302606 092A8648 86F70D01 09021619 6F6F622E 6E79632E
+  64632E66 74772E6A 69766569 702E6E65 74301E17 0D313430 32323330 33343532
+  375A170D 32303031 30313030 30303030 5A305031 24302206 03550403 131B494F
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 65312830 2606092A
+  864886F7 0D010902 16196F6F 622E6E79 632E6463 2E667477 2E6A6976 6569702E
+  6E657430 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02
+  82010100 C8457200 9FDB00D3 21C3B289 E06AEA27 3ABF0246 5C92A4FF 2F4BD30B
+  B39C3E11 70FFCD27 811BCC86 C3D2B730 A5E1A040 55888063 07EC6B9C 531329FA
+  F88876B0 272DEC66 2A48C52E 5D63FD7A 4D1DC776 31E9E9E0 08231DB9 8874EA36
+  6B587E50 4DB87B20 CBA5CEDE 766A567E 31489156 4BB98474 A2C46C6D 2FA7DDA9
+  0D906AB7 EFA6D4DF 294A0C07 B84A971D BE8C2B67 6FD8B058 1A8579EB 24C0D740
+  8937345C C78EC5E8 F03163FD 0BDB031B 2E460021 8FEB4792 44366515 D55456F4
+  99A4E98D 04ECFA7F 11A47378 4540949A FD55F968 CFFB1283 D1961947 34761201
+  C60F6FA5 9302013D FA0930A2 BF7427C9 D08B1E49 0FC2573A ACD6D642 24693F11
+  8FF544DD 02030100 01A35330 51300F06 03551D13 0101FF04 05300301 01FF301F
+  0603551D 23041830 168014DC CADDD9E2 09369D04 7E6C9B99 B2FD1106 F4BE1C30
+  1D060355 1D0E0416 0414DCCA DDD9E209 369D047E 6C9B99B2 FD1106F4 BE1C300D
+  06092A86 4886F70D 01010505 00038201 0100840F EA08EA33 70BBDB4A 981646FA
+  0E12223E DD0659CE 5CF907CB 50D79C17 15DBAACE 1ED98F9C F27F3E46 771B0B0C
+  994F547E 2FA631B8 B4CC7158 DB33B75C 2A29AEC2 847E5A0E 94F55BFF 9D4E5DC0
+  897A2FEA 7A057D1E 6C7E2566 3E9E7B0D 0174447E 99BBBFE7 7505E179 CF93866E
+  EFDD38A3 3B5C3351 A252D7CB ED91AD71 FC5AE08B 4DDB0D43 B6DC240A 92B09138
+  ABC39F32 CF87D062 05456261 2E696597 F1E78B15 8E51B23C DD3D4F8E C982557C
+  4C3E6C8D 039D2F77 97B015CF 62E16D28 8689AC06 ACF2437E 94442617 8FBAE648
+  AB9ECC55 CEB4E8D8 90FA5792 A9CACBC5 DEB9AC81 7F834D51 0C0B9DFC 863795F8
+  A1700D17 D5975984 A6F13B52 603D740B 7CA3
+  	quit
+license udi pid CISCO1921/K9 sn FTX1748301X
+!
+!
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/c1921.nyc-1a/
+ write-memory
+ time-period 60
+username theo privilege 15 secret 5 $1$yiCW$v4H63KefDkW3cvahs7Qz50
+username phil privilege 15 secret 4 L5Skk3Bpmz8irHs8uDDkGE5CKyHS73VEX7plYMDWjHE
+username pholmes privilege 15 password 7 047A58151B29495A0C
+!
+redundancy
+ notification-timer 60000
+!
+!
+!
+!
+!
+controller Cellular 0/0
+!
+ip ssh authentication-retries 1
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+!
+!
+crypto vpn anyconnect usbflash0:/webvpn/anyconnect-macosx-i386-3.1.04072-k9.pkg sequence 1
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description Mgmt-Int
+ ip address 172.20.0.1 255.255.255.0
+ ip helper-address 172.31.1.10
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.5
+ description V5 Management LAN (SG Native)
+ encapsulation dot1Q 5
+ ip address 172.20.5.2 255.255.255.0
+!
+interface GigabitEthernet0/1.10
+ description Public Internet
+ encapsulation dot1Q 10
+ ip address 162.250.61.2 255.255.255.0
+ no cdp enable
+!
+interface Cellular0/0/0
+ no ip address
+ encapsulation slip
+ dialer in-band
+ dialer pool-member 1
+ async mode interactive
+!
+interface Virtual-Template1
+ description Virtual-Template attached to internal VRF (WebVPN)
+ ip unnumbered GigabitEthernet0/0
+!
+interface Dialer1
+ vrf forwarding LTE
+ ip address negotiated
+ ip virtual-reassembly in
+ ip virtual-reassembly out
+ encapsulation slip
+ dialer pool 1
+ dialer idle-timeout 0
+ dialer string lte
+ dialer persistent
+!
+ip local pool webvpn-pool 172.20.0.8 172.20.0.15
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip http client source-interface GigabitEthernet0/0
+!
+ip dns view default
+ domain timeout 1
+ domain retry 0
+ip route 0.0.0.0 0.0.0.0 162.250.61.1
+ip route 172.16.0.0 255.240.0.0 172.20.5.1
+ip route vrf LTE 0.0.0.0 0.0.0.0 Dialer1
+!
+ip access-list standard snmp-read
+ permit 10.101.24.1
+ permit 172.31.1.10
+ permit 172.31.1.11
+ip access-list standard ssh-v1
+ permit 172.20.0.1
+ permit 172.31.1.15
+ permit 172.20.0.0 0.0.255.255
+ permit 199.87.121.0 0.0.0.255
+!
+logging origin-id string c1921.nyc-1a
+logging source-interface GigabitEthernet0/1.10
+logging host 199.87.120.197 transport tcp port 5514 sequence-num-session
+access-list 23 permit 10.10.10.0 0.0.0.7
+!
+!
+snmp-server community public RO
+snmp-server community jive RO
+snmp-server community opscontrol RO snmp-read
+snmp-server location OREM-PROD
+snmp-server contact noc@jive.com
+snmp-server chassis-id c1901.orem
+snmp-server enable traps entity-sensor threshold
+snmp-server enable traps vstack operation
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+ no exec
+ transport input ssh
+ stopbits 1
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line 0/0/0
+ script dialer lte
+ no exec
+ rxspeed 100000000
+ txspeed 50000000
+line vty 0 4
+ access-class ssh-v1 in vrf-also
+ privilege level 15
+ transport preferred none
+ transport input ssh
+line vty 5 15
+ privilege level 15
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+!
+webvpn gateway Cisco-WebVPN-Gateway
+ ip interface Dialer1 port 443
+ ssl trustpoint self
+ inservice
+ dtls port 4433
+ !
+webvpn context Cisco-WebVPN
+ virtual-template 1
+ aaa authentication list sslvpn
+ gateway Cisco-WebVPN-Gateway
+ max-users 10
+ !
+ ssl authenticate verify all
+ inservice
+ !
+ policy group webvpnpolicy
+   functions svc-enabled
+   filter tunnel ssl-acl
+   svc address-pool "webvpn-pool" netmask 255.255.255.0
+   svc rekey method new-tunnel
+   svc split include 172.20.0.0 255.255.255.0
+ default-group-policy webvpnpolicy
+!
+end

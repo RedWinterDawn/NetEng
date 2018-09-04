@@ -1,0 +1,206 @@
+version 15.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname c1921.gru-1a
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+aaa new-model
+!
+aaa authentication login sslvpn local
+!
+aaa session-id common
+!
+ip cef
+!
+ip dhcp excluded-address 10.10.10.1
+!
+ip domain retry 0
+ip domain timeout 1
+ip domain name oob.ldn.dc.ftw.jiveip.net
+login on-failure log
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+crypto pki token default removal timeout 0
+!
+!
+license udi pid CISCO1921/K9 sn FTX164185C8
+!
+!
+username admin secret 4 XVwa2tl5C6vUKXecHw/8SCf/KDp0MCmEwbQusFd7z2c
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 172.27.0.1 255.255.255.0
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+no ipv6 cef
+ip source-route
+ip cef
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+crypto pki token default removal timeout 0
+!
+!
+license udi pid CISCO1921/K9 sn FTX164185C8
+!
+!
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/c1921.gru-1a/
+ write-memory
+ time-period 60
+!
+!
+username admin secret 4 XVwa2tl5C6vUKXecHw/8SCf/KDp0MCmEwbQusFd7z2c
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description MGMT switch 
+ ip address 172.27.0.1 255.255.255.0
+ ip help-address 172.31.1.10 
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+!
+!
+interface GigabitEthernet0/1.5
+ description V5 Management LAN (SG Native)
+ encapsulation dot1Q 5
+ ip address 172.19.5.2 255.255.255.0
+ shutdown
+!
+interface GigabitEthernet0/1.10
+ description Public Internet
+ encapsulation dot1Q 10
+ ip address 162.250.60.2 255.255.255.0
+ no cdp enable
+ shutdown
+!
+!
+!
+ip local pool webvpn-pool 172.27.0.8 172.27.0.15
+!
+ip forward-protocol nd
+!
+ip http server
+ip http access-class 23
+ip http authentication local 
+ip http secure-server
+ip http timeout-policy idle 60 life 86400 requests 10000
+ip http client source-interface GigabitEthernet0/0
+!
+!
+!
+logging origin-id string c1921.gru-1a
+logging source-interface GigabitEthernet0/1.10
+logging host 199.87.120.197 transport tcp port 5514 sequence-num-session
+dialer-list 1 protocol ip permit
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ password admin
+ login
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output lat pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ privilege level 15
+ password admin
+ login
+ transport input all
+!
+line vty 5 15
+ privilege level15
+ transport input telnet ssh
+!
+scheduler allocate 20000 1000
+!
+end

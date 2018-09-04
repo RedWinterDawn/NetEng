@@ -1,0 +1,472 @@
+!
+! Last configuration change at 10:19:31 UTC Sat Aug 6 2011 by achidester
+! NVRAM config last updated at 22:36:55 UTC Sat Jun 25 2011 by pholmes
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname sw1.ord-1a
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username theo privilege 15 secret 5 $1$H3KE$kZB/VcE.4USRr5GQ0XKl40
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+ip domain-name sw1.ord.1a
+ip device tracking
+login on-failure log
+login on-success log
+vtp mode transparent
+!
+!
+crypto pki trustpoint TP-self-signed-1861305088
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1861305088
+ revocation-check none
+ rsakeypair TP-self-signed-1861305088
+!
+!
+crypto pki certificate chain TP-self-signed-1861305088
+ certificate self-signed 01
+  3082024D 308201B6 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 31383631 33303530 3838301E 170D3933 30333031 30303031
+  32365A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 38363133
+  30353038 3830819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100AA6F 1CE01759 5571AD05 7C2CE254 FD073181 5350E5A9 9734978F BC8137D2
+  63905BBC 7B93F225 294B03C6 9E713203 D0EC48A1 FECDC1EC 81CF4A54 71DF5A4D
+  2954754E 7F0C263B 69A6675F 896DD870 3C8E53F0 F52B38D6 A9D9E0FA 58C997ED
+  4A28E1CA 43B1077A 0AF39B10 ECDACAD0 1FAD7013 4A7B0734 369033D9 F7279991
+  EB090203 010001A3 75307330 0F060355 1D130101 FF040530 030101FF 30200603
+  551D1104 19301782 15737731 2E6F7264 2D31612E 7377312E 6F72642E 3161301F
+  0603551D 23041830 168014F3 FD78E121 922CABE3 E8CC7602 317B5486 9D568230
+  1D060355 1D0E0416 0414F3FD 78E12192 2CABE3E8 CC760231 7B54869D 5682300D
+  06092A86 4886F70D 01010405 00038181 0036305A 6264CDB5 ECB1105F AD3A827A
+  EC82A141 393CD984 36DF83CF FAF231E1 315B6170 4136013D 597DD8F1 DF54C961
+  88EEEB90 DAB47017 21F3F87A BD5E1557 C6D201A3 1DE6FF21 73A0472F 0905D4FB
+  236AE00D DAD46E38 4F20994E A5060895 951AF2F6 D667CF71 2825F75B D8B2ABE3
+  0C417F3E 8A5D8CE2 2DEFF589 24285CA1 CF
+  	quit
+license boot level ipservices
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/sw1.ord-1a/
+ write-memory
+ time-period 60
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name OPSCONTROL
+!
+vlan 3
+ name SERVERS-ETH
+!
+vlan 4
+ name V4COMPAT
+!
+vlan 5
+ name V5MGMT
+!
+vlan 8
+ name BM-MGMT
+!
+vlan 9
+ name VM-MGMT
+!
+vlan 10
+ name INTERNET
+!
+vlan 11
+ name ANYCAST
+!
+vlan 20
+ name OOB-Copper-MGMT
+!
+ip ssh authentication-retries 1
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ ip address 172.25.0.3 255.255.255.240
+!
+interface GigabitEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/4
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/5
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/6
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/7
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/8
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/9
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/10
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/11
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/12
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/13
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/14
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/15
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/16
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/17
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/18
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/19
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/20
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/21
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/22
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/23
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/25
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/26
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/27
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/28
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/29
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/30
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/31
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/32
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/33
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/34
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/35
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/36
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/37
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/38
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/39
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet0/40
+ description pathview-device
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet0/41
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/42
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/43
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/44
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/45
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/46
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/47
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 3
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet0/48
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet1/1
+!
+interface GigabitEthernet1/2
+!
+interface GigabitEthernet1/3
+!
+interface GigabitEthernet1/4
+!
+interface TenGigabitEthernet1/1
+!
+interface TenGigabitEthernet1/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+ip http server
+ip http secure-server
+ip http client source-interface FastEthernet0
+!
+!
+!
+logging origin-id string sw1.ord
+logging source-interface FastEthernet0
+logging host 172.31.1.87 transport tcp port 5514 sequence-num-session
+!
+snmp-server community opscontrol RO snmp-read
+!
+!
+line con 0
+line vty 0 4
+ privilege level 15
+ login local
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+line vty 5 15
+ privilege level 15
+ login local
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+!
+end
+
+
+

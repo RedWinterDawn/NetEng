@@ -1,0 +1,59 @@
+!
+router bgp 6643
+ template peer-policy PEER-POLICY-JIVE-GUATEMALA-IPv4
+  route-map BGP-JIVE-GUATEMALA-IPv4-IN in
+  route-map BGP-JIVE-GUATEMALA-IPv4-OUT out
+  next-hop-self
+  maximum-prefix 100
+ exit-peer-policy
+ !
+ template peer-session PEER-SESSION-JIVE-GUATEMALA
+  remote-as 64600
+  version 4
+ exit-peer-session
+ !
+ bgp log-neighbor-changes
+ neighbor 208.34.103.5 inherit peer-session PEER-SESSION-JIVE-GUATEMALA
+ neighbor 208.34.103.5 description :r=cpe.guatemala:a=64600:d=Jive Guatemala CPE:
+  !
+ address-family ipv4
+  redistribute connected
+  redistribute static
+  neighbor 208.34.103.5 activate
+  neighbor 208.34.103.5 inherit peer-policy PEER-POLICY-JIVE-GUATEMALA-IPv4
+ exit-address-family
+ !
+!
+!
+!
+!
+!
+!
+!
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN description :d=Prefixes to accept from Jive Guatemala peers:
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 5 permit 10.23.0.0/24
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-IN seq 10 permit 10.23.1.0/24
+!
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT description :d=Prefixes to advertise to Jive Guatemala peers:
+ip prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT seq 5 permit 10.199.0.0/16
+!
+!
+!
+!
+route-map BGP-JIVE-GUATEMALA-IPv4-IN permit 5
+ match ip address prefix-list BGP-JIVE-GUATEMALA-IPv4-IN
+!
+route-map BGP-JIVE-GUATEMALA-IPv4-IN deny 999
+ description :d=explicit deny:
+!
+!
+!
+!
+route-map BGP-JIVE-GUATEMALA-IPv4-OUT permit 5
+ match ip address prefix-list BGP-JIVE-GUATEMALA-IPv4-OUT
+!
+route-map BGP-JIVE-GUATEMALA-IPv4-OUT deny 999
+ description :d=explicit deny:
+!
+!
+!

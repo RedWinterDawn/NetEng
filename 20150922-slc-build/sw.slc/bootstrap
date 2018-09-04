@@ -1,0 +1,10 @@
+ssh root@bootstrap
+
+cd /srv/cisco/software
+
+upgrade to 15.2
+
+
+
+
+

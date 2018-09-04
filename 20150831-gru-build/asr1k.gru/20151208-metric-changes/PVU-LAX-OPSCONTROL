@@ -1,0 +1,10 @@
+! configuration for asr1k.pvu->asr1k.lax VPLS link on asr1k.pvu
+router ospf 1 vrf opscontrol
+ neighbor 172.16.254.19 cost 5691
+exit
+!
+! configuration for asr1k.pvu->asr1k.lax DMVPN link on asr1k.pvu
+router ospf 1 vrf opscontrol
+ neighbor 172.16.255.19 cost 5891
+exit
+!

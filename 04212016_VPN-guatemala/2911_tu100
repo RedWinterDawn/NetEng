@@ -1,0 +1,21 @@
+!
+interface Tunnel100
+description :r=asr1k.corp:d=IPSEC-protected GRE:
+ip address 208.34.103.5 255.255.255.254
+ip mtu 1400
+tunnel source GigabitEthernet8
+tunnel destination 199.87.120.14 ??
+tunnel protection ipsec profile ipsec-JIVE-guatemala shared
+ip virtual assembly
+!
+!
+!
+ip route 10.0.0.0 255.0.0.0 Tunnel100 208.34.103.4 
+ip route 10.3.0.0 255.255.0.0 Tunnel100 208.34.103.4
+ip route 10.20.0.0 255.255.0.0 Tunnel100 208.34.103.4
+ip route 10.132.0.0 255.255.255.0 Tunnel100 208.34.103.4
+!
+!
+
+
+

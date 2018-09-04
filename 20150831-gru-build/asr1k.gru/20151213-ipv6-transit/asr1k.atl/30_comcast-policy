@@ -1,0 +1,10 @@
+router bgp 6643
+ template peer-policy PEER-POLICY-COMCAST-IPv6
+    route-map BGP-COMCAST-IPv6-IN in
+    route-map BGP-TRANSIT-IPv6-OUT out
+    prefix-list BGP-BOGONS-IPv6-IN in
+    prefix-list BGP-TRANSIT-IPv6-OUT out
+    next-hop-self
+    allowas-in 10
+ exit
+exit

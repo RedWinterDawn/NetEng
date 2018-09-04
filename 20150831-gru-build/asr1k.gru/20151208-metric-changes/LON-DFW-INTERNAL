@@ -1,0 +1,5 @@
+! configuration for asr1k.lon->asr1k.dfw DMVPN link on asr1k.lon
+router ospf 4 vrf internal
+ neighbor 10.254.10.18 cost 1064
+exit
+!

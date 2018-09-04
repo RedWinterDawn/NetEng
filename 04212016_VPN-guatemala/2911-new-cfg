@@ -1,0 +1,343 @@
+ssh admin@190.148.254.27
+Pret33n12 same as en
+
+
+-------
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Guatemala
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$QjDY$zUUT461cA/vKPYyp8bgYb/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip dhcp pool Wifi
+ network 10.23.100.0 255.255.255.0
+ default-router 10.23.100.1
+ dns-server 8.8.8.8
+ lease 1 4
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+crypto pki trustpoint TP-self-signed-2249055583
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2249055583
+ revocation-check none
+ rsakeypair TP-self-signed-2249055583
+!
+!
+crypto pki certificate chain TP-self-signed-2249055583
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 32323439 30353535 3833301E 170D3136 30343237 31373337
+  35395A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 32343930
+  35353538 3330819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100AECF 4E16921B 423AE747 180275DA EB16E5AF 5FA5EBD9 EBA6B26A 8F93D0A5
+  D77B92DB CDDE23A6 9670AB45 CD278BD9 A3B7D91E 928314C3 096AF0FB 2759ECF8
+  9F20AAD4 8F830195 A75A853C 97209915 D0625E0F 5E2D9CDA 4F7C1971 8A9C8F69
+  1B2BF3B8 5DD57EC6 D44CCC10 550FD7E6 BE5C071A BC4CB817 1F5E7F31 DD74A557
+  1DDF0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603
+  551D2304 18301680 14FB2823 94498D0C 005C1187 B5A38DFF F4B8027F 4A301D06
+  03551D0E 04160414 FB282394 498D0C00 5C1187B5 A38DFFF4 B8027F4A 300D0609
+  2A864886 F70D0101 05050003 81810086 49139008 7982B546 4F6DC00F CF35F9B6
+  89E8244A 30962216 FA6A2B3F 3D3C4D40 0F477F6C 25998D04 2B1EBB93 79B5FC20
+  35158671 54392B8A E93F1648 38F63EA6 89116E8B 3D860672 BBDC1030 B4F285C8
+  8DEF56E3 A64F7425 43723BEE 357BAF17 71E39C1D E950D117 AC8884EF 45580FDB
+  52FE5FF0 4C775ACE 74245784 FC137C
+  	quit
+voice-card 0
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FGL195210FA
+license boot module c2900 technology-package securityk9
+hw-module pvdm 0/0
+!
+!
+!
+username admin secret 5 $1$yDB3$ekmMrJhVHE1lyEakef6Iz0
+!
+redundancy
+!
+!
+!
+!
+track timer interface 5
+!
+track 1 interface GigabitEthernet0/1 ip routing
+ delay down 3 up 1
+!
+track 2 interface GigabitEthernet0/2 ip routing
+ delay down 3 up 1
+!
+!
+crypto keyring keyring-JIVE-GUATEMALA
+  local-address GigabitEthernet0/2
+  pre-shared-key address 199.87.120.14 key chewbacca4lyfe
+crypto keyring keyring-JIVE-GUATEMALA1
+  local-address GigabitEthernet0/1
+  pre-shared-key address 199.87.120.14 key wadewash3r3
+!
+crypto isakmp policy 200
+ encr aes
+ authentication pre-share
+ group 2
+ lifetime 28800
+crypto isakmp profile isakmp-JIVE-GUATEMALA
+   keyring keyring-JIVE-GUATEMALA
+   match identity address 199.87.120.14 255.255.255.255
+   keepalive 10 retry 2
+   local-address GigabitEthernet0/2
+crypto isakmp profile isakmp-JIVE-GUATEMALA1
+   keyring keyring-JIVE-GUATEMALA1
+   match identity address 199.87.120.14 255.255.255.255
+   keepalive 10 retry 2
+   local-address GigabitEthernet0/1
+!
+!
+crypto ipsec transform-set ipsec-trans-JIVE-GUATEMALA esp-aes esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set ipsec-trans-JIVE-GUATEMALA1 esp-aes esp-sha-hmac
+ mode tunnel
+!
+!
+crypto ipsec profile ipsec-JIVE-GUATEMALA
+ set transform-set ipsec-trans-JIVE-GUATEMALA
+!
+crypto ipsec profile ipsec-JIVE-GUATEMALA1
+ set transform-set ipsec-trans-JIVE-GUATEMALA1
+!
+!
+!
+!
+!
+!
+interface Tunnel100
+ description :r=cpe0.guatemala:d=IPSEC-protected GRE:
+ ip address 208.34.104.5 255.255.255.254
+ tunnel source GigabitEthernet0/2
+ tunnel destination 199.87.120.14
+ tunnel protection ipsec profile ipsec-JIVE-GUATEMALA shared
+!
+interface Tunnel110
+ description :r=cpe1.guatemala:d=IPSEC-protected GRE
+ ip address 208.34.104.9 255.255.255.254
+ tunnel source GigabitEthernet0/1
+ tunnel destination 199.87.120.14
+ tunnel protection ipsec profile ipsec-JIVE-GUATEMALA1 shared
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description TO LAN
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.2
+ description Management
+ encapsulation dot1Q 2
+ ip address 10.23.2.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.5
+ encapsulation dot1Q 5
+ ip address 10.23.5.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.10
+ description Data
+ encapsulation dot1Q 10
+ ip address 10.23.10.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.20
+ description Voice
+ encapsulation dot1Q 20
+ ip address 10.23.20.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.30
+ description Lab
+ encapsulation dot1Q 30
+ ip address 10.23.30.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.50
+ description Development
+ encapsulation dot1Q 50
+ ip address 10.23.50.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.100
+ description Guest Wifi
+ encapsulation dot1Q 100
+ ip address 10.23.100.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/1
+ description ISP Tigo Primary
+ ip address 181.174.100.210 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ description ISP Claro Secondary
+ ip address 190.148.254.27 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+no ip forward-protocol nd
+ip forward-protocol udp bootps
+!
+no ip http server
+ip http secure-server
+!
+ip nat inside source route-map Voice interface GigabitEthernet0/2 overload
+ip nat inside source route-map date interface GigabitEthernet0/1 overload
+ip route 0.0.0.0 0.0.0.0 181.174.100.209 track 1
+ip route 0.0.0.0 0.0.0.0 190.148.254.25 track 2
+!
+ip access-list extended ISP1
+ permit ip 10.23.0.0 0.0.255.255 any
+ permit ip 10.23.5.0 0.0.0.255 any
+ permit ip 10.23.10.0 0.0.0.255 any
+ permit ip 10.23.50.0 0.0.0.255 any
+ permit ip 10.23.100.0 0.0.0.255 any
+ip access-list extended ISP2
+ permit ip 10.23.20.0 0.0.0.255 any
+ permit ip 10.23.30.0 0.0.0.255 any
+ permit ip 10.23.10.0 0.0.0.255 any
+!
+ip sla 1
+ icmp-echo 66.62.10.24 source-interface GigabitEthernet0/1
+ threshold 3
+ frequency 6
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 199.36.251.5 source-interface GigabitEthernet0/2
+ threshold 3
+ frequency 6
+ip sla schedule 2 life forever start-time now
+ip sla enable reaction-alerts
+!
+route-map date permit 10
+ match ip address ISP1
+ match interface GigabitEthernet0/1
+!
+route-map Voice permit 10
+ match ip address ISP2
+ match interface GigabitEthernet0/2
+!
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+banner login ^CCCC
+----------------------------------
+^C
+banner motd ^CCCxc^C
+!
+line con 0
+ login local
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ privilege level 7
+ password temppass
+ login local
+ transport input ssh
+line vty 5 15
+ privilege level 7
+ login local
+ transport input telnet ssh
+!
+scheduler allocate 20000 1000
+!
+end
+

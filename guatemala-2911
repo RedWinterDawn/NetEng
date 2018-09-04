@@ -1,0 +1,298 @@
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Guatemala
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$QjDY$zUUT461cA/vKPYyp8bgYb/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip dhcp pool Wifi
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.1
+ dns-server 208.67.222.222 208.67.220.220 10.23.5.6
+ lease 1 4
+!
+!
+!
+ip cef
+no ipv6 cef
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+crypto pki trustpoint TP-self-signed-2249055583
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2249055583
+ revocation-check none
+ rsakeypair TP-self-signed-2249055583
+!
+!
+crypto pki certificate chain TP-self-signed-2249055583
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 32323439 30353535 3833301E 170D3136 30333135 31363030
+  31315A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 32343930
+  35353538 3330819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  81009893 04F7F414 400663CA C17B5076 80AFA82A 2F1A55D1 19EA2019 B24DD272
+  6A56E98B 5DCCE43D AEB8B4BC EC3B1824 9FFBE11C 3EFA40DB 42C5DE12 0A716CFF
+  755D6D9D 3F51D23F CE9F851D 397D143C 01FD84E5 FE6E9B02 7381B57C 30A7626B
+  4BFBEF71 6D22C3EF 75CE6E88 E9884321 8A7E6DAF 70B41581 8A059FB9 C025891C
+  D64B0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603
+  551D2304 18301680 14E13669 0F9CCD51 3EA82085 A30A094C DCC6A37B D0301D06
+  03551D0E 04160414 E136690F 9CCD513E A82085A3 0A094CDC C6A37BD0 300D0609
+  2A864886 F70D0101 05050003 81810060 2AD9F53F 277AFCE9 5F7B9DDC 3D1461A4
+  0BD92B47 B3566202 F068247E 68549B6D 1AD62AC2 A04BA906 4D0A10CA D377A12C
+  45379429 44C6D236 4003E0BB AE1EC075 DC49AD48 DC312F54 51BB086D E2B0A37E
+  7D6A1134 50383BCB 756B10E1 948BBE04 4F43C114 2B44C058 5207E203 1A53B81A
+  820E6AAA 06F0133A D5BB5A74 BECEFB
+        quit
+voice-card 0
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FGL195210FA
+hw-module pvdm 0/0
+!
+!
+!
+username admin secret 5 $1$yDB3$ekmMrJhVHE1lyEakef6Iz0
+!
+redundancy
+!
+track timer interface 5
+!
+track 1 interface GigabitEthernet0/1 ip routing
+ delay down 15 up 10
+!
+track 2 interface GigabitEthernet0/2 ip routing
+ delay down 15 up 10
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description TO LAN
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.2
+ description Management
+ encapsulation dot1Q 2
+ ip address 10.23.2.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.5
+ encapsulation dot1Q 5
+ ip address 10.23.5.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.10
+ description Data
+ encapsulation dot1Q 10
+ ip address 10.23.10.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.20
+ description Voice
+ encapsulation dot1Q 20
+ ip address 10.23.20.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.30
+ description Lab
+ encapsulation dot1Q 30
+ ip address 10.23.30.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.50
+ description Development
+ encapsulation dot1Q 50
+ ip address 10.23.50.1 255.255.255.0
+ ip helper-address 10.23.5.4
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/0.100
+ description Guest Wifi
+ encapsulation dot1Q 100
+ ip address 192.168.1.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+!
+interface GigabitEthernet0/1
+ description ISP Tigo Primary
+ ip address 181.174.100.211 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ description ISP Claro Secondary
+ ip address 190.148.254.27 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+no ip forward-protocol nd
+ip forward-protocol udp bootps
+!
+ip http server
+ip http access-class 23
+ip http authentication local
+ip http secure-server
+ip http timeout-policy idle 60 life 86400 requests 10000
+!
+ip route 0.0.0.0 0.0.0.0 181.174.100.209 track 1
+ip route 0.0.0.0 0.0.0.0 190.148.254.25 track 2
+!
+ip access-list extended ISP1
+ permit ip 10.23.10.0 0.0.0.255 any
+ permit ip 192.168.1.0 0.0.0.255 any
+ permit ip 10.23.50.0 0.0.0.255 any
+ permit ip 10.23.5.0 0.0.0.255 any
+ip access-list extended ISP2
+ permit ip 10.23.20.0 0.0.0.255 any
+ permit ip 0.0.0.0 255.255.255.0 any
+ permit ip 10.23.30.0 0.0.0.255 any
+!
+ip sla 1
+ icmp-echo 66.62.10.24 source-interface GigabitEthernet0/1
+ threshold 3
+ frequency 6
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 199.36.251.5 source-interface GigabitEthernet0/2
+ threshold 3
+ frequency 6
+ip sla schedule 2 life forever start-time now
+ip sla enable reaction-alerts
+!
+route-map date permit 10
+ match ip address ISP1
+ match interface GigabitEthernet0/1
+!
+route-map Voice permit 10
+ match ip address ISP2
+ match interface GigabitEthernet0/2
+!
+!
+access-list 24 permit 199.87.120.0 0.0.0.255
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+banner exec ^CCC
+% warning.
+-----------------------------------------------------------------------
+
+This device is property of Jive Communications.
+Any unautherized changes to this device will result in prosecution
+
+-----------------------------------------------------------------------
+^C
+banner login ^CCC
+-----------------------------------------------------------------------
+
+
+IF YOU DO NOT CHANGE THE PUBLICLY-KNOWN CREDENTIALS, YOU WILL NOT BE ABLE
+TO LOG INTO THE DEVICE AGAIN AFTER YOU HAVE LOGGED OFF.
+
+For more information about Cisco CP please follow the instructions in the
+QUICK START GUIDE for your router or go to http://www.cisco.com/go/ciscocp
+-----------------------------------------------------------------------
+^C
+banner motd ^CCxc^C
+!
+line con 0
+ login local
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ access-class 24 in
+ privilege level 15
+ login local
+ transport input telnet ssh
+line vty 5 15
+ access-class 24 in
+ privilege level 15
+ login local
+ transport input telnet ssh
+!
+scheduler allocate 20000 1000
+ntp server pnpntpserver.jivecommunications.com
+!
+end

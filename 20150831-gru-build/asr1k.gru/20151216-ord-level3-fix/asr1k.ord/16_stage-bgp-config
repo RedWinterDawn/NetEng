@@ -1,0 +1,13 @@
+router bgp 6643
+ template peer-session PEER-SESSION-JIVE-IBGP
+  remote-as 6643
+ exit-peer-session
+ !
+ template peer-policy PEER-POLICY-JIVE-IBGP-IPv4
+  next-hop-self
+  allowas-in 10
+  soft-reconfiguration inbound
+  route-map BGP-DENY-EVERYTHING-IPv4 out
+  default-originate
+ !
+!

@@ -1,0 +1,2 @@
+ipv6 route 2606:CB00:FF16::/48 Null0 tag 100 name INFRA-PUBLIC-PULLUP-IPv6
+ipv6 route 2606:CB00:16::/48 Null0 tag 100 name PUBLIC-PULLUP-IPv6

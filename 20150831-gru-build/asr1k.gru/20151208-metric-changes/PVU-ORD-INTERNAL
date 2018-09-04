@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.pvu->asr1k.ord VPLS link on asr1k.pvu
+router ospf 4 vrf internal
+ neighbor 10.255.10.25 cost 5800
+exit
+!
+!
+!
+! configuration for asr1k.pvu->asr1k.ord DMVPN link on asr1k.pvu
+router ospf 4 vrf internal
+ neighbor 10.255.5.25 cost 6000
+exit
+!

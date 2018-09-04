@@ -1,0 +1,14 @@
+!
+!
+! configuration for asr1k.nyc->asr1k.pvu VPLS link on asr1k.nyc
+router ospf 1 vrf opscontrol
+ neighbor 172.16.254.17 cost 5917
+exit
+!
+!
+!
+! configuration for asr1k.nyc->asr1k.pvu DMVPN link on asr1k.nyc
+router ospf 1 vrf opscontrol
+ neighbor 172.16.255.17 cost 6117
+exit
+!

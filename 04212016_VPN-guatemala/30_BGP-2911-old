@@ -1,0 +1,86 @@
+!
+router bgp 64600
+ template peer-policy PEER-POLICY-JIVE-CORPORATE-IPv4
+  route-map BGP-JIVE-CORPORATE-IPv4-IN in
+  route-map BGP-JIVE-CORPORATE-IPv4-OUT out
+  next-hop-self
+  maximum-prefix 100
+ exit-peer-policy
+ !
+template peer-policy PEER-POLICY-JIVE-ORD-IPv4
+  route-map BGP-JIVE-ORD-PUBLIC-IPv4-IN in
+  route-map BGP-DENY-EVERYTHIGN-IPv4 out
+  next-hop-self
+  soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-session PEER-SESSION-JIVE-CORPORATE
+  remote-as 6643
+  version 4
+ exit-peer-session
+ !
+ template peer-session PEER-SESSION-JIVE-EBGP
+  remote-as 6643
+  version 4
+ exit-peer-session
+ !
+ no bgp enforce-first-as
+ bgp log-neighbor-changes
+ bgp graceful-restart restart-time 120
+ bgp graceful-restart stalepath-time 360
+ bgp graceful-restart
+ bgp maxas-limit 24
+ no bgp default ipv4-unicast
+ neighbor 208.34.103.4 inherit peer-session PEER-SESSION-JIVE-CORPORATE
+ neighbor 208.34.103.4 description :r=asr1k.corp:a=6643:d=Orem Corp ASR1K:
+ neighbor 208.34.103.6 inherit peer-session PEER-SESSION-JIVE-EBGP
+ neighbor 208.34.103.6 description :r=asr1k.ord:a=6643:d=Jive ORD:
+ !
+ address-family ipv4
+  redistribute connected route-map REDIST-CONNECTED-TO-BGP-IPv4
+  neighbor 208.34.103.4 activate
+  neighbor 208.34.103.4 inherit peer-policy PEER-POLICY-JIVE-CORPORATE-IPv4
+  neighbor 208.34.103.6 activate
+  neighbor 208.34.103.6 inherit peer-policy PEER-POLICY-JIVE-ORD-IPv4
+ exit-address-family
+!
+!
+!
+!
+route-map BGP-JIVE-CORPORATE-IPv4-OUT permit 5
+ match ip address prefix-list BGP-JIVE-CORPORATE-IPv4-OUT
+!
+route-map BGP-DENY-EVERYTHING-IPv4 deny 5
+ description :d=Deny all IPv4 routes:
+ match ip address prefix-list BGP-DENY-EVERYTHING-IPv4
+!
+route-map REDIST-CONNECTED-TO-BGP-IPv4 permit 5
+ match ip address prefix-list REDIST-CONNECTED-TO-BGP-IPv4
+!
+route-map BGP-JIVE-CORPORATE-IPv4-IN permit 5
+ match ip address prefix-list BGP-JIVE-CORPORATE-IPv4-IN
+!
+route-map BGP-JIVE-ORD-PUBLIC-IPv4-IN permit 5
+ description :d=permit route to CHI prefix:
+ match ip address prefix-list BGP-JIVE-ORD-PUBLIC-IPv4
+!
+!
+!
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 description :d=Deny all routes via BGP:
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 seq 5 permit 0.0.0.0/0 le 32
+!
+ip prefix-list BGP-JIVE-CORPORATE-IPv4-IN description :d=Prefixes to accept from Jive corporate peers:
+ip prefix-list BGP-JIVE-CORPORATE-IPv4-IN seq 5 permit 10.199.0.0/16
+!
+ip prefix-list BGP-JIVE-CORPORATE-IPv4-OUT description :d=Prefixes to advertise to Jive corporate peers:
+ip prefix-list BGP-JIVE-CORPORATE-IPv4-OUT seq 5 permit 10.23.0.0/24
+ip prefix-list BGP-JIVE-CORPORATE-IPv4-OUT seq 10 permit 10.23.1.0/24
+!
+ip prefix-list BGP-JIVE-ORD-PUBLIC-IPv4 description :d=Prefixes to accept from Jive ORD:
+ip prefix-list BGP-JIVE-ORD-PUBLIC-IPv4 seq 5 permit 199.36.250.0/24
+!
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 description :d=Prefixes to redistribute to BGP:
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 seq 5 permit 10.23.0.0/24
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 seq 10 permit 10.23.1.0/24
+!
+!

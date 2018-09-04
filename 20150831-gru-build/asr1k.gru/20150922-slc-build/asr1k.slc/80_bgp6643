@@ -1,0 +1,21 @@
+!
+router bgp 6643 
+  neighbor 169.254.255.17 remote-as 7224
+  neighbor 169.254.255.17 activate
+  neighbor 169.254.255.17 timers 10 30 30
+  address-family ipv4 unicast
+    neighbor 169.254.255.17 remote-as 7224
+    neighbor 169.254.255.17 timers 10 30 30
+    neighbor 169.254.255.17 default-originate
+    neighbor 169.254.255.17 activate
+    neighbor 169.254.255.17 soft-reconfiguration inbound
+ template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
+  prefix-list BGP-BOGONS-IPv4-IN in
+!  prefix-list BGP-PUBLIC-PEER-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+ exit-peer-policy
+!
+ 
+
+

@@ -1,0 +1,47 @@
+!
+
+
+
+
+
+
+!
+
+
+
+
+
+
+
+
+router bgp 6643
+template peer-policy MEX-PUBLIC-PEER-POLICY-TRANSIT-IPv4
+  route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN in
+  route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out
+  prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-IN in
+  prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+  exit-peer-policy
+
+ip prefix-list MEX-PUBLIC-BGP-DEFAULT-ONLY-IPv4-IN description :d=permit only 0.0.0.0/0:
+ip prefix-list MEX-PUBLIC-BGP-DEFAULT-ONLY-IPv4-IN seq 5 permit 0.0.0.0/0
+!
+ip prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT description :d=Prefixes to announce to transits over BGP:
+ip prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT seq 10 permit 208.34.80.0/24
+
+
+
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-IN deny 1000
+ description :d=explicit deny:
+!
+!
+!
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT permit 10
+ description :d=Permit only Jive prefixes to be announced to transit:
+ match ip address prefix-list MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT
+!
+route-map MEX-PUBLIC-BGP-TRANSIT-IPv4-OUT deny 1000
+ description :d=Explicit deny:
+
+

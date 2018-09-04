@@ -1,0 +1,311 @@
+
+! Last configuration change at 15:53:55 UTC Tue Aug 25 2015 by sgridley
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service internal
+!
+hostname c1921.lax-1a
+!
+boot-start-marker
+boot system flash:c1900-universalk9-mz.SPA.153-2.T.bin
+boot-end-marker
+!
+!
+vrf definition LTE
+ !
+ address-family ipv4
+ exit-address-family
+!
+logging buffered 51200 warnings
+!
+aaa new-model
+!
+!
+aaa authentication login sslvpn local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+ip cef
+!
+!
+!
+!
+!
+!
+!
+ip dhcp excluded-address 10.10.10.1
+!
+!
+!
+ip domain retry 0
+ip domain timeout 1
+ip domain name oob.lax.dc.ftw.jiveip.net
+ip host test 2014 192.168.19.1
+ip inspect WAAS flush-timeout 10
+login on-failure log
+login on-success log
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+chat-script lte "" "AT!CALL1" TIMEOUT 60 "OK"
+!
+crypto pki trustpoint TP-self-signed-915809663
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-915809663
+ revocation-check none
+ rsakeypair TP-self-signed-915809663
+!
+!
+crypto pki certificate chain TP-self-signed-915809663
+ certificate self-signed 01
+  3082026D 308201D6 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  52312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 39313538 30393636 33312030 1E06092A 864886F7 0D010902
+  16114C41 2E796F75 72646F6D 61696E2E 636F6D30 1E170D31 34303230 33303834
+  3430375A 170D3230 30313031 30303030 30305A30 52312E30 2C060355 04031325
+  494F532D 53656C66 2D536967 6E65642D 43657274 69666963 6174652D 39313538
+  30393636 33312030 1E06092A 864886F7 0D010902 16114C41 2E796F75 72646F6D
+  61696E2E 636F6D30 819F300D 06092A86 4886F70D 01010105 0003818D 00308189
+  02818100 C81F8DC6 902E6653 0EF6071F D6E3C255 0B519336 84021410 92D443EF
+  149DD70C 67FB6E95 2EC21C40 6F1B309A 3EEE30E3 3EC1495D F7CF87AF D3F3AACA
+  416E5B34 7BEBE175 1807B3EB D03C5773 83DAE748 588C52BD 99FA6D1A 549C99F2
+  C4F365C1 441BA567 7F040763 2076E10E 420C7E8C EF9254DB 859C77BC F1F24C5C
+  2C028F69 02030100 01A35330 51300F06 03551D13 0101FF04 05300301 01FF301F
+  0603551D 23041830 1680144D C1DF92FB F9D243CA 16B29659 F8B4B743 FC90AD30
+  1D060355 1D0E0416 04144DC1 DF92FBF9 D243CA16 B29659F8 B4B743FC 90AD300D
+  06092A86 4886F70D 01010505 00038181 00536EFF F2F23EE4 94CF269B E8254101
+  DF4C0BA4 03E9B296 1782083E DB658B23 C2902845 D96D8D9C 1CE55641 E921E042
+  D5FEA064 E90524F9 6EAFE792 2C924395 D7E2F93C 95349411 AA032233 B259C290
+  E9381874 851E00F3 24DA9874 83EC5802 57558E31 1C3C88E3 90DE69A3 DB881F0F
+  328BC1AC 58C67EDE 135A892B 47A275C7 4D
+  	quit
+license udi pid CISCO1921/K9 sn FTX1748301Y
+!
+!
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/c1921.lax-1a/
+ write-memory
+ time-period 60
+username theo privilege 15 secret 4 3b1Fmnk0F1UgUqq83Im6oyhL3KDpvypqYLsaBPGal42
+username nethier privilege 15 secret 4 rNnPVW6GV0fgc4vQdnZrgfeJEVg0YndrbEH18rUWbLg
+username phil privilege 15 secret 4 L5Skk3Bpmz8irHs8uDDkGE5CKyHS73VEX7plYMDWjHE
+!
+redundancy
+ notification-timer 60000
+!
+!
+!
+!
+!
+controller Cellular 0/0
+!
+ip ssh time-out 60
+ip ssh authentication-retries 1
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+!
+!
+crypto vpn anyconnect usbflash0:/webvpn/anyconnect-macosx-i386-3.1.04072-k9.pkg sequence 1
+crypto isakmp keepalive 10 10
+!
+!
+crypto ipsec df-bit clear
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description Management Switch
+ ip dhcp relay information option subscriber-id management
+ ip address 172.19.0.1 255.255.255.0
+ ip helper-address 172.31.1.10
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ ipv6 address autoconfig
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.5
+ description V5 Management LAN (SG Native)
+ encapsulation dot1Q 5
+ ip address 172.19.5.2 255.255.255.0
+!
+interface GigabitEthernet0/1.10
+ description Public Internet
+ encapsulation dot1Q 10
+ ip address 162.250.60.2 255.255.255.0
+ no cdp enable
+!
+interface Cellular0/0/0
+ no ip address
+ encapsulation slip
+ dialer in-band
+ dialer pool-member 1
+ async mode interactive
+!
+interface Virtual-Template1
+ description Virtual-Template attached to internal VRF (WebVPN)
+ ip unnumbered GigabitEthernet0/0
+!
+interface Dialer1
+ vrf forwarding LTE
+ ip address negotiated
+ ip virtual-reassembly in
+ ip virtual-reassembly out
+ encapsulation slip
+ dialer pool 1
+ dialer idle-timeout 0
+ dialer string lte
+ dialer persistent
+!
+ip local pool webvpn-pool 172.19.0.8 172.19.0.15
+ip forward-protocol nd
+!
+ip http server
+ip http access-class 23
+ip http authentication local
+ip http secure-server
+ip http timeout-policy idle 60 life 86400 requests 10000
+ip http client source-interface GigabitEthernet0/0
+!
+ip dns view default
+ domain timeout 1
+ domain retry 0
+ip route 0.0.0.0 0.0.0.0 162.250.60.1
+ip route 172.16.0.0 255.240.0.0 172.19.5.1
+ip route 172.19.0.0 255.255.0.0 Null0
+ip route vrf LTE 0.0.0.0 0.0.0.0 Dialer1
+!
+ip access-list standard snmp-read
+ permit 10.101.24.1
+ permit 172.31.1.10
+ permit 172.31.1.11
+ip access-list standard ssh-v1
+ permit 172.31.1.15
+ permit 172.19.0.1
+ permit 172.19.0.0 0.0.255.255
+ permit 199.87.121.0 0.0.0.255
+!
+logging origin-id string c1921.lax-1a
+logging source-interface GigabitEthernet0/1.10
+logging host 199.87.120.197 transport tcp port 5514 sequence-num-session
+dialer-list 1 protocol ip permit
+!
+!
+snmp-server community jive RO
+snmp-server community opscontrol RO snmp-read
+snmp-server location LAX-PROD
+snmp-server contact noc@jive.com
+snmp-server chassis-id c1901.lax
+snmp-server enable traps entity-sensor threshold
+snmp-server enable traps vstack operation
+access-list 1 permit 166.140.13.152
+access-list 7 permit 172.19.0.16 0.0.0.15
+access-list 7 permit 0.0.0.0 255.255.255.0
+access-list 23 permit 10.10.10.0 0.0.0.7
+access-list 100 permit udp any eq 4433 any
+access-list 110 permit icmp any any
+access-list 110 permit ip any any
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+ privilege level 15
+ no exec
+ transport input ssh
+ stopbits 1
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line 0/0/0
+ script dialer lte
+ no exec
+ rxspeed 100000000
+ txspeed 50000000
+line vty 0 4
+ access-class ssh-v1 in vrf-also
+ privilege level 15
+ transport preferred none
+ transport input ssh
+line vty 5 15
+ privilege level 15
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+!
+webvpn gateway Cisco-WebVPN-Gateway
+ ip address 166.140.13.152 port 443
+ ssl trustpoint TP-self-signed-915809663
+ inservice
+ dtls port 4433
+ !
+webvpn context Cisco-WebVPN
+ title "LA WebVPN Gateway"
+ virtual-template 1
+ aaa authentication list sslvpn
+ gateway Cisco-WebVPN-Gateway
+ max-users 10
+ !
+ ssl authenticate verify all
+ inservice
+ !
+ policy group webvpnpolicy
+   functions svc-enabled
+   filter tunnel ssl-acl
+   svc address-pool "webvpn-pool" netmask 255.255.255.0
+   svc rekey method new-tunnel
+   svc split include 172.19.0.0 255.255.255.0
+ !
+ policy group xxx
+   functions svc-enabled
+   filter tunnel ssl-acl
+   svc address-pool "webvpn-pool" netmask 255.255.255.0
+   svc rekey method new-tunnel
+   svc split include 172.19.0.0 255.255.255.0
+ default-group-policy webvpnpolicy
+!
+end

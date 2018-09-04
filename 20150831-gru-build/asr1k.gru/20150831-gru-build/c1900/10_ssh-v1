@@ -1,0 +1,9 @@
+ip access-list standard ssh-v1
+ permit 172.31.1.15
+ permit 172.27.1.15
+ permit 172.27.0.1
+ permit 172.27.0.0 0.0.255.255
+ permit 199.87.121.0 0.0.0.255
+
+
+

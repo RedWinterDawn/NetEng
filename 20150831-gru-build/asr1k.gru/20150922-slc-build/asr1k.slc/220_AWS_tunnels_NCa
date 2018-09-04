@@ -1,0 +1,25 @@
+!
+interface Tunnel11
+ description :t=ET:p=AZ:v=INTERNAL:d=North California AWS Tunnel 1:
+ vrf forwarding INTERNAL
+ ip address 169.254.253.14 255.255.255.252
+ ip tcp adjust-mss 1387 
+ shutdown
+ tunnel source 209.41.89.196
+ tunnel mode ipsec ipv4
+ tunnel destination 204.246.163.62 
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual-reassembly
+!
+interface Tunnel12
+ description :t=ET:p=AZ:v=INTERNAL:d=North California AWS Tunnel 2:
+ vrf forwarding INTERNAL
+ ip address 169.254.253.10 255.255.255.252
+ ip tcp adjust-mss 1387
+ shutdown
+ tunnel source 209.41.89.196
+ tunnel mode ipsec ipv4
+ tunnel destination 204.246.163.76
+ tunnel protection ipsec profile ipsec-AMAZON-AWS
+ ip virtual-reassembly
+!

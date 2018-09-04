@@ -1,0 +1,6 @@
+crypto keyring keyring-JIVEVPN
+  pre-shared-key address 208.34.81.3 key symmEavuv5
+exit
+crypto isakmp profile isakmp-JIVEVPN
+  match identity address 208.34.81.3 255.255.255.255
+exit

@@ -1,0 +1,217 @@
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+!
+hostname asr1k
+!
+boot-start-marker
+boot system flash asr1001x-universalk9.03.15.01.S.155-2.S1-std.SPA.bin
+boot system flash bootflash:asr1001x-universalk9.03.15.01.S.155-2.S1-std.SPA.bin
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+no aaa new-model
+prompt %h/mex-1a%p
+no ip source-route
+ip options drop
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+ip domain name mex-1a.dc.ftw.jiveip.net
+ip name-server 8.8.8.8
+
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+multilink bundle-name authenticated
+!
+!
+license udi pid ASR1001-X sn JAE191708DT
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path bootflash:/jive-cfg-archive
+!
+username admin privilege 15 secret 5 $1$eaeW$YlOBx/PfkZqytBj6tbLxQ1
+!
+redundancy
+ mode none
+!
+!
+!
+ip tftp source-interface GigabitEthernet0
+ip ssh time-out 60
+ip ssh authentication-retries 1
+ip ssh source-interface GigabitEthernet0
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+  username mpl
+   key-hash ssh-rsa CB1A2A9558428A0532D9CC508B52D299 mpl@jive.com
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+!
+!
+!
+!
+!
+interface Loopback0
+ no ip address
+!
+interface TenGigabitEthernet0/0/0
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet0/0/1
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0/0
+description :d=???:
+ip address 200.53.96.226 255.255.255.252
+no ip redirects
+no ip unreachables
+ntp disable 
+ shutdown
+speed 100
+no negotiation auto
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/0/2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/0/3
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/0/4
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/0/5
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 172.26.0.1 255.255.255.0
+ negotiation auto
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip route 0.0.0.0 0.0.0.0 200.53.96.225 name DEFAULT-GATEWAY 
+!
+!
+ip access-list standard login-SSH
+ permit 172.27.0.1
+ permit 172.31.1.15
+ permit 172.27.0.0 0.0.0.255
+ permit 199.36.248.0 0.0.3.255
+ permit 162.250.60.0 0.0.3.255
+ permit 199.87.120.0 0.0.3.255
+ permit 10.0.0.0 0.255.255.255
+ permit 199.192.165.192 0.0.0.7
+ip access-list standard ntp-clients
+ permit 172.16.0.0 0.15.255.255
+ permit 10.0.0.0 0.255.255.255
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ transport preferred none
+ transport output none
+ stopbits 1
+line aux 0
+ exec-timeout 0 1
+ no exec
+ transport input telnet
+ transport output none
+ stopbits 1
+line vty 0 4
+ access-class login-SSH in vrf-also
+ privilege level 15
+ login local
+ transport preferred none
+ transport input telnet ssh
+ transport output telnet ssh
+line vty 5 15
+ access-class login-SSH in vrf-also
+ privilege level 15
+ login local
+ transport preferred none
+ transport input ssh
+ transport output ssh
+!
+ntp source GigabitEthernet0/0/0
+ntp server 3.us.pool.ntp.org
+ntp server 0.us.pool.ntp.org
+ntp server ntp1.level3.net
+ntp server 1.us.pool.ntp.org
+ntp server 2.us.pool.ntp.org
+ntp server clock.nyc.he.net
+ntp server ntp2.level3.net
+event manager applet CLIaccounting
+ event cli pattern ".*" sync no skip no
+ action 1.0 syslog priority informational msg "$_cli_msg"
+ action 2.0 set _exit_status "1"
+!
+end
+

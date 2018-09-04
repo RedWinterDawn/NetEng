@@ -1,0 +1,466 @@
+!
+! Last configuration change at 14:55:16 UTC Wed Nov 18 2015 by rjs
+! NVRAM config last updated at 14:55:16 UTC Wed Nov 18 2015 by rjs
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service unsupported-transceiver
+no platform punt-keepalive disable-kernel-core
+!
+hostname asr1k
+!
+boot-start-marker
+boot system bootflash:asr1001-universalk9.03.11.00.S.154-1.S-std.bin
+boot-end-marker
+!
+aqm-register-fnf
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition internal
+ description V4 Internal Network (10.X.X.X)
+ !
+ address-family ipv4
+ exit-address-family
+!
+logging count
+logging buffered 16384 informational
+!
+aaa new-model
+!
+!
+!
+!
+!
+!
+!
+aaa session-id common
+prompt %h/ord-2a%p
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip bootp server
+ip domain lookup source-interface GigabitEthernet0/0/0
+ip domain name ord-1a.dc.ftw.jiveip.net
+ip name-server 8.8.8.8
+ip dhcp bootp ignore
+!
+!
+!
+login on-failure log
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid ASR1001 sn JAE181909SR
+license boot level advipservices
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/ord-2a/
+ write-memory
+ time-period 60
+spanning-tree extend system-id
+!
+username pholmes privilege 15 secret 5 $1$Lm01$F4FKTKYCyNpeKoJyfRFH1.
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+ip tftp source-interface GigabitEthernet0
+ip ssh time-out 60
+ip ssh authentication-retries 1
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback2
+ no ip address
+!
+interface GigabitEthernet0/0/0
+ description Level3CircuitID: BCTZ0957 |  CableID:16812305
+ ip address 4.15.86.6 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ negotiation auto
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/1
+ no ip address
+ negotiation auto
+!
+interface GigabitEthernet0/0/1.130
+ description description asr1k.ord-2a-link-to-asr1k.ord-1a
+ encapsulation dot1Q 130
+ vrf forwarding internal
+ ip address 10.80.130.2 255.255.255.248
+!
+interface GigabitEthernet0/0/1.140
+ description description iBGP-ASR-1A
+ encapsulation dot1Q 140
+ ip address 10.80.0.17 255.255.255.248
+!
+interface GigabitEthernet0/0/2
+ description CustomerLink CircuitID:6342043
+ no ip address
+ no negotiation auto
+!
+interface GigabitEthernet0/0/2.125
+ description description DFT-OSPF-INTERNAL
+ encapsulation dot1Q 125
+ vrf forwarding internal
+ ip address 10.80.125.2 255.255.255.248
+!
+interface GigabitEthernet0/0/2.128
+ description description iBGP-BGP1
+ encapsulation dot1Q 128
+ ip address 10.80.0.26 255.255.255.248
+!
+interface GigabitEthernet0/0/3
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 172.25.0.9 255.255.255.0
+ negotiation auto
+!
+router bgp 6643
+ template peer-policy ebgp-peer
+  prefix-list bogons-in in
+  prefix-list TRANSIT_OUT out
+  next-hop-self
+  soft-reconfiguration inbound
+  allowas-in 10
+ exit-peer-policy
+ !
+ bgp log-neighbor-changes
+ neighbor 4.15.86.5 remote-as 3356
+ neighbor 10.80.0.18 remote-as 6643
+ neighbor 10.80.0.25 remote-as 6643
+ !
+ address-family ipv4
+  neighbor 4.15.86.5 activate
+  neighbor 4.15.86.5 next-hop-self
+  neighbor 4.15.86.5 allowas-in 10
+  neighbor 4.15.86.5 soft-reconfiguration inbound
+  neighbor 4.15.86.5 prefix-list bogons-in in
+  neighbor 4.15.86.5 route-map TRANSIT_IN in
+  neighbor 4.15.86.5 route-map TRANSIT_OUT out
+  neighbor 10.80.0.18 activate
+  neighbor 10.80.0.18 next-hop-self
+  neighbor 10.80.0.18 allowas-in 10
+  neighbor 10.80.0.18 soft-reconfiguration inbound
+  neighbor 10.80.0.18 route-map ibgp-asr1-in in
+  neighbor 10.80.0.18 route-map ibgp-asr1-out out
+  neighbor 10.80.0.25 activate
+  neighbor 10.80.0.25 next-hop-self
+  neighbor 10.80.0.25 allowas-in 10
+  neighbor 10.80.0.25 soft-reconfiguration inbound
+  neighbor 10.80.0.25 route-map ibgp-bgp1-in in
+  neighbor 10.80.0.25 route-map ibgp-bgp1-out out
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip http client source-interface GigabitEthernet0
+ip route 212.83.134.100 255.255.255.255 Null0 name BLACKHOLE-LEVEL3-FRAUD-18112015
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.25.0.1
+ip route vrf internal 10.101.0.0 255.255.0.0 10.80.125.1
+ip route vrf internal 10.125.0.0 255.255.0.0 10.80.130.1
+ip route vrf internal 10.131.0.0 255.255.0.0 10.80.125.1
+!
+ip access-list standard ntp-clients
+ permit 172.16.0.0 0.15.255.255
+ permit 10.0.0.0 0.255.255.255
+ip access-list standard nurse
+ permit 172.25.9.0 0.0.0.255
+ip access-list standard snmp-read
+ permit 10.101.24.1
+ permit 172.31.1.10
+ permit 172.31.1.11
+ permit 172.30.8.0 0.0.0.255
+ip access-list standard ssh-v1
+ permit 172.31.1.15
+ permit 172.25.0.0 0.0.0.255
+ permit 199.36.248.0 0.0.3.255
+ permit 162.250.60.0 0.0.3.255
+ permit 199.87.120.0 0.0.3.255
+ permit 10.0.0.0 0.255.255.255
+!
+!
+ip prefix-list PREPEND_LEVEL3_DFW seq 10 permit 199.36.251.0/24
+!
+ip prefix-list bgp-to-peers seq 5 permit 199.87.121.0/24
+ip prefix-list bgp-to-peers seq 10 permit 199.36.250.0/24
+ip prefix-list bgp-to-peers seq 15 permit 199.36.248.0/24
+!
+ip prefix-list bogons-in description Denies internet bogon routes
+ip prefix-list bogons-in seq 90 deny 199.87.121.0/24 le 32
+ip prefix-list bogons-in seq 100 deny 0.0.0.0/8 le 32
+ip prefix-list bogons-in seq 101 deny 10.0.0.0/8 le 32
+ip prefix-list bogons-in seq 102 deny 127.0.0.0/8 le 32
+ip prefix-list bogons-in seq 103 deny 169.254.0.0/16 le 32
+ip prefix-list bogons-in seq 104 deny 172.16.0.0/12 le 32
+ip prefix-list bogons-in seq 105 deny 192.0.2.0/24 le 32
+ip prefix-list bogons-in seq 106 deny 192.168.0.0/16 le 32
+ip prefix-list bogons-in seq 107 deny 224.0.0.0/3 le 32
+ip prefix-list bogons-in seq 108 deny 0.0.0.0/0 ge 25
+ip prefix-list bogons-in seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list ibgp-asr1-in seq 5 permit 199.87.121.0/24
+ip prefix-list ibgp-asr1-in seq 6 permit 199.36.248.0/24
+ip prefix-list ibgp-asr1-in seq 15 deny 0.0.0.0/0 le 32
+!
+ip prefix-list ibgp-asr1-out seq 5 deny 199.87.121.0/24
+ip prefix-list ibgp-asr1-out seq 10 permit 0.0.0.0/0 le 32
+!
+ip prefix-list ibgp-bgp1-in seq 5 permit 199.36.250.0/24
+ip prefix-list ibgp-bgp1-in seq 15 deny 0.0.0.0/0 le 32
+!
+ip prefix-list ibgp-bgp1-out seq 4 deny 37.0.0.0/8 le 32
+ip prefix-list ibgp-bgp1-out seq 5 deny 199.36.250.0/24
+ip prefix-list ibgp-bgp1-out seq 6 deny 40.0.0.0/8 le 32
+ip prefix-list ibgp-bgp1-out seq 7 deny 1.0.0.0/8 le 32
+ip prefix-list ibgp-bgp1-out seq 8 deny 38.76.0.0/16 le 32
+ip prefix-list ibgp-bgp1-out seq 9 deny 162.254.0.0/16 le 32
+ip prefix-list ibgp-bgp1-out seq 10 permit 0.0.0.0/0 le 32
+!
+ip prefix-list transit-in seq 5 deny 199.87.121.0/24
+logging origin-id string asr1k.ord-2a
+!
+route-map TRANSIT_IN permit 10
+!
+route-map ibgp-asr1-out permit 10
+ match ip address prefix-list ibgp-asr1-out
+!
+route-map ibgp-bgp1-out permit 10
+ match ip address prefix-list ibgp-bgp1-out
+!
+route-map bgp-level3-in permit 100
+!
+route-map ibgp-asr1-in permit 10
+ match ip address prefix-list ibgp-asr1-in
+!
+route-map TRANSIT_OUT permit 10
+ match ip address prefix-list bgp-to-peers
+!
+route-map bgp-level3-out deny 1000
+!
+route-map ibgp-bgp1-in permit 10
+ match ip address prefix-list ibgp-bgp1-in
+!
+snmp-server community opscontrol RO snmp-read
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps vrrp
+snmp-server enable traps pfr
+snmp-server enable traps flowmon
+snmp-server enable traps ds1
+snmp-server enable traps call-home message-send-fail server-fail
+snmp-server enable traps tty
+snmp-server enable traps eigrp
+snmp-server enable traps ospf state-change
+snmp-server enable traps ospf errors
+snmp-server enable traps ospf retransmit
+snmp-server enable traps ospf lsa
+snmp-server enable traps ospf cisco-specific state-change nssa-trans-change
+snmp-server enable traps ospf cisco-specific state-change shamlink interface
+snmp-server enable traps ospf cisco-specific state-change shamlink neighbor
+snmp-server enable traps ospf cisco-specific errors
+snmp-server enable traps ospf cisco-specific retransmit
+snmp-server enable traps ospf cisco-specific lsa
+snmp-server enable traps casa
+snmp-server enable traps license
+snmp-server enable traps aaa_server
+snmp-server enable traps atm subif
+snmp-server enable traps bfd
+snmp-server enable traps bgp
+snmp-server enable traps bgp cbgp2
+snmp-server enable traps memory bufferpeak
+snmp-server enable traps config-copy
+snmp-server enable traps config
+snmp-server enable traps config-ctid
+snmp-server enable traps dhcp
+snmp-server enable traps dial
+snmp-server enable traps dlsw
+snmp-server enable traps dsp card-status
+snmp-server enable traps dsp oper-state
+snmp-server enable traps dsp video-usage
+snmp-server enable traps dsp video-out-of-resource
+snmp-server enable traps fru-ctrl
+snmp-server enable traps entity
+snmp-server enable traps event-manager
+snmp-server enable traps frame-relay
+snmp-server enable traps frame-relay subif
+snmp-server enable traps hsrp
+snmp-server enable traps ipmulticast
+snmp-server enable traps msdp
+snmp-server enable traps mvpn
+snmp-server enable traps ospfv3 state-change
+snmp-server enable traps ospfv3 errors
+snmp-server enable traps pim neighbor-change rp-mapping-change invalid-pim-message
+snmp-server enable traps pppoe
+snmp-server enable traps cpu threshold
+snmp-server enable traps pw vc
+snmp-server enable traps rsvp
+snmp-server enable traps ipsla
+snmp-server enable traps syslog
+snmp-server enable traps l2tun session
+snmp-server enable traps l2tun pseudowire status
+snmp-server enable traps ethernet evc status create delete
+snmp-server enable traps ether-oam
+snmp-server enable traps ethernet cfm cc mep-up mep-down cross-connect loop config
+snmp-server enable traps ethernet cfm crosscheck mep-missing mep-unknown service-up
+snmp-server enable traps entity-qfp mem-res-thresh
+snmp-server enable traps entity-state
+snmp-server enable traps trustsec-sxp conn-srcaddr-err msg-parse-err conn-config-err binding-err conn-up conn-down binding-expn-fail oper-nodeid-change binding-conflict
+snmp-server enable traps flash insertion removal
+snmp-server enable traps firewall serverstatus
+snmp-server enable traps sbc adj-status
+snmp-server enable traps sbc blacklist
+snmp-server enable traps sbc congestion-alarm
+snmp-server enable traps sbc h248-ctrlr-status
+snmp-server enable traps sbc media-source
+snmp-server enable traps sbc radius-conn-status
+snmp-server enable traps sbc sla-violation
+snmp-server enable traps sbc sla-violation-rev1
+snmp-server enable traps sbc svc-state
+snmp-server enable traps sbc qos-statistics
+snmp-server enable traps srp
+snmp-server enable traps isdn call-information
+snmp-server enable traps isdn layer2
+snmp-server enable traps isdn chan-not-avail
+snmp-server enable traps isdn ietf
+snmp-server enable traps cnpd
+snmp-server enable traps entity-diag boot-up-fail hm-test-recover hm-thresh-reached scheduled-test-fail
+snmp-server enable traps cef resource-failure peer-state-change peer-fib-state-change inconsistency
+snmp-server enable traps sonet
+snmp-server enable traps resource-policy
+snmp-server enable traps nhrp nhs
+snmp-server enable traps nhrp nhc
+snmp-server enable traps nhrp nhp
+snmp-server enable traps nhrp quota-exceeded
+snmp-server enable traps isis
+snmp-server enable traps ip local pool
+snmp-server enable traps mpls rfc ldp
+snmp-server host 10.101.24.1 vrf internal informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-ctid event-manager cpu ipsla ipsec isakmp
+snmp-server inform retries 10 pending 1000
+!
+!
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ transport preferred none
+ transport output none
+ stopbits 1
+line aux 0
+ exec-timeout 0 1
+ no exec
+ transport input telnet
+ transport output none
+ stopbits 1
+line vty 0 4
+ access-class ssh-v1 in vrf-also
+ privilege level 15
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+line vty 5 15
+ privilege level 15
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+!
+ntp source GigabitEthernet0/0/0
+ntp server 0.us.pool.ntp.org minpoll 8
+ntp server 2.us.pool.ntp.org
+ntp server 3.us.pool.ntp.org
+ntp server 1.us.pool.ntp.org minpoll 8
+event manager applet CLIaccounting
+ event cli pattern ".*" sync no skip no
+ action 1.0 syslog priority informational msg "$_cli_msg"
+ action 2.0 set _exit_status "1"
+!
+end
+
+

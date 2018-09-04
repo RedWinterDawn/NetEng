@@ -1,0 +1,48 @@
+no crypto ipsec profile incontact
+no crypto ipsec transform-set incontact
+no crypto isakmp profile incontacft
+no crypto keyring incontact
+no interface Tunnel50
+!
+! New keyring configuration
+!
+crypto keyring keyring-INCONTACT
+  local-address Loopback1
+  pre-shared-key address 207.166.95.222 key YfW&4FWq
+exit
+!
+! ISAKMP
+!
+crypto isakmp profile isakmp-INCONTACT
+  keyring keyring-INCONTACT
+  match identity address 207.166.95.222 255.255.255.255
+  local-address Loopback1
+exit
+!
+! Transform set
+!
+crypto ipsec transform-set ipsec-trans-INCONTACT esp-aes esp-sha-hmac
+  mode tunnel
+exit
+!
+! IPSEC Profile
+!
+crypto ipsec profile ipsec-INCONTACT
+  description :d=IPSEC Profile for InContact Tunnels:
+  set transform-set ipsec-trans-INCONTACT
+  set pfs group2
+exit
+!
+! Tunnel
+!
+interface Tunnel50
+  description :t=x:d=IPSEC Tunnel for InContact SIP - LA:
+  ip unnumbered Loopback1
+  tunnel source Loopback1
+  tunnel mode ipsec ipv4
+  tunnel destination 207.166.95.222
+  tunnel protection ipsec profile ipsec-INCONTACT
+  ip virtual-reassembly
+exit
+
+ip route 216.20.237.0 255.255.255.0 Tunnel50 name INCONTACT-ENCRYPTION-DOMAIN

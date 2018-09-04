@@ -1,0 +1,3 @@
+interface loopback0
+    ip ospf 6643 area 0
+exit

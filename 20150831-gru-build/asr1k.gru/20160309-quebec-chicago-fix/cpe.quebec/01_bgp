@@ -1,0 +1,39 @@
+
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 description :d=Deny all routes via BGP:
+ip prefix-list BGP-DENY-EVERYTHING-IPv4 seq 5 permit 0.0.0.0/0 le 32
+
+ip prefix-list BGP-JIVE-ORD-PUBLIC-IPv4 description :d=Prefixes to accept from Jive ORD:
+ip prefix-list BGP-JIVE-ORD-PUBLIC-IPv4 seq 5 permit 199.36.250.0/24
+
+route-map BGP-JIVE-ORD-PUBLIC-IPv4-IN permit 5
+    description :d=permit route to CHI prefix:
+    match ip address prefix-list BGP-JIVE-ORD-PUBLIC-IPv4
+exit
+route-map BGP-JIVE-ORD-PUBLIC-IPv4-IN deny 999
+    description :d=Explicit deny:
+exit
+
+route-map BGP-DENY-EVERYTHING-IPv4 deny 5
+ description :d=Deny all IPv4 routes:
+ match ip address prefix-list BGP-DENY-EVERYTHING-IPv4
+exit
+
+router bgp 64598
+    template peer-policy PEER-POLICY-JIVE-ORD-IPv4
+        route-map BGP-DENY-EVERYTHIGN-IPv4 out
+        route-map BGP-JIVE-ORD-PUBLIC-IPv4-IN in
+        next-hop-self
+        soft-reconfiguration inbound
+    exit
+    template peer-session PEER-SESSION-JIVE-EBGP
+        version 4
+        remote-as 6643
+    exit
+    
+    neigh 208.34.103.6 inherit peer-session PEER-SESSION-JIVE-EBGP
+    neigh 208.34.103.6 description :r=asr1k.ord:a=6643:d=Jive ORD:
+    address-family ipv4
+        neigh 208.34.103.6 activate
+        neigh 208.34.103.6 inherit peer-policy PEER-POLICY-JIVE-ORD-IPv4
+    exit
+exit

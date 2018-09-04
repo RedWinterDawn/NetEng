@@ -1,0 +1,59 @@
+router bgp 6643
+ template peer-policy PEER-POLICY-PUBLIC-PEER-IPv4
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-PUBLIC-PEER-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+  ! disabled due to memory limitations
+  ! soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-TRANSIT-IPv4
+  route-map BGP-TRANSIT-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
+  allowas-in 10
+  next-hop-self
+  ! again disabled
+  ! soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
+  route-map BGP-TRANSIT-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-DEFAULT-ONLY-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
+  allowas-in 10
+  next-hop-self
+ exit-peer-policy
+ !
+ template peer-session PEER-SESSION-TRANSIT
+  version 4
+ exit-peer-session
+ !
+ !
+ template peer-session PEER-SESSION-PUBLIC-PEER
+  version 4
+ exit-peer-session
+ !
+ template peer-session PEER-SESSION-AS3549
+  inherit peer-session PEER-SESSION-TRANSIT
+  remote-as 3549
+ !
+ no bgp default ipv4-unicast
+ !
+ ! need to remove the old peer
+ no neighbor 189.125.5.93
+ !
+ neighbor 189.125.5.93 inherit peer-session PEER-SESSION-AS3549
+ neighbor 189.125.5.93 description :f=t:p=L3:a=3549:d=Level3 Transit:
+ neighbor 189.125.5.93 shut
+ !
+ address-family ipv4
+  ! allow ECMP across two peers
+  maximum-paths 2
+  neighbor 189.125.5.93 activate
+  neighbor 189.125.5.93 inherit peer-policy PEER-POLICY-TRANSIT-DEFAULT-ONLY-IPv4
+  redistribute static route-map REDIST-STATIC-TO-BGP-IPv4
+!

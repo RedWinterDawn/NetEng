@@ -1,0 +1,2 @@
+ip ssh time-out 60
+ip ssh authentication-retries 1

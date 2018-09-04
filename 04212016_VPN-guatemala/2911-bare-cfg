@@ -1,0 +1,50 @@
+track 10 rtr 1 reachability
+ delay down 1 up 1
+ !
+ interface GigabitEthernet0/1
+ description tigo
+ ip address 181.174.100.211 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ !
+ interface GigabitEthernet0/2
+ description claro
+ ip address 190.148.254.27 255.255.255.248
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ !
+ interface GigabitEthernet0/0
+ description LAN
+ ip address 192.168.0.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ speed 100
+ full-duplex
+ !
+ ip forward-protocol nd
+ ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1 10.0.0.1 track 10
+ ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/2 10.0.1.1 10
+ !
+ ip nat inside source route-map ISP1 interface GigabitEthernet0/1 overload
+ ip nat inside source route-map ISP2 interface GigabitEthernet0/2 overload
+ !
+ ip sla 1
+ icmp-echo 10.0.0.1 source-interface GgabitEthernet0/0
+ timeout 1000
+ threshold 2
+ frequency 3
+ ip sla schedule 1 life forever start-time now
+ access-list 1 permit 192.168.0.0 0.0.0.255
+ !
+ route-map ISP2 permit 10
+ match ip address 1
+ match interface GigabitEthernet0/2
+ !
+ route-map ISP1 permit 10
+ match ip address 1
+ match interface GigabitEthernet0/1
+ !

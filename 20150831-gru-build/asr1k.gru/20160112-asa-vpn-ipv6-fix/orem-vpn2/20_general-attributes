@@ -1,0 +1,3 @@
+tunnel-group dev general-attributes
+ ipv6-address-pool vpn_users
+exit

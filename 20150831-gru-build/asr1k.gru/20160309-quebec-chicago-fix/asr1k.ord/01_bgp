@@ -1,0 +1,41 @@
+ip prefix-list BGP-CHI-PUBLIC-IPv4 description :d=Match the Chicago Public IPv4:
+ip prefix-list BGP-CHI-PUBLIC-IPv4 seq 5 permit 199.36.250.0/24
+!
+route-map BGP-JIVE-QUEBEC-PUBLIC-IPv4-OUT permit 10
+    description :d=Advertise only the Chicago public prefix:
+    match ip address prefix-list BGP-CHI-PUBLIC-IPv4
+exit
+route-map BGP-JIVE-QUEBEC-PUBLIC-IPv4-OUT deny 999
+    description :d=Explicit deny:
+exit
+!
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 description :d=Prefixes to redistribute from connected to BGP:
+ip prefix-list REDIST-CONNECTED-TO-BGP-IPv4 seq 5 permit 208.34.103.7/31
+!
+route-map REDIST-CONNECTED-TO-BGP-IPv4 permit 5
+    description :d=Prefixes to redist from connected to BGP:
+    match ip address prefix-list REDIST-CONNECTED-TO-BGP-IPv4
+exit
+route-map REDIST-CONNECTED-TO-BGP-IPv4 deny 999
+    description :d=Explicit deny:
+exit
+
+router bgp 6643
+ template peer-policy PEER-POLICY-JIVE-QUEBEC-PUBLIC-IPv4
+    route-map BGP-DENY-EVERYTHING-IPv4 in
+    route-map BGP-JIVE-QUEBEC-PUBLIC-IPv4-OUT out
+    next-hop-self
+    soft-reconfiguration inbound
+ exit
+ template peer-session PEER-SESSION-JIVE-QUEBEC
+    version 4
+    remote-as 64598
+ exit
+ neigh 208.34.103.7 inherit peer-session PEER-SESSION-JIVE-QUEBEC
+ neigh 208.34.103.7 description :r=cpe.quebec:a=64598:d=Jive Quebec CPE:
+ address-family ipv4
+   redistribute connected route-map REDIST-CONNECTED-TO-BGP-IPv4
+   neigh 208.34.103.7 activate
+   neigh 208.34.103.7 inherit peer-policy PEER-POLICY-JIVE-QUEBEC-PUBLIC-IPv4
+ exit
+exit

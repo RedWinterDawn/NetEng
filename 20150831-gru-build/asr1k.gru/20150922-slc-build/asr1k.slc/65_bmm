@@ -1,0 +1,6 @@
+!
+interface GigabitEthernet0/0/3.8
+ description :v=OPSCONTROL:d=Bare Metal Management:
+ encapsulation dot1Q 8
+ vrf forwarding OPSCONTROL
+!

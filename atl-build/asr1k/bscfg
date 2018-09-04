@@ -1,0 +1,1484 @@
+!
+! Last configuration change at 14:53:20 UTC Wed Nov 18 2015 by rjs
+! NVRAM config last updated at 04:32:41 UTC Tue Dec 8 2015 by rjs
+!
+version 15.4
+no service pad
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec
+service timestamps log datetime msec show-timezone
+service password-encryption
+service sequence-numbers
+service unsupported-transceiver
+no platform punt-keepalive disable-kernel-core
+!
+hostname asr1k
+!
+boot-start-marker
+boot system bootflash:asr1001-universalk9.03.11.00.S.154-1.S-std.bin
+boot-end-marker
+!
+aqm-register-fnf
+!
+vrf definition Mgmt-intf
+ description Management network
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition customers
+ rd 169.254.22.2:10
+ !
+ address-family ipv4
+  import ipv4 unicast map TRANSIT_OUT
+  export ipv4 unicast map airespring
+  route-target export 169.254.22.2:10
+  route-target import 169.254.22.2:10
+ exit-address-family
+!
+vrf definition internal
+ description V4 Internal Network (10.X.X.X)
+ rd 10.122.255.1:10
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition opscontrol
+ description Admin access to all servers (NOT for production traffic!)
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+logging count
+logging buffered 16384 informational
+enable secret 5 $1$uXZI$WJU0hVDfESHlnWIuDujCD1
+!
+aaa new-model
+aaa local authentication default authorization default
+!
+!
+aaa group server tacacs+ NETENG-AUTH
+ server name NETENG-AUTH-LAX
+ server name NETENG-AUTH-NYC
+ ip tacacs source-interface Loopback0
+!
+aaa authentication login default group NETENG-AUTH local
+aaa authorization exec default group NETENG-AUTH local
+aaa accounting commands 0 default start-stop group NETENG-AUTH
+aaa accounting commands 15 default start-stop group NETENG-AUTH
+!
+!
+!
+!
+!
+aaa session-id common
+prompt %h/atl-1a%p
+no ip source-route
+ip options drop
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip bootp server
+ip domain lookup source-interface Loopback0
+ip domain name atl-1a.dc.ftw.jiveip.net
+ip name-server 8.8.8.8
+ip dhcp bootp ignore
+!
+!
+!
+login on-failure log
+login on-success log
+ipv6 multicast rpf use-bgp
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+flow exporter COLLECTOR-OPS
+ description Jive Ops Collector
+ destination 172.30.8.3 vrf opscontrol
+ source Loopback2
+ transport udp 2022
+ export-protocol netflow-v5
+!
+!
+flow monitor PUBLIC
+ description Monitor Public IP Traffic
+ exporter COLLECTOR-OPS
+ statistics packet protocol
+ statistics packet size
+ record netflow ipv4 original-input
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid ASR1001 sn JAE174707QJ
+license accept end user agreement
+license boot level advipservices
+archive
+ log config
+  logging enable
+  logging size 200
+  notify syslog contenttype plaintext
+  hidekeys
+ path http://172.31.1.10/cisco.php/atl-1a/
+ write-memory
+ time-period 60
+memory statistics history table 72
+memory reserve critical 65536
+memory free low-watermark processor 1048576
+spanning-tree extend system-id
+!
+username theo privilege 15 secret 5 $1$yiCW$v4H63KefDkW3cvahs7Qz50
+username phil privilege 15 secret 5 $1$1IOV$OwamTcC070/0TJM7Eqrjc1
+username sgridley
+username jfallback secret 5 $1$XLmN$MDTn6ymbthGmQ2YlpDWU5.
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+!
+ip tftp source-interface GigabitEthernet0
+ip ssh time-out 60
+ip ssh authentication-retries 1
+ip ssh source-interface GigabitEthernet0
+ip ssh version 2
+ip ssh pubkey-chain
+  username theo
+   key-hash ssh-rsa 9FFEADE2D2409F9E8DA08A82FBAD80B5 theo@theo-mba.local
+  username pholmes
+   key-hash ssh-rsa C792175A2613CF42997CF16C6EACE6BC GitHub@holmes41@gmail.com
+  username nethier
+   key-hash ssh-rsa 303CF59A72EBEB607239CDC724AACE7A nethier@lilie.local
+  username sgridley
+   key-hash ssh-rsa B740471D0B1B08266486CAA4C3848969 scottgridley@Scotts-MacBook-Pro-2.local
+  username achidester
+   key-hash ssh-rsa 5212789C3A095740F4AF0D5E9F001D21 achidester@Temps-MacBook-Pro.local
+  username mpl
+   key-hash ssh-rsa CB1A2A9558428A0532D9CC508B52D299 mpl@jive.com
+  username rjs
+   key-hash ssh-rsa B01B4C2510CE7E14B0E3697E4FF63BDB rjs@jive.com
+lldp run
+!
+!
+crypto keyring Level3SMS
+  local-address Loopback1
+  pre-shared-key address 74.63.156.28 key 1teadm321
+  pre-shared-key address 63.209.137.28 key 1teadm321
+crypto keyring verizon
+  local-address Loopback1
+  pre-shared-key address 63.110.103.238 key Nn5OGJiAvBo5n0wHF8jqvQUSHw6
+  pre-shared-key address 65.211.121.238 key Nn5OGJiAvBo5n0wHF8jqvQUSHw6
+  pre-shared-key address 63.77.77.238 key Nn5OGJiAvBo5n0wHF8jqvQUSHw6
+  pre-shared-key address 65.243.173.238 key Nn5OGJiAvBo5n0wHF8jqvQUSHw6
+  pre-shared-key address 65.217.41.238 key Nn5OGJiAvBo5n0wHF8jqvQUSHw6
+crypto keyring syniverse
+  local-address Loopback1
+  pre-shared-key address 173.209.203.20 key J1v3E$n9@Syn
+  pre-shared-key address 173.209.198.20 key J1v3E$n9@Syn
+crypto keyring keyring-JIVEVPN
+  local-address Loopback1
+  pre-shared-key address 199.87.120.14 key 7S4VBRyAvp9nw
+  pre-shared-key address 162.250.61.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 162.250.60.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.87.123.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 162.250.63.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.36.250.242 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.36.251.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.87.121.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.87.122.3 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.192.165.194 key 7S4VBRyAvp9nw
+  pre-shared-key address 199.36.249.3 key 7triavAkpee
+crypto keyring Amazon-AWS
+  local-address 162.250.62.3
+  pre-shared-key address 204.246.163.77 key Lvwqx48FFKiyy13iL3Vsu_6aywMXwmnb
+  pre-shared-key address 204.246.163.76 key pM4ZyiONfWb1wuzqhuerPDegURWDXhB8
+  pre-shared-key address 72.21.209.226 key N.fGM5iA1FuhsFI3NDiFM3_jBcMW.6XO
+  pre-shared-key address 72.21.209.192 key tgMY_4fY9HfczR5.ggBSkXj2F5GEvcrf
+crypto keyring SSG-CHI
+  local-address 162.250.62.3
+  pre-shared-key address 199.36.250.129 key ji2d9s8!ndlf)SD(k2jd872$19283@kdj2!!!!!
+!
+!
+!
+!
+!
+crypto isakmp policy 200
+ encr aes
+ authentication pre-share
+ group 2
+ lifetime 28800
+!
+crypto isakmp policy 201
+ encr 3des
+ authentication pre-share
+ group 2
+ lifetime 28800
+!
+crypto isakmp policy 202
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+ lifetime 28800
+!
+crypto isakmp policy 300
+ encr 3des
+ authentication pre-share
+ group 2
+ lifetime 3600
+crypto isakmp keepalive 10
+crypto isakmp profile SSG-CHI
+   keyring SSG-CHI
+   match identity address 199.36.250.129 255.255.255.255
+   keepalive 10 retry 2
+   local-address 162.250.62.3
+crypto isakmp profile isakmp-JIVEVPN
+   keyring keyring-JIVEVPN
+   match identity address 199.87.123.4 255.255.255.255
+   match identity address 162.250.61.3 255.255.255.255
+   match identity address 162.250.60.3 255.255.255.255
+   match identity address 199.87.120.14 255.255.255.255
+   match identity address 199.87.123.3 255.255.255.255
+   match identity address 162.250.63.3 255.255.255.255
+   match identity address 199.36.250.242 255.255.255.255
+   match identity address 199.36.251.3 255.255.255.255
+   match identity address 199.87.121.3 255.255.255.255
+   match identity address 199.87.122.3 255.255.255.255
+   match identity address 199.192.165.194 255.255.255.255
+   match identity address 199.36.249.3 255.255.255.255
+   keepalive 10 retry 2
+   local-address Loopback1
+crypto isakmp profile Amazon-AWS
+   keyring Amazon-AWS
+   match identity address 204.246.163.77 255.255.255.255
+   match identity address 204.246.163.76 255.255.255.255
+   match identity address 72.21.209.226 255.255.255.255
+   match identity address 72.21.209.192 255.255.255.255
+   local-address 162.250.62.3
+crypto isakmp profile syniverse
+   keyring syniverse
+   match identity address 173.209.198.20 255.255.255.255
+   match identity address 173.209.203.20 255.255.255.255
+   local-address Loopback1
+crypto isakmp profile verizon
+   keyring verizon
+   match identity address 63.110.103.238 255.255.255.255
+   match identity address 65.211.121.238 255.255.255.255
+   match identity address 63.77.77.238 255.255.255.255
+   match identity address 65.243.173.238 255.255.255.255
+   match identity address 65.217.41.238 255.255.255.255
+   local-address Loopback1
+crypto isakmp profile Level3SMS
+   keyring Level3SMS
+   match identity address 74.63.156.28 255.255.255.255
+   match identity address 63.209.137.28 255.255.255.255
+   local-address Loopback1
+!
+crypto ipsec security-association replay window-size 128
+!
+crypto ipsec transform-set SSG-CHI esp-aes esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set ipsec-prop-JIVEVPN esp-aes esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set Amazon-AWS esp-aes esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set syniverse esp-3des esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set syniverse2 esp-3des esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set JIVEVPN esp-aes esp-sha-hmac
+ mode tunnel
+crypto ipsec transform-set verizon esp-3des esp-md5-hmac
+ mode tunnel
+crypto ipsec transform-set Level3SMS esp-3des esp-md5-hmac
+ mode tunnel
+crypto ipsec df-bit clear
+!
+crypto ipsec profile Amazon-AWS
+ set transform-set Amazon-AWS
+ set pfs group2
+!
+crypto ipsec profile JIVEVPN
+ set transform-set JIVEVPN
+!
+crypto ipsec profile Level3SMS
+ description Level3SMS
+ set security-association lifetime seconds 28800
+ set transform-set Level3SMS
+ set pfs group2
+!
+crypto ipsec profile SSG-CHI
+ description SSG-CHI
+ set transform-set SSG-CHI
+ set pfs group2
+!
+!
+crypto ipsec profile ipsec-JIVEVPN
+ set transform-set ipsec-prop-JIVEVPN
+!
+crypto ipsec profile syniverse
+ description Syniverse
+ set transform-set syniverse2
+!
+crypto ipsec profile syniverse2
+!
+crypto ipsec profile verizon
+ set transform-set verizon
+ set pfs group2
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Public Loopback (Jive PI address space)
+ ip address 162.250.62.1 255.255.255.255
+ ntp disable
+!
+interface Loopback1
+ description Public VPN Termination Loopback (Jive PI address space)
+ ip address 162.250.62.3 255.255.255.255
+ ntp disable
+!
+interface Loopback2
+ description OpsControl Network Loopback (for VPN)
+ vrf forwarding opscontrol
+ ip address 172.22.255.1 255.255.255.255
+!
+interface Loopback3
+ ip address 10.255.10.22 255.255.255.255
+!
+interface Loopback11
+ description Anycast Loopback
+ ip address 199.36.248.254 255.255.255.255
+ ntp disable
+!
+interface Tunnel1
+ description SSG-CHI
+ vrf forwarding internal
+ ip unnumbered Loopback1
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf 4 area 0
+ shutdown
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 199.36.250.129
+ tunnel protection ipsec profile SSG-CHI
+ ip virtual-reassembly
+!
+interface Tunnel10
+ description N.Cali 1
+ vrf forwarding internal
+ ip address 169.254.253.78 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 204.246.163.77
+ tunnel protection ipsec profile Amazon-AWS
+ ip virtual-reassembly
+!
+interface Tunnel11
+ description N.Cali 1
+ vrf forwarding internal
+ ip address 169.254.253.74 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 204.246.163.76
+ tunnel protection ipsec profile Amazon-AWS
+ ip virtual-reassembly
+!
+interface Tunnel12
+ description N. Virginia 1
+ vrf forwarding internal
+ ip address 169.254.255.110 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 72.21.209.226
+ tunnel protection ipsec profile Amazon-AWS
+ ip virtual-reassembly
+!
+interface Tunnel13
+ description N. Virginia 2
+ vrf forwarding internal
+ ip address 169.254.255.106 255.255.255.252
+ ip tcp adjust-mss 1387
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 72.21.209.192
+ tunnel protection ipsec profile Amazon-AWS
+ ip virtual-reassembly
+!
+interface Tunnel15
+ description syniverse dallas
+ ip unnumbered Loopback1
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 173.209.198.20
+ tunnel protection ipsec profile syniverse
+ ip virtual-reassembly
+!
+interface Tunnel16
+ description syniverse chicago
+ ip unnumbered Loopback1
+ shutdown
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 173.209.203.20
+ tunnel protection ipsec profile syniverse
+ ip virtual-reassembly
+!
+interface Tunnel22
+ vrf forwarding customers
+ ip address 169.254.22.2 255.255.255.252
+ tunnel source Loopback1
+ tunnel destination 199.36.250.167
+!
+interface Tunnel25
+ vrf forwarding customers
+ ip address 169.255.22.2 255.255.255.252
+ tunnel source Loopback1
+ tunnel destination 199.87.121.3
+!
+interface Tunnel40
+ description verizon-RTO
+ ip unnumbered Loopback1
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 63.110.103.238
+ tunnel protection ipsec profile verizon
+ ip virtual-reassembly
+!
+interface Tunnel41
+ description verizon-ELB
+ ip unnumbered Loopback1
+ tunnel source 162.250.63.3
+ tunnel mode ipsec ipv4
+ tunnel destination 65.211.121.238
+ tunnel protection ipsec profile verizon
+ ip virtual-reassembly
+!
+interface Tunnel42
+ description verizon-DNG
+ ip unnumbered Loopback1
+ tunnel source 162.250.63.3
+ tunnel mode ipsec ipv4
+ tunnel destination 63.77.77.238
+ tunnel protection ipsec profile verizon
+ ip virtual-reassembly
+!
+interface Tunnel43
+ description verizon-HSJ
+ ip unnumbered Loopback1
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 65.243.173.238
+ tunnel protection ipsec profile verizon
+ ip virtual-reassembly
+!
+interface Tunnel44
+ description verizon-CPZ
+ ip unnumbered Loopback1
+ tunnel source Loopback1
+ tunnel mode ipsec ipv4
+ tunnel destination 65.217.41.238
+ tunnel protection ipsec profile verizon
+ ip virtual-reassembly
+!
+interface Tunnel50
+ no ip address
+!
+interface Tunnel60
+ description Level3SMS - CO
+ ip unnumbered Loopback1
+ no ip redirects
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 74.63.156.28
+ tunnel protection ipsec profile Level3SMS
+ ip virtual-reassembly
+!
+interface Tunnel61
+ description Level3SMS - MI
+ ip unnumbered Loopback1
+ no ip redirects
+ shutdown
+ tunnel source 162.250.62.3
+ tunnel mode ipsec ipv4
+ tunnel destination 63.209.137.28
+ tunnel protection ipsec profile Level3SMS
+ ip virtual-reassembly
+!
+interface Tunnel1000
+ description OpsControl - P2P
+ vrf forwarding opscontrol
+ ip address 172.16.255.22 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 172.16.255.31 199.87.120.14
+ ip nhrp map multicast 162.250.63.3
+ ip nhrp map 172.16.255.23 162.250.63.3
+ ip nhrp map multicast 162.250.60.3
+ ip nhrp map 172.16.255.19 162.250.60.3
+ ip nhrp map multicast 162.250.61.3
+ ip nhrp map 172.16.255.20 162.250.61.3
+ ip nhrp map multicast 199.36.251.3
+ ip nhrp map 172.16.255.18 199.36.251.3
+ ip nhrp map multicast 199.87.121.3
+ ip nhrp map 172.16.255.25 199.87.121.3
+ ip nhrp map multicast 199.87.123.3
+ ip nhrp map 172.16.255.17 199.87.123.3
+ ip nhrp map multicast 199.87.122.3
+ ip nhrp map 172.16.255.24 199.87.122.3
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 172.16.255.30 199.192.165.194
+ ip nhrp map multicast 199.36.249.3
+ ip nhrp map 172.16.255.27 199.36.249.3
+ ip nhrp network-id 1
+ ip tcp adjust-mss 1387
+ ip ospf network point-to-multipoint
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf mtu-ignore
+ ip ospf 1 area 0
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel protection ipsec profile ipsec-JIVEVPN shared
+ ip virtual-reassembly
+!
+interface Tunnel1024
+ description asr1k.lon-1a-OPS
+ vrf forwarding opscontrol
+ ip unnumbered Loopback2
+ ip mtu 1400
+ ip tcp adjust-mss 1387
+ ip ospf network point-to-point
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf 1 area 0
+ shutdown
+ tunnel source Loopback1
+ tunnel destination 199.87.122.3
+ ip virtual-reassembly
+!
+interface Tunnel4000
+ description V4Compat - P2P
+ vrf forwarding internal
+ ip address 10.255.5.22 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map multicast 162.250.61.3
+ ip nhrp map 10.255.5.20 162.250.61.3
+ ip nhrp map multicast 162.250.60.3
+ ip nhrp map 10.255.5.19 162.250.60.3
+ ip nhrp map multicast 199.87.120.14
+ ip nhrp map 10.255.5.31 199.87.120.14
+ ip nhrp map multicast 162.250.63.3
+ ip nhrp map 10.255.5.23 162.250.63.3
+ ip nhrp map multicast 199.36.250.242
+ ip nhrp map 10.255.5.21 199.36.250.242
+ ip nhrp map multicast 199.36.251.3
+ ip nhrp map 10.255.5.18 199.36.251.3
+ ip nhrp map multicast 199.87.121.3
+ ip nhrp map 10.255.5.25 199.87.121.3
+ ip nhrp map multicast 199.87.123.3
+ ip nhrp map 10.255.5.17 199.87.123.3
+ ip nhrp map multicast 199.87.122.3
+ ip nhrp map 10.255.5.24 199.87.122.3
+ ip nhrp map multicast 199.192.165.194
+ ip nhrp map 10.255.5.30 199.192.165.194
+ ip nhrp map multicast 199.36.249.3
+ ip nhrp map 10.255.5.27 199.36.249.3
+ ip nhrp network-id 4
+ ip tcp adjust-mss 1387
+ ip ospf network point-to-multipoint
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf mtu-ignore
+ ip ospf 4 area 0
+ tunnel source Loopback1
+ tunnel mode gre multipoint
+ tunnel key 4
+ tunnel protection ipsec profile ipsec-JIVEVPN shared
+ ip virtual-reassembly
+!
+interface Tunnel4024
+ description asr1k.lon-1a
+ vrf forwarding internal
+ ip unnumbered Loopback3
+ ip mtu 1400
+ ip tcp adjust-mss 1387
+ ip ospf network point-to-point
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf 4 area 0
+ shutdown
+ tunnel source Loopback1
+ tunnel destination 199.87.122.3
+ ip virtual-reassembly
+!
+interface GigabitEthernet0/0/0
+ description link-to-psw1.atl
+ no ip address
+ no ip redirects
+ no ip unreachables
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ no negotiation auto
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/0.102
+ description Telex House Blend Circuti ID:
+ encapsulation dot1Q 102
+ ip address 72.28.104.18 255.255.255.248
+ no ip redirects
+ no ip unreachables
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/0.103
+ encapsulation dot1Q 103
+ ip address 198.32.132.184 255.255.255.0
+ no ip redirects
+ no ip unreachables
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/0.105
+ description :f=t:p=CC:c=15001/GIGE/ATLNGAMQ/ATLNGAMQR11:d=Comcast IP Transit:
+ encapsulation dot1Q 105
+ ip address 173.167.56.98 255.255.255.252
+ no ip redirects
+ no ip unreachables
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ ip verify unicast source reachable-via any
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/1
+ description Zayo
+ ip address 208.185.102.242 255.255.255.252
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ ip verify unicast source reachable-via any
+ no negotiation auto
+!
+interface GigabitEthernet0/0/2
+ description Comcast CID: 15001/GIGE /ATLNGAMQ /ATLNGAMQR11
+ no ip address
+ no ip redirects
+ no ip unreachables
+ ip flow monitor PUBLIC unicast input
+ ip flow monitor PUBLIC unicast output
+ ip verify unicast source reachable-via any
+ no negotiation auto
+ no lldp transmit
+ no lldp receive
+!
+interface GigabitEthernet0/0/2.100
+ description opscontrol-vpls
+ encapsulation dot1Q 100
+ vrf forwarding opscontrol
+ ip address 172.16.254.22 255.255.255.0
+ ip ospf network point-to-multipoint non-broadcast
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf mtu-ignore
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0/2.400
+ description internal-vpls
+ encapsulation dot1Q 400
+ vrf forwarding internal
+ ip address 10.255.10.22 255.255.255.0
+ ip ospf network point-to-multipoint non-broadcast
+ ip ospf dead-interval 5
+ ip ospf hello-interval 1
+ ip ospf retransmit-interval 1
+ ip ospf mtu-ignore
+ ip ospf 4 area 0
+ ip ospf cost 300
+!
+interface GigabitEthernet0/0/3
+ no ip address
+ negotiation auto
+!
+interface GigabitEthernet0/0/3.2
+ encapsulation dot1Q 2
+ vrf forwarding opscontrol
+ ip address 172.22.2.1 255.255.255.0
+!
+interface GigabitEthernet0/0/3.3
+ encapsulation dot1Q 3
+ vrf forwarding opscontrol
+ ip dhcp relay information option subscriber-id servers
+ ip dhcp relay information option-insert
+ ip address 172.22.3.1 255.255.255.0
+ ip helper-address 172.31.1.10
+!
+interface GigabitEthernet0/0/3.4
+ encapsulation dot1Q 4
+ vrf forwarding internal
+ ip address 10.122.0.1 255.255.0.0
+!
+interface GigabitEthernet0/0/3.5
+ encapsulation dot1Q 5
+ vrf forwarding opscontrol
+ ip address 172.22.5.1 255.255.255.0
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0/3.8
+ description Bare Metal Management
+ encapsulation dot1Q 8
+ vrf forwarding opscontrol
+ ip address 172.22.8.254 255.255.255.0
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0/3.9
+ description VM Management
+ encapsulation dot1Q 9
+ vrf forwarding opscontrol
+ ip address 172.22.9.254 255.255.255.0
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0/3.10
+ encapsulation dot1Q 10
+ ip unnumbered Loopback0
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ ip address 172.22.0.2 255.255.255.0
+ negotiation auto
+!
+router ospf 4 vrf internal
+ router-id 10.122.0.1
+ ispf
+ prefix-suppression
+ timers throttle spf 10 100 1000
+ timers throttle lsa 10 100 1000
+ timers lsa arrival 50
+ timers pacing flood 5
+ timers pacing retransmission 60
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/2.400
+ no passive-interface Tunnel1
+ no passive-interface Tunnel4000
+ network 10.0.0.0 0.255.255.255 area 0
+ neighbor 10.255.10.19
+ neighbor 10.255.10.25
+ neighbor 10.255.10.18
+ neighbor 10.255.5.27 cost 5000
+ maximum-paths 1
+ distribute-list prefix v4compat in
+!
+router ospf 1 vrf opscontrol
+ router-id 172.22.255.1
+ ispf
+ prefix-suppression
+ timers throttle spf 10 100 1000
+ timers throttle lsa 10 100 1000
+ timers lsa arrival 50
+ timers pacing flood 5
+ timers pacing retransmission 60
+ redistribute static subnets
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/2.100
+ no passive-interface Tunnel1000
+ network 172.16.0.0 0.15.255.255 area 0
+ neighbor 172.16.254.20
+ neighbor 172.16.254.25
+ neighbor 172.16.254.18
+ neighbor 172.16.254.19
+ neighbor 172.16.255.27 cost 5000
+ maximum-paths 1
+!
+router bgp 6643
+ template peer-policy ebgp-peer
+  prefix-list bogons-in in
+  prefix-list BGP_TO_TRANSIT out
+  next-hop-self
+  soft-reconfiguration inbound
+  send-community both
+  allowas-in 10
+ exit-peer-policy
+ !
+ template peer-policy public-peer
+  prefix-list bogons-in in
+  prefix-list BGP_TO_TRANSIT out
+  next-hop-self
+  soft-reconfiguration inbound
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-TRANSIT-IPv4
+  route-map BGP-TRANSIT-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+ exit-peer-policy
+ !
+ template peer-policy PEER-POLICY-COMCAST-IPv4
+  route-map BGP-COMCAST-IPv4-IN in
+  route-map BGP-TRANSIT-IPv4-OUT out
+  prefix-list BGP-BOGONS-IPv4-IN in
+  prefix-list BGP-TRANSIT-IPv4-OUT out
+  next-hop-self
+  allowas-in 10
+ exit-peer-policy
+ !
+ template peer-session PEER-SESSION-TRANSIT
+  version 4
+ exit-peer-session
+ !
+ template peer-session PEER-SESSION-AS7922
+  remote-as 7922
+  inherit peer-session PEER-SESSION-TRANSIT
+ exit-peer-session
+ !
+ bgp log-neighbor-changes
+ bgp graceful-restart restart-time 120
+ bgp graceful-restart stalepath-time 360
+ bgp graceful-restart
+ bgp bestpath as-path multipath-relax
+ bgp maxas-limit 60
+ neighbor 72.28.104.17 remote-as 36086
+ neighbor 173.167.56.97 inherit peer-session PEER-SESSION-AS7922
+ neighbor 173.167.56.97 description :f=t:p=CC:a=7922:d=Comcast Transit:
+ neighbor 198.32.132.35 remote-as 4565
+ neighbor 198.32.132.35 description Megapath
+ neighbor 198.32.132.75 remote-as 6939
+ neighbor 198.32.132.75 description Hurricane Electric
+ neighbor 198.32.132.88 remote-as 33132
+ neighbor 198.32.132.88 description Fibernet
+ neighbor 198.32.132.132 remote-as 31877
+ neighbor 198.32.132.132 description Georgia Public Web
+ neighbor 198.32.132.134 remote-as 18886
+ neighbor 198.32.132.134 description Inline.com
+ neighbor 198.32.132.134 password 7 002C3600160E110749346F
+ neighbor 198.32.132.180 remote-as 714
+ neighbor 198.32.132.180 description Apple
+ neighbor 208.185.102.241 remote-as 6461
+ neighbor 208.185.102.241 description Zayo
+ !
+ address-family ipv4
+  network 162.250.62.0 mask 255.255.255.0 route-map PUBLIC_ANNOUNCE
+  network 199.36.248.0 route-map PUBLIC_ANNOUNCE
+  redistribute static route-map REDIST-STATIC-TO-BGP-IPv4
+  neighbor 72.28.104.17 activate
+  neighbor 72.28.104.17 inherit peer-policy ebgp-peer
+  neighbor 72.28.104.17 route-map bgp-telx-in in
+  neighbor 72.28.104.17 route-map bgp-telx-out out
+  neighbor 173.167.56.97 activate
+  neighbor 173.167.56.97 inherit peer-policy PEER-POLICY-COMCAST-IPv4
+  neighbor 198.32.132.35 activate
+  neighbor 198.32.132.35 inherit peer-policy public-peer
+  neighbor 198.32.132.35 maximum-prefix 10000
+  neighbor 198.32.132.75 activate
+  neighbor 198.32.132.75 inherit peer-policy public-peer
+  neighbor 198.32.132.75 maximum-prefix 117000
+  neighbor 198.32.132.88 activate
+  neighbor 198.32.132.88 inherit peer-policy public-peer
+  neighbor 198.32.132.88 maximum-prefix 1500
+  neighbor 198.32.132.132 activate
+  neighbor 198.32.132.132 inherit peer-policy public-peer
+  neighbor 198.32.132.132 maximum-prefix 75000
+  neighbor 198.32.132.134 activate
+  neighbor 198.32.132.134 inherit peer-policy public-peer
+  neighbor 198.32.132.134 maximum-prefix 75000
+  neighbor 198.32.132.180 activate
+  neighbor 198.32.132.180 inherit peer-policy public-peer
+  neighbor 198.32.132.180 maximum-prefix 1000
+  neighbor 208.185.102.241 activate
+  neighbor 208.185.102.241 inherit peer-policy ebgp-peer
+  neighbor 208.185.102.241 route-map bgp-zayo-in in
+  neighbor 208.185.102.241 route-map bgp-zayo-out out
+ exit-address-family
+ !
+ address-family ipv4 vrf customers
+  redistribute connected
+  neighbor ORD-GRE peer-group
+  neighbor ORD-GRE next-hop-self
+  neighbor ORD-GRE soft-reconfiguration inbound
+  neighbor ORD-GRE route-map receive-from-customers in
+  neighbor ORD-GRE route-map announce-to-customers out
+  neighbor 169.255.22.1 remote-as 6643
+  neighbor 169.255.22.1 peer-group ORD-GRE
+  neighbor 169.255.22.1 activate
+ exit-address-family
+ !
+ address-family ipv4 vrf internal
+  network 10.122.0.0 mask 255.255.0.0
+  neighbor aws-vpn peer-group
+  neighbor aws-vpn next-hop-self
+  neighbor aws-vpn soft-reconfiguration inbound
+  neighbor aws-vpn prefix-list BGP_FROM_AWS in
+  neighbor aws-vpn prefix-list BGP_TO_AWS out
+  neighbor 169.254.253.73 remote-as 7224
+  neighbor 169.254.253.73 peer-group aws-vpn
+  neighbor 169.254.253.73 activate
+  neighbor 169.254.253.77 remote-as 7224
+  neighbor 169.254.253.77 peer-group aws-vpn
+  neighbor 169.254.253.77 activate
+  neighbor 169.254.255.105 remote-as 7224
+  neighbor 169.254.255.105 peer-group aws-vpn
+  neighbor 169.254.255.105 activate
+  neighbor 169.254.255.109 remote-as 7224
+  neighbor 169.254.255.109 peer-group aws-vpn
+  neighbor 169.254.255.109 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip bgp-community new-format
+ip community-list expanded comcast-internal permit ^7922:1...$
+ip community-list expanded comcast-customers permit ^7922:2...$
+ip community-list expanded AS7922-COMCAST-INTERNAL permit ^7922:1...$
+ip community-list expanded AS7922-COMCAST-CUSTOMERS permit ^7922:2...$
+no ip http server
+no ip http secure-server
+ip http client source-interface GigabitEthernet0
+ip route 8.17.202.0 255.255.255.128 Tunnel61
+ip route 8.28.64.0 255.255.255.128 Tunnel60
+ip route 10.122.0.0 255.255.0.0 Null0
+ip route 63.77.76.224 255.255.255.224 Tunnel42
+ip route 63.110.102.224 255.255.255.224 Tunnel40
+ip route 65.211.120.224 255.255.255.224 Tunnel41
+ip route 65.217.40.192 255.255.255.224 Tunnel44
+ip route 65.243.172.224 255.255.255.224 Tunnel43
+ip route 162.250.62.0 255.255.255.0 GigabitEthernet0/0/3.10
+ip route 173.209.198.156 255.255.255.255 Tunnel15
+ip route 173.209.203.156 255.255.255.255 Tunnel16
+ip route 176.67.120.0 255.255.254.0 Null0
+ip route 192.96.201.135 255.255.255.255 Null0
+ip route 208.34.80.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 208.34.103.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 208.34.104.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 208.34.109.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 208.34.110.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 208.34.111.0 255.255.255.0 162.250.62.7 tag 100 name INFRA-SPRINT-ADDR-TO-SINKHOLE
+ip route 212.83.134.100 255.255.255.255 Null0 name BLACKHOLE-LEVEL3-FRAUD-18112015
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.22.0.1
+ip route vrf internal 10.122.0.0 255.255.0.0 Null0
+ip route vrf opscontrol 172.22.0.0 255.255.255.0 172.22.5.2
+!
+ip access-list standard ntp-clients
+ permit 172.16.0.0 0.15.255.255
+ permit 10.0.0.0 0.255.255.255
+ip access-list standard nurse
+ permit 172.22.9.0 0.0.0.255
+ip access-list standard snmp-read
+ permit 10.101.24.1
+ permit 172.31.9.42
+ permit 172.31.1.10
+ permit 172.31.1.11
+ permit 172.30.8.0 0.0.0.255
+ip access-list standard ssh-v1
+ permit 172.22.0.1
+ permit 172.31.1.15
+ permit 76.27.60.128
+ permit 172.22.0.0 0.0.0.255
+ permit 199.36.248.0 0.0.3.255
+ permit 162.250.60.0 0.0.3.255
+ permit 199.87.120.0 0.0.3.255
+ permit 10.0.0.0 0.255.255.255
+!
+!
+ip prefix-list BGP-BOGONS-IPv4-IN description :d=Internet bogon routes:
+ip prefix-list BGP-BOGONS-IPv4-IN seq 100 deny 0.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 101 deny 10.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 102 deny 127.0.0.0/8 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 103 deny 169.254.0.0/16 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 104 deny 172.16.0.0/12 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 105 deny 192.0.2.0/24 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 106 deny 192.168.0.0/16 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 107 deny 224.0.0.0/3 le 32
+ip prefix-list BGP-BOGONS-IPv4-IN seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list BGP-TRANSIT-IPv4-OUT description :d=Prefixes to annouce to IP transit providers over BGP:
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 5 permit 162.250.62.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 10 permit 208.34.80.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 20 permit 208.34.81.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 30 permit 208.34.103.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 40 permit 208.34.104.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 50 permit 208.34.109.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 60 permit 208.34.110.0/24
+ip prefix-list BGP-TRANSIT-IPv4-OUT seq 70 permit 208.34.111.0/24
+!
+ip prefix-list BGP_FROM_AWS seq 10 permit 10.103.0.0/16
+ip prefix-list BGP_FROM_AWS seq 11 permit 10.104.0.0/16
+!
+ip prefix-list BGP_TO_AWS seq 5 permit 10.122.0.0/16
+!
+ip prefix-list BGP_TO_TRANSIT description Prefixes to announce to transits over BGP
+ip prefix-list BGP_TO_TRANSIT seq 5 permit 162.250.62.0/24
+ip prefix-list BGP_TO_TRANSIT seq 10 permit 208.34.80.0/24
+ip prefix-list BGP_TO_TRANSIT seq 20 permit 208.34.81.0/24
+ip prefix-list BGP_TO_TRANSIT seq 30 permit 208.34.103.0/24
+ip prefix-list BGP_TO_TRANSIT seq 40 permit 208.34.104.0/24
+ip prefix-list BGP_TO_TRANSIT seq 50 permit 208.34.109.0/24
+ip prefix-list BGP_TO_TRANSIT seq 60 permit 208.34.110.0/24
+ip prefix-list BGP_TO_TRANSIT seq 70 permit 208.34.111.0/24
+!
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 10 permit 208.34.80.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 20 permit 208.34.81.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 30 permit 208.34.103.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 40 permit 208.34.104.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 50 permit 208.34.109.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 60 permit 208.34.110.0/24
+ip prefix-list REDIST-STATIC-TO-BGP-IPv4 seq 70 permit 208.34.111.0/24
+!
+ip prefix-list bogons-in description Denies internet bogon routes
+ip prefix-list bogons-in seq 100 deny 0.0.0.0/8 le 32
+ip prefix-list bogons-in seq 101 deny 10.0.0.0/8 le 32
+ip prefix-list bogons-in seq 102 deny 127.0.0.0/8 le 32
+ip prefix-list bogons-in seq 103 deny 169.254.0.0/16 le 32
+ip prefix-list bogons-in seq 104 deny 172.16.0.0/12 le 32
+ip prefix-list bogons-in seq 105 deny 192.0.2.0/24 le 32
+ip prefix-list bogons-in seq 106 deny 192.168.0.0/16 le 32
+ip prefix-list bogons-in seq 107 deny 224.0.0.0/3 le 32
+ip prefix-list bogons-in seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list customers-in seq 5 permit 0.0.0.0/0 ge 28
+ip prefix-list customers-in seq 10 deny 0.0.0.0/0 le 32
+!
+ip prefix-list jive-other-prefixes description Prefixes announced from other sites
+ip prefix-list jive-other-prefixes seq 5 permit 162.250.60.0/24
+ip prefix-list jive-other-prefixes seq 10 permit 162.250.61.0/24
+ip prefix-list jive-other-prefixes seq 15 permit 162.250.63.0/24
+ip prefix-list jive-other-prefixes seq 20 permit 199.36.250.0/24
+ip prefix-list jive-other-prefixes seq 25 permit 199.36.251.0/24
+ip prefix-list jive-other-prefixes seq 30 permit 199.36.249.0/24
+!
+ip prefix-list lon-ospf seq 5 permit 10.124.0.0/16
+!
+ip prefix-list v4compat seq 5 permit 10.101.0.0/16
+ip prefix-list v4compat seq 10 permit 10.131.0.0/16
+ip prefix-list v4compat seq 15 permit 10.117.0.0/16
+ip prefix-list v4compat seq 20 permit 10.118.0.0/16
+ip prefix-list v4compat seq 25 permit 10.119.0.0/16
+ip prefix-list v4compat seq 30 permit 10.120.0.0/16
+ip prefix-list v4compat seq 35 permit 10.121.0.0/16
+ip prefix-list v4compat seq 40 permit 10.122.0.0/16
+ip prefix-list v4compat seq 45 permit 10.123.0.0/16
+ip prefix-list v4compat seq 50 permit 10.124.0.0/16
+ip prefix-list v4compat seq 55 permit 10.132.0.0/24
+ip prefix-list v4compat seq 60 permit 10.103.0.0/16
+ip prefix-list v4compat seq 65 permit 10.104.0.0/16
+ip prefix-list v4compat seq 70 permit 10.125.0.0/16
+ip prefix-list v4compat seq 75 permit 10.130.0.0/16
+ip prefix-list v4compat seq 80 permit 10.127.0.0/16
+ip sla 1
+ icmp-echo 172.31.1.10 source-interface GigabitEthernet0
+ vrf Mgmt-intf
+ tag overlord
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1 life forever start-time now
+ip sla 1017
+ icmp-echo 199.87.123.1 source-interface Loopback0
+ tag pvu-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1017 life forever start-time now
+ip sla 1018
+ icmp-echo 199.36.251.1 source-interface Loopback0
+ tag dfw-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1018 life forever start-time now
+ip sla 1019
+ icmp-echo 162.250.60.1 source-interface Loopback0
+ tag lax-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1019 life forever start-time now
+ip sla 1020
+ icmp-echo 162.250.61.1 source-interface Loopback0
+ tag nyc-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1020 life forever start-time now
+ip sla 1021
+ icmp-echo 199.36.250.242 source-interface Loopback0
+ tag ord-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1021 life forever start-time now
+ip sla 1023
+ icmp-echo 162.250.63.1 source-interface Loopback0
+ tag geg-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1023 life forever start-time now
+ip sla 1024
+ icmp-echo 199.87.122.3 source-interface Loopback0
+ tag ord-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1024 life forever start-time now
+ip sla 1025
+ icmp-echo 199.87.121.3 source-interface Loopback0
+ tag ord-1a.asr1k.loopback
+ threshold 100
+ timeout 500
+ frequency 1
+ip sla schedule 1025 life forever start-time now
+logging alarm minor
+logging origin-id string asr1k.atl-1a
+logging source-interface Loopback2 vrf opscontrol
+logging host 172.30.8.8 vrf opscontrol transport tcp port 5514 sequence-num-session
+access-list 20 permit 10.122.0.0 0.0.255.255 log
+!
+route-map receive-from-customers permit 10
+ match ip address prefix-list customers-in
+!
+route-map receive-from-customers deny 1000
+!
+route-map airespring permit 10
+ description Allow all BGP routes
+!
+route-map REDIST-STATIC-TO-BGP-IPv4 permit 10
+ match ip address prefix-list REDIST-STATIC-TO-BGP-IPv4
+ match tag 100
+!
+route-map bgp-comcast-in permit 5
+ match community comcast-internal
+ set local-preference 200
+!
+route-map bgp-comcast-in permit 6
+ match community comcast-customers
+ set local-preference 200
+!
+route-map bgp-comcast-in permit 10
+!
+route-map bgp-comcast-in deny 1000
+!
+route-map bgp-zayo-out permit 10
+ match ip address prefix-list BGP_TO_TRANSIT
+!
+route-map bgp-zayo-out deny 1000
+!
+route-map AWS_IN permit 10
+!
+route-map bgp-telx-out permit 10
+ match ip address prefix-list BGP_TO_TRANSIT
+!
+route-map bgp-telx-out deny 1000
+!
+route-map TRANSIT_IN permit 10
+!
+route-map BGP-TRANSIT-IPv4-OUT permit 10
+ description :d=Permit only Jive prefixes to be announced to transit:
+ match ip address prefix-list BGP-TRANSIT-IPv4-OUT
+!
+route-map BGP-TRANSIT-IPv4-OUT deny 1000
+ description :d=Explicit deny:
+!
+route-map PUBLIC_ANNOUNCE permit 10
+ description Applied to public announcement (/24)
+!
+route-map AWS_OUT permit 10
+ match ip address prefix-list BGP_TO_AWS
+!
+route-map AWS_OUT deny 1000
+!
+route-map TRANSIT_OUT permit 10
+ match ip address prefix-list BGP_TO_TRANSIT
+!
+route-map TRANSIT_OUT deny 1000
+!
+route-map BGP-COMCAST-IPv4-IN permit 10
+ description :d=Set Comcast internal routes to be local peer route preference:
+ match community AS7922-COMCAST-INTERNAL
+ set local-preference 210
+!
+route-map BGP-COMCAST-IPv4-IN permit 20
+ description :d=Set Comcast customer routes to be local peer route preference:
+ match community AS7922-COMCAST-INTERNAL
+ set local-preference 210
+!
+route-map BGP-COMCAST-IPv4-IN permit 100
+ description :d=Accept other routes from Comcast, TODO-NEWPREF will be 180:
+!
+route-map BGP-TRANSIT-IPv4-IN permit 10
+ description :d=Routing policy applied to inbound transit routes:
+!
+route-map bgp-telx-in permit 1000
+!
+route-map bgp-comcast-out permit 10
+ match ip address prefix-list BGP_TO_TRANSIT
+!
+route-map bgp-comcast-out deny 1000
+!
+route-map announce-to-customers permit 10
+ match ip address prefix-list BGP_TO_TRANSIT
+!
+route-map announce-to-customers deny 1000
+!
+route-map bgp-zayo-in permit 10
+!
+snmp-server view nurse rttMonLatestRttOperCompletionTime included
+snmp-server community opscontrol RO snmp-read
+snmp-server community nurse view nurse RO nurse
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps vrrp
+snmp-server enable traps pfr
+snmp-server enable traps flowmon
+snmp-server enable traps ds1
+snmp-server enable traps call-home message-send-fail server-fail
+snmp-server enable traps tty
+snmp-server enable traps eigrp
+snmp-server enable traps ospf state-change
+snmp-server enable traps ospf errors
+snmp-server enable traps ospf retransmit
+snmp-server enable traps ospf lsa
+snmp-server enable traps ospf cisco-specific state-change nssa-trans-change
+snmp-server enable traps ospf cisco-specific state-change shamlink interface
+snmp-server enable traps ospf cisco-specific state-change shamlink neighbor
+snmp-server enable traps ospf cisco-specific errors
+snmp-server enable traps ospf cisco-specific retransmit
+snmp-server enable traps ospf cisco-specific lsa
+snmp-server enable traps casa
+snmp-server enable traps license
+snmp-server enable traps aaa_server
+snmp-server enable traps atm subif
+snmp-server enable traps bfd
+snmp-server enable traps bgp
+snmp-server enable traps bgp cbgp2
+snmp-server enable traps memory bufferpeak
+snmp-server enable traps config-copy
+snmp-server enable traps config
+snmp-server enable traps config-ctid
+snmp-server enable traps dhcp
+snmp-server enable traps dial
+snmp-server enable traps dlsw
+snmp-server enable traps dsp card-status
+snmp-server enable traps dsp oper-state
+snmp-server enable traps dsp video-usage
+snmp-server enable traps dsp video-out-of-resource
+snmp-server enable traps fru-ctrl
+snmp-server enable traps entity
+snmp-server enable traps event-manager
+snmp-server enable traps frame-relay
+snmp-server enable traps frame-relay subif
+snmp-server enable traps hsrp
+snmp-server enable traps ipmulticast
+snmp-server enable traps msdp
+snmp-server enable traps mvpn
+snmp-server enable traps ospfv3 state-change
+snmp-server enable traps ospfv3 errors
+snmp-server enable traps pim neighbor-change rp-mapping-change invalid-pim-message
+snmp-server enable traps pppoe
+snmp-server enable traps cpu threshold
+snmp-server enable traps pw vc
+snmp-server enable traps rsvp
+snmp-server enable traps ipsla
+snmp-server enable traps syslog
+snmp-server enable traps l2tun session
+snmp-server enable traps l2tun pseudowire status
+snmp-server enable traps ethernet evc status create delete
+snmp-server enable traps ether-oam
+snmp-server enable traps ethernet cfm cc mep-up mep-down cross-connect loop config
+snmp-server enable traps ethernet cfm crosscheck mep-missing mep-unknown service-up
+snmp-server enable traps entity-qfp mem-res-thresh
+snmp-server enable traps entity-state
+snmp-server enable traps trustsec-sxp conn-srcaddr-err msg-parse-err conn-config-err binding-err conn-up conn-down binding-expn-fail oper-nodeid-change binding-conflict
+snmp-server enable traps flash insertion removal
+snmp-server enable traps firewall serverstatus
+snmp-server enable traps sbc adj-status
+snmp-server enable traps sbc blacklist
+snmp-server enable traps sbc congestion-alarm
+snmp-server enable traps sbc h248-ctrlr-status
+snmp-server enable traps sbc media-source
+snmp-server enable traps sbc radius-conn-status
+snmp-server enable traps sbc sla-violation
+snmp-server enable traps sbc sla-violation-rev1
+snmp-server enable traps sbc svc-state
+snmp-server enable traps sbc qos-statistics
+snmp-server enable traps srp
+snmp-server enable traps isdn call-information
+snmp-server enable traps isdn layer2
+snmp-server enable traps isdn chan-not-avail
+snmp-server enable traps isdn ietf
+snmp-server enable traps cnpd
+snmp-server enable traps entity-diag boot-up-fail hm-test-recover hm-thresh-reached scheduled-test-fail
+snmp-server enable traps cef resource-failure peer-state-change peer-fib-state-change inconsistency
+snmp-server enable traps sonet
+snmp-server enable traps resource-policy
+snmp-server enable traps nhrp nhs
+snmp-server enable traps nhrp nhc
+snmp-server enable traps nhrp nhp
+snmp-server enable traps nhrp quota-exceeded
+snmp-server enable traps isis
+snmp-server enable traps ip local pool
+snmp-server enable traps mpls rfc ldp
+snmp-server enable traps mpls ldp
+snmp-server enable traps mpls rfc traffic-eng
+snmp-server enable traps mpls traffic-eng
+snmp-server enable traps mpls fast-reroute protected
+snmp-server enable traps ike policy add
+snmp-server enable traps ike policy delete
+snmp-server enable traps ike tunnel start
+snmp-server enable traps ike tunnel stop
+snmp-server enable traps ipsec cryptomap add
+snmp-server enable traps ipsec cryptomap delete
+snmp-server enable traps ipsec cryptomap attach
+snmp-server enable traps ipsec cryptomap detach
+snmp-server enable traps ipsec tunnel start
+snmp-server enable traps ipsec tunnel stop
+snmp-server enable traps ipsec too-many-sas
+snmp-server enable traps gdoi gm-start-registration
+snmp-server enable traps gdoi gm-registration-complete
+snmp-server enable traps gdoi gm-re-register
+snmp-server enable traps gdoi gm-rekey-rcvd
+snmp-server enable traps gdoi gm-rekey-fail
+snmp-server enable traps gdoi ks-rekey-pushed
+snmp-server enable traps gdoi gm-incomplete-cfg
+snmp-server enable traps gdoi ks-no-rsa-keys
+snmp-server enable traps gdoi ks-new-registration
+snmp-server enable traps gdoi ks-reg-complete
+snmp-server enable traps bulkstat collection transfer
+snmp-server enable traps alarms informational
+snmp-server enable traps voice
+snmp-server enable traps vrfmib vrf-up vrf-down vnet-trunk-up vnet-trunk-down
+snmp-server enable traps ethernet cfm alarm
+snmp-server enable traps rf
+snmp-server enable traps transceiver all
+snmp-server enable traps mpls vpn
+snmp-server enable traps mpls rfc vpn
+snmp-server host 10.101.24.1 vrf internal informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-ctid event-manager cpu ipsla ipsec isakmp
+snmp-server host 172.31.1.83 vrf opscontrol informs version 2c public  flowmon call-home bgp bgp ospf alarms tty bfd memory config-copy config config-ctid event-manager cpu ipsla ipsec isakmp
+snmp-server inform retries 10 pending 1000
+snmp ifmib ifalias long
+snmp ifmib ifindex persist
+snmp mib persist v3mibs
+snmp mib persist cbqos
+snmp mib persist dsmib
+!
+tacacs server NETENG-AUTH-LAX
+ address ipv4 162.250.60.7
+ key 7 060D0A2219410A17041133
+tacacs server NETENG-AUTH-NYC
+ address ipv4 162.250.61.7
+ key 7 11021C06421D0802052C0A
+!
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+!
+!
+!
+alias exec overlord-confirm configure confirm
+alias exec overlord-revert configure revert
+alias exec overlord-ping ping vrf Mgmt-intf 172.16.0.136 timeout 1 repeat 1 source GigabitEthernet0
+alias exec overlord-diff show archive config differences http://172.16.0.136/cisco/asr1k.atl-1a-confg?licence=advipservices
+alias exec overlord-apply configure replace http://172.16.0.136/cisco/asr1k.atl-1a-confg?licence=advipservices list force ignorecase revert trigger error timer 1
+configuration mode exclusive
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ transport preferred none
+ transport output none
+ stopbits 1
+line aux 0
+ exec-timeout 0 1
+ no exec
+ transport input telnet
+ transport output none
+ stopbits 1
+line vty 0 4
+ access-class ssh-v1 in vrf-also
+ privilege level 15
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+line vty 5 15
+ privilege level 15
+ transport preferred none
+ transport input ssh
+ transport output telnet ssh
+!
+ntp source Loopback0
+ntp server 3.us.pool.ntp.org
+ntp server 1.us.pool.ntp.org
+ntp server 2.us.pool.ntp.org
+ntp server 0.us.pool.ntp.org
+ntp server ntp1.level3.net
+ntp server clock.nyc.he.net
+ntp server ntp2.level3.net
+event manager applet CLIaccounting
+ event cli pattern ".*" sync no skip no
+ action 1.0 syslog priority informational msg "$_cli_msg"
+ action 2.0 set _exit_status "1"
+!
+end
+
+
+

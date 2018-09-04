@@ -1,0 +1,8 @@
+interface Tunnel201
+ description :r=asr1k.ord:d=GRE tunnel - workaround to tcp/5060 issue:
+ ip address 208.34.103.7 255.255.255.254
+ ip nat outside
+ ip virtual-reassembly in
+ tunnel source GigabitEthernet8
+ tunnel destination 199.87.121.3
+end

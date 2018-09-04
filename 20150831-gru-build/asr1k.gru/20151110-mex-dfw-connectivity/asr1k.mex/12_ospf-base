@@ -1,0 +1,23 @@
+router ospf 6643
+    ! explicitly specify router-id
+    router-id 208.34.80.1
+    ! enable incremental SPF
+    ispf
+    ! standard Jive timers
+    timers throttle spf 10 100 1000
+    timers throttle lsa 10 100 1000
+    timers lsa arrival 50
+    timers pacing flood 5
+    timers pacing retransmission 60
+    ! 2 path ECMP
+    maximum-paths 2
+    !
+    ! Do not initially need MPLS-TE, but want to
+    ! have IGP TE extensions turned on for future
+    ! proofing.
+    ! 
+    mpls traffic-eng area 0
+    mpls traffic-eng router-id loopback0
+    passive-interface default
+    no passive-interface GigabitEthernet0/0/2.701
+exit

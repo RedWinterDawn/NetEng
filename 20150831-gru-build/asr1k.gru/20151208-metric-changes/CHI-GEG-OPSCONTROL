@@ -1,0 +1,10 @@
+! configuration for asr1k.chi->asr1k.geg VPLS link on asr1k.chi
+router ospf 1 vrf opscontrol
+ neighbor 172.16.254.23 cost 343
+exit
+!
+! configuration for asr1k.chi->asr1k.geg DMVPN link on asr1k.chi
+router ospf 1 vrf opscontrol
+ neighbor 172.16.255.23 cost 543
+exit
+!

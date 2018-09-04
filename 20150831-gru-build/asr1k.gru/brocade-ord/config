@@ -1,0 +1,668 @@
+!
+ver V5.6.0bT183
+!
+!
+mirror ethernet 1/24
+!
+lag "1" dynamic id 1
+ ports ethernet 1/13 to 1/14
+ primary-port 1/13
+ deploy
+ port-name "ICL-to-BR2:1/13" ethernet 1/13
+ port-name "ICL-to-BR2:1/14" ethernet 1/14
+!
+lag "2" dynamic id 2
+ ports ethernet 1/15
+ primary-port 1/15
+ deploy
+ port-name "ICL-to-BSW1:1/5" ethernet 1/15
+!
+lag "3" dynamic id 3
+ ports ethernet 1/16
+ primary-port 1/16
+ deploy
+ port-name "ICL-to-BSW2:1/5" ethernet 1/16
+!
+!
+
+!
+no spanning-tree
+!
+!
+vlan 1 name DEFAULT-VLAN
+ no untagged ethe 1/6 to 1/7 ethe 1/13 to 1/14
+!
+vlan 10 name iBGP
+ untagged ethe 1/3
+ router-interface ve 10
+!
+vlan 11 name iBGP
+ tagged ethe 1/13 to 1/16
+ router-interface ve 11
+!
+vlan 20 name VRRP
+ untagged ethe 1/2
+ tagged ethe 1/3
+ router-interface ve 20
+!
+vlan 35 name DFT-350E
+ tagged ethe 1/3 ethe 1/6
+ router-interface ve 35
+!
+vlan 80 name iBGP-ASR1k
+ tagged ethe 1/7
+ router-interface ve 80
+!
+vlan 125
+ tagged ethe 1/6 ethe 1/21
+!
+vlan 128 name iBGP-ASR2
+ tagged ethe 1/6
+ router-interface ve 128
+!
+vlan 4090 name Session-VLAN
+ tagged ethe 1/13 to 1/14
+ router-interface ve 90
+!
+
+!
+system-max ip-cache 524288
+system-max ip-route 524288
+!
+!
+aaa authentication login default local
+aaa authentication login privilege-mode
+!
+!
+clock summer-time
+clock timezone us Mountain
+logging host 10.101.27.1
+logging buffered 3000
+logging console
+privilege exec level 5 skip-page-display
+username admin password .....
+username admin history  .....
+username rancid privilege 5 password .....
+username theo password .....
+username pholmes password .....
+!
+ip as-path access-list 5 seq 5 permit _701_
+ip as-path access-list 5 seq 6 permit _19262_
+ip as-path access-list 5 seq 7 permit _2920_
+ip as-path access-list 5 seq 8 permit _21873_
+ip as-path access-list 5 seq 10 deny .*
+!
+ip as-path access-list 10 seq 5 permit _701_
+ip as-path access-list 10 seq 50 deny .*
+!
+ip as-path access-list 15 seq 5 deny _26375_
+ip as-path access-list 15 seq 50 permit .*
+!
+ip community-list extended COMCAST_INTERNAL seq 5 permit ^7922:1...$
+!
+ip community-list extended COMCAST_CUSTOMERS seq 5 permit ^7922:2...$
+!
+ip prefix-list Level3_OUT description Level3
+ip prefix-list Level3_OUT seq 10 permit 199.36.250.0/24
+ip prefix-list Level3_OUT seq 15 permit 199.87.121.0/24
+!
+ip prefix-list nLayer_OUT description nLayer
+ip prefix-list nLayer_OUT seq 10 permit 199.36.250.0/24
+!
+ip prefix-list iBGP_CERMAK description "iBGP CERMAK"
+ip prefix-list iBGP_CERMAK seq 100 deny 199.36.251.0/24
+ip prefix-list iBGP_CERMAK seq 101 deny 162.250.60.0/24
+ip prefix-list iBGP_CERMAK seq 102 deny 162.250.61.0/24
+ip prefix-list iBGP_CERMAK seq 103 deny 162.250.62.0/24
+ip prefix-list iBGP_CERMAK seq 104 deny 162.250.63.0/24
+ip prefix-list iBGP_CERMAK seq 105 deny 199.36.248.0/24
+ip prefix-list iBGP_CERMAK seq 106 deny 199.36.250.0/24
+ip prefix-list iBGP_CERMAK seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list iBGP_OUT description "iBGP OUT"
+ip prefix-list iBGP_OUT seq 5 permit 199.36.250.0/24
+!
+ip prefix-list HE_OUT description Level3
+ip prefix-list HE_OUT seq 10 permit 199.36.250.0/24
+ip prefix-list HE_OUT seq 15 permit 199.87.121.0/24
+!
+ip prefix-list BGP_TO_COMCAST seq 10 permit 199.36.250.0/24
+ip prefix-list BGP_TO_COMCAST seq 15 permit 199.87.121.0/24
+!
+ip prefix-list BOGONS description "Denies internet bogon routes"
+ip prefix-list BOGONS seq 100 deny 0.0.0.0/8 le 32
+ip prefix-list BOGONS seq 101 deny 10.0.0.0/8 le 32
+ip prefix-list BOGONS seq 102 deny 127.0.0.0/8 le 32
+ip prefix-list BOGONS seq 103 deny 169.254.0.0/16 le 32
+ip prefix-list BOGONS seq 104 deny 172.16.0.0/12 le 32
+ip prefix-list BOGONS seq 105 deny 192.0.2.0/24 le 32
+ip prefix-list BOGONS seq 106 deny 192.168.0.0/16 le 32
+ip prefix-list BOGONS seq 107 deny 224.0.0.0/3 le 32
+ip prefix-list BOGONS seq 200 deny 1.0.0.0/8 le 32
+ip prefix-list BOGONS seq 201 deny 2.0.0.0/8 le 32
+ip prefix-list BOGONS seq 205 deny 5.0.0.0/8 le 32
+ip prefix-list BOGONS seq 208 deny 8.0.0.0/8 le 32
+ip prefix-list BOGONS seq 212 deny 12.0.0.0/8 le 32
+ip prefix-list BOGONS seq 214 deny 14.0.0.0/8 le 32
+ip prefix-list BOGONS seq 223 deny 23.0.0.0/8 le 32
+ip prefix-list BOGONS seq 224 deny 24.0.0.0/8 le 32
+ip prefix-list BOGONS seq 227 deny 27.0.0.0/8 le 32
+ip prefix-list BOGONS seq 241 deny 41.0.0.0/8 le 32
+ip prefix-list BOGONS seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list DCS_FROM_COMCAST seq 10 permit 162.250.62.0/24
+ip prefix-list DCS_FROM_COMCAST seq 15 permit 162.250.60.0/24
+!
+ip prefix-list iBGP_ORD_IN seq 100 deny 199.36.250.0/24
+ip prefix-list iBGP_ORD_IN seq 200 deny 1.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 201 deny 2.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 205 deny 5.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 208 deny 8.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 212 deny 12.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 214 deny 14.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 223 deny 23.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 224 deny 24.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 227 deny 27.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list iBGP_ORD_OUT seq 10 permit 199.36.250.0/24
+!
+ip prefix-list PREPEND_LEVEL3_NYC_DFW seq 10 permit 199.36.251.0/24
+ip prefix-list PREPEND_LEVEL3_NYC_DFW seq 15 permit 162.250.61.0/24
+!
+ip prefix-list nLayer_ORD_OUT description ORD-nLayer-OUT
+ip prefix-list nLayer_ORD_OUT seq 15 permit 199.87.121.0/24
+!
+ip prefix-list iBGP_ORD_IN_2 seq 100 deny 199.36.250.0/24
+ip prefix-list iBGP_ORD_IN_2 seq 200 deny 1.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 201 deny 2.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 205 deny 5.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 208 deny 8.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 212 deny 12.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 214 deny 14.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 223 deny 23.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 224 deny 24.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 227 deny 27.0.0.0/8 le 32
+ip prefix-list iBGP_ORD_IN_2 seq 1000 permit 0.0.0.0/0 le 32
+!
+ip prefix-list iBGP_ORD_OUT_2 description "iBGP OUT"
+ip prefix-list iBGP_ORD_OUT_2 seq 5 permit 199.36.250.0/24
+ip route 0.0.0.0/0 10.80.0.2
+ip route 1.0.0.0/8 10.80.0.2
+ip route 1.1.1.1/32 10.1.1.1
+ip route 2.0.0.0/8 10.80.0.2
+ip route 5.0.0.0/8 10.80.0.26
+ip route 10.0.0.0/8 10.1.1.1
+ip route 10.2.2.0/30 ve 10 name iBGP
+ip route 10.2.2.2/32 ethernet 1/3
+ip route 10.2.2.2/32 ve 10
+ip route 10.8.0.0/14 10.1.1.1
+ip route 10.101.0.0/16 10.1.1.1
+ip route 10.101.24.1/32 10.1.1.10
+ip route 10.101.24.2/32 10.1.1.10
+ip route 10.101.27.1/32 10.1.1.10
+ip route 10.129.1.0/29 10.1.1.1
+ip route 10.129.1.254/32 10.1.1.1
+ip route 10.154.0.0/15 10.80.0.2
+ip route 10.158.0.0/16 10.80.0.2
+ip route 10.164.0.0/16 10.80.0.2
+ip route 10.174.0.0/15 10.80.0.2
+ip route 10.200.1.0/24 10.1.1.1
+ip route 10.254.254.3/32 10.255.255.2
+ip route 23.0.0.0/8 10.80.0.26
+ip route 24.0.0.0/8 10.80.0.26
+ip route 27.0.0.0/8 10.80.0.26
+ip route 38.76.96.16/30 10.80.0.2
+ip route 38.76.98.12/30 10.80.0.2
+ip route 38.76.110.120/29 10.80.0.2
+ip route 64.55.228.4/30 10.80.0.2
+ip route 65.126.215.148/30 10.80.0.2
+ip route 76.27.60.128/32 4.28.56.5
+ip route 152.26.14.2/32 null0
+ip route 162.219.216.120/29 10.80.0.2
+ip route 162.219.217.96/30 10.80.0.2
+ip route 173.245.43.184/30 10.80.0.2
+ip route 178.33.167.206/32 null0
+ip route 192.96.201.135/32 null0
+ip route 199.36.248.0/22 null0
+ip route 199.36.250.0/24 null0
+ip route 199.36.250.0/25 10.1.1.1
+ip route 199.36.250.117/32 null0
+ip route 199.36.250.128/30 10.1.1.1
+ip route 199.36.250.160/30 10.1.1.1
+ip route 199.87.120.153/32 69.31.110.149
+ip route 206.78.0.0/16 10.80.0.2
+ip route 216.149.107.200/30 10.80.0.2
+!
+!
+!
+!
+!
+snmp-server
+snmp-server community ..... ro
+snmp-server contact "Admin <admin@getjive.com>"
+snmp-server enable ethe 1/2 ethe 1/4
+snmp-server enable vlan 20
+snmp-server preserve-statistics
+snmp-server host 10.101.24.1 version v1 .....
+snmp-server host 10.199.24.1 version v1 .....
+snmp-server host 10.101.24.1 version v2c .....
+hostname "[DFT-CH1 BGP 1]"
+!
+netconf server
+!
+router ospf
+ area 10.1.1.0
+ default-information-originate always
+!
+!
+!
+!
+!
+!
+interface loopback 1
+ ip address 199.36.250.145/30
+!
+interface loopback 2
+ ip address 10.254.254.2/32
+!
+!
+interface management 1
+ ip address 10.100.1.17/24
+ enable
+!
+interface ethernet 1/1
+ port-name nLayer-FW155:9:45
+ enable
+ ip address 69.31.110.150/30
+ ip policy route-map RTP
+ no spanning-tree
+!
+interface ethernet 1/2
+ port-name "Firewall 1"
+ enable
+ no spanning-tree
+ mon ethernet 1/24 both
+!
+interface ethernet 1/3
+ port-name "BGP Router 2 - iBGP"
+ enable
+ no spanning-tree
+!
+interface ethernet 1/4
+ port-name asr1k/chi-1a:gi0/0/0
+ enable
+ route-only
+ ip address 199.36.250.241/30
+ no spanning-tree
+!
+interface ethernet 1/5
+ port-name "Level3: GC155:5:65|66 -- Circuit ID: BBDQ07656"
+ enable
+ ip address 4.28.56.6/30
+ ip policy route-map RTP
+ no spanning-tree
+ gig-default neg-off
+!
+interface ethernet 1/6
+ port-name SC CustomerLink to Cermak
+ enable
+ no spanning-tree
+!
+interface ethernet 1/7
+ port-name SC CustomerLink to Cermak 413
+ enable
+ no spanning-tree
+!
+interface ethernet 1/8
+ no spanning-tree
+!
+interface ethernet 1/9
+ no spanning-tree
+!
+interface ethernet 1/10
+ no spanning-tree
+!
+interface ethernet 1/11
+ no spanning-tree
+!
+interface ethernet 1/12
+ no spanning-tree
+!
+interface ethernet 1/13
+ enable
+ no spanning-tree
+!
+interface ethernet 1/15
+ enable
+ no spanning-tree
+!
+interface ethernet 1/16
+ enable
+ no spanning-tree
+!
+interface ethernet 1/17
+ no spanning-tree
+!
+interface ethernet 1/18
+ no spanning-tree
+!
+interface ethernet 1/19
+ no spanning-tree
+!
+interface ethernet 1/20
+ no spanning-tree
+!
+interface ethernet 1/21
+ enable
+ no spanning-tree
+!
+interface ethernet 1/22
+ port-name to_s1.39
+ enable
+ route-only
+ ip address 10.1.1.5/30 ospf-ignore
+ no spanning-tree
+ mon ethernet 1/24 both
+!
+interface ethernet 1/23
+ port-name to_s2.40
+ enable
+ route-only
+ ip address 10.1.1.9/30 ospf-ignore
+ no spanning-tree
+ mon ethernet 1/24 both
+!
+interface ethernet 1/24
+ enable
+ no spanning-tree
+!
+interface ve 10
+ port-name "iBGP Interface"
+ ip address 10.2.2.1/30
+ ip policy route-map RTP
+!
+interface ve 11
+ ip address 10.1.11.1/24
+!
+interface ve 20
+ ip ospf area 10.1.1.0
+ ip address 10.1.1.2/30
+!
+interface ve 35
+ ip address 10.255.255.1/28
+ ip policy route-map RTP
+!
+interface ve 80
+ port-name "Cermak ASR"
+ ip address 10.80.0.1/28
+ ip policy route-map RTP
+!
+interface ve 90
+ ip address 1.1.1.1/24 ospf-ignore
+!
+interface ve 128
+ ip address 10.80.0.25/29
+ ip policy route-map RTP
+!
+!
+interface tunnel 12
+!
+!
+!
+router bgp
+ local-as 6643
+ auto-shutdown-new-neighbors
+ neighbor 4.28.56.5 remote-as 3356
+ neighbor 4.28.56.5 soft-reconfiguration inbound
+ neighbor 10.2.2.2 remote-as 6643
+ neighbor 10.2.2.2 shutdown
+ neighbor 10.2.2.2 next-hop-self
+ neighbor 10.2.2.2 update-source ve 10
+ neighbor 10.2.2.2 soft-reconfiguration inbound
+ neighbor 10.80.0.2 remote-as 6643
+ neighbor 10.80.0.2 description ASR1K.ORD
+ neighbor 10.80.0.2 next-hop-self
+ neighbor 10.80.0.2 soft-reconfiguration inbound
+ neighbor 10.80.0.26 remote-as 6643
+ neighbor 10.80.0.26 description IBGP-ASR2
+ neighbor 10.80.0.26 next-hop-self
+ neighbor 10.80.0.26 soft-reconfiguration inbound
+ neighbor 69.31.110.149 remote-as 4436
+ neighbor 69.31.110.149 shutdown
+
+ address-family ipv4 unicast
+ network 199.36.250.0/24
+ neighbor 4.28.56.5 allowas-in 10
+ neighbor 4.28.56.5 prefix-list BOGONS in
+ neighbor 4.28.56.5 prefix-list Level3_OUT out
+ neighbor 4.28.56.5 route-map in Level3_Routes_IN
+ neighbor 4.28.56.5 route-map out Level3_Routes_OUT
+ neighbor 10.2.2.2 route-map in iBGP_Routes_IN
+ neighbor 10.2.2.2 route-map out iBGP_Routes_OUT
+ neighbor 10.80.0.2 allowas-in 10
+ neighbor 10.80.0.2 prefix-list iBGP_ORD_IN in
+ neighbor 10.80.0.2 prefix-list iBGP_ORD_OUT out
+ neighbor 10.80.0.26 allowas-in 10
+ neighbor 10.80.0.26 prefix-list iBGP_ORD_IN_2 in
+ neighbor 10.80.0.26 prefix-list iBGP_ORD_OUT_2 out
+ neighbor 10.80.0.26 route-map in ORD_ASR2_Routes_IN 
+ neighbor 69.31.110.149 allowas-in 10
+ neighbor 69.31.110.149 prefix-list BOGONS in
+ neighbor 69.31.110.149 prefix-list nLayer_OUT out
+ neighbor 69.31.110.149 route-map in nLayer_Routes_IN
+ neighbor 69.31.110.149 route-map out nLayer_Routes_OUT
+ exit-address-family
+
+ address-family ipv4 multicast
+ exit-address-family
+
+ address-family ipv6 unicast
+ exit-address-family
+
+ address-family ipv6 multicast
+ exit-address-family
+
+
+
+!
+!
+!
+cluster CHI 1
+ rbridge-id 1
+ session-vlan 4090
+ member-vlan 11
+ icl CHI ethernet 1/13
+ peer 1.1.1.2 rbridge-id 2 icl CHI
+ deploy
+ client BSW1
+  rbridge-id 100
+  client-interface ethernet 1/15
+  deploy
+ client BSW2
+  rbridge-id 200
+  client-interface ethernet 1/16
+  deploy
+!
+access-list 5 permit 98.112.0.0 0.0.255.255
+!
+access-list 101 permit udp any host 199.36.250.8 range 20000  60000
+access-list 101 permit udp any host 199.36.250.9 range 20000  60000
+access-list 101 permit udp any host 199.36.250.10 range 20000  60000
+access-list 101 permit udp any host 199.36.250.11 range 20000  60000
+access-list 101 permit udp any host 199.36.250.12 range 20000  60000
+access-list 101 permit udp any host 199.36.250.13 range 20000  60000
+access-list 101 permit udp any host 199.36.250.14 range 20000  60000
+access-list 101 permit udp any host 199.36.250.15 range 20000  60000
+access-list 101 permit udp any host 199.36.250.16 range 20000  60000
+access-list 101 permit udp any host 199.36.250.17 range 20000  60000
+access-list 101 permit udp any host 199.36.250.18 range 20000  60000
+access-list 101 permit udp any host 199.36.250.19 range 20000  60000
+access-list 101 permit udp any host 199.36.250.20 range 20000  60000
+access-list 101 permit udp any host 199.36.250.21 range 20000  60000
+access-list 101 permit udp any host 199.36.250.22 range 20000  60000
+access-list 101 permit udp any host 199.36.250.23 range 20000  60000
+access-list 101 permit udp any host 199.36.250.24 range 20000  60000
+access-list 101 permit udp any host 199.36.250.25 range 20000  60000
+access-list 101 permit udp any host 199.36.250.26 range 20000  60000
+access-list 101 permit udp any host 199.36.250.27 range 20000  60000
+access-list 101 permit udp any host 199.36.250.28 range 20000  60000
+access-list 101 permit udp any host 199.36.250.29 range 20000  60000
+access-list 101 permit udp any host 199.36.250.30 range 20000  60000
+access-list 101 permit udp any host 199.36.250.31 range 20000  60000
+access-list 101 permit udp any host 199.36.250.32 range 20000  60000
+access-list 101 permit udp any host 199.36.250.33 range 20000  60000
+access-list 101 permit udp any host 199.36.250.34 range 20000  60000
+access-list 101 permit udp any host 199.36.250.35 range 20000  60000
+access-list 101 permit udp any host 199.36.250.36 range 20000  60000
+access-list 101 permit udp any host 199.36.250.37 range 20000  60000
+access-list 101 permit udp any host 199.36.250.38 range 20000  60000
+access-list 101 permit udp any host 199.36.250.39 range 20000  60000
+access-list 101 permit udp any host 199.36.250.8 range 4000  5000
+access-list 101 permit udp any host 199.36.250.9 range 4000  5000
+access-list 101 permit udp any host 199.36.250.10 range 4000  5000
+access-list 101 permit udp any host 199.36.250.11 range 4000  5000
+access-list 101 permit udp any host 199.36.250.12 range 4000  5000
+access-list 101 permit udp any host 199.36.250.13 range 4000  5000
+access-list 101 permit udp any host 199.36.250.14 range 4000  5000
+access-list 101 permit udp any host 199.36.250.15 range 4000  5000
+access-list 101 permit udp any host 199.36.250.16 range 4000  5000
+access-list 101 permit udp any host 199.36.250.17 range 4000  5000
+access-list 101 permit udp any host 199.36.250.18 range 4000  5000
+access-list 101 permit udp any host 199.36.250.19 range 4000  5000
+access-list 101 permit udp any host 199.36.250.20 range 4000  5000
+access-list 101 permit udp any host 199.36.250.21 range 4000  5000
+access-list 101 permit udp any host 199.36.250.22 range 4000  5000
+access-list 101 permit udp any host 199.36.250.23 range 4000  5000
+access-list 101 permit udp any host 199.36.250.24 range 4000  5000
+access-list 101 permit udp any host 199.36.250.25 range 4000  5000
+access-list 101 permit udp any host 199.36.250.26 range 4000  5000
+access-list 101 permit udp any host 199.36.250.27 range 4000  5000
+access-list 101 permit udp any host 199.36.250.28 range 4000  5000
+access-list 101 permit udp any host 199.36.250.29 range 4000  5000
+access-list 101 permit udp any host 199.36.250.30 range 4000  5000
+access-list 101 permit udp any host 199.36.250.31 range 4000  5000
+access-list 101 permit udp any host 199.36.250.32 range 4000  5000
+access-list 101 permit udp any host 199.36.250.33 range 4000  5000
+access-list 101 permit udp any host 199.36.250.34 range 4000  5000
+access-list 101 permit udp any host 199.36.250.35 range 4000  5000
+access-list 101 permit udp any host 199.36.250.36 range 4000  5000
+access-list 101 permit udp any host 199.36.250.37 range 4000  5000
+access-list 101 permit udp any host 199.36.250.38 range 4000  5000
+access-list 101 permit udp any host 199.36.250.39 range 4000  5000
+access-list 101 permit udp any host 199.36.250.100 range 20000  60000
+access-list 101 permit udp any host 199.36.250.101 range 4000  5000
+access-list 101 permit udp any host 199.36.250.101 range 20000  60000
+access-list 101 permit udp any host 199.36.250.100 range 4000  5000
+access-list 101 permit udp any host 199.36.250.75 range 20000  60000
+access-list 101 permit udp any host 199.36.250.76 range 20000  60000
+access-list 101 permit udp any host 199.36.250.77 range 20000  60000
+access-list 101 permit udp any host 199.36.250.78 range 20000  60000
+access-list 101 permit udp any host 199.36.250.75 range 4000  5000
+access-list 101 permit udp any host 199.36.250.76 range 4000  5000
+access-list 101 permit udp any host 199.36.250.77 range 4000  5000
+access-list 101 permit udp any host 199.36.250.78 range 4000  5000
+access-list 101 permit ip any host 199.36.250.99
+access-list 101 permit udp any host 199.36.250.101 range 20000  60000
+access-list 101 permit udp any host 199.36.250.102 range 20000  60000
+access-list 101 permit udp any host 199.36.250.103 range 20000  60000
+access-list 101 permit udp any host 199.36.250.104 range 20000  60000
+access-list 101 permit udp any host 199.36.250.105 range 20000  60000
+access-list 101 permit udp any host 199.36.250.106 range 20000  60000
+access-list 101 permit udp any host 199.36.250.107 range 20000  60000
+access-list 101 permit udp any host 199.36.250.108 range 20000  60000
+access-list 101 permit udp any host 199.36.250.109 range 20000  60000
+access-list 101 permit udp any host 199.36.250.110 range 20000  60000
+access-list 101 permit udp any host 199.36.250.114 range 20000  60000
+access-list 101 permit udp any host 199.36.250.115 range 20000  60000
+access-list 101 permit udp any host 199.36.250.116 range 20000  60000
+access-list 101 permit udp any host 199.36.250.101 range 4000  5000
+access-list 101 permit udp any host 199.36.250.102 range 4000  5000
+access-list 101 permit udp any host 199.36.250.103 range 4000  5000
+access-list 101 permit udp any host 199.36.250.104 range 4000  5000
+access-list 101 permit udp any host 199.36.250.105 range 4000  5000
+access-list 101 permit udp any host 199.36.250.106 range 4000  5000
+access-list 101 permit udp any host 199.36.250.107 range 4000  5000
+access-list 101 permit udp any host 199.36.250.108 range 4000  5000
+access-list 101 permit udp any host 199.36.250.109 range 4000  5000
+access-list 101 permit udp any host 199.36.250.110 range 4000  5000
+access-list 101 permit udp any host 199.36.250.114 range 4000  5000
+access-list 101 permit udp any host 199.36.250.115 range 4000  5000
+access-list 101 permit udp any host 199.36.250.116 range 4000  5000
+access-list 101 permit ip any host 199.36.250.61
+access-list 101 permit ip any host 199.36.250.60
+access-list 101 permit ip any host 199.36.250.118
+access-list 101 permit ip any host 199.36.250.86
+access-list 101 permit ip any host 199.36.250.111
+access-list 101 permit ip any host 199.36.250.112
+access-list 101 permit ip any host 199.36.250.113
+access-list 101 permit ip any host 199.36.250.87
+access-list 101 permit ip any host 199.36.250.88
+access-list 101 permit ip any host 199.36.250.89
+access-list 101 permit ip any host 199.36.250.8
+access-list 101 permit ip any host 199.36.250.17
+access-list 101 permit ip any host 199.36.250.20
+access-list 101 permit ip any host 199.36.250.120
+!
+access-list 199 permit ip host 66.89.100.210 any mirror
+access-list 199 permit ip any host 66.89.100.210 mirror
+access-list 199 permit ip host 166.70.142.225 any mirror
+access-list 199 permit ip any host 166.70.142.225 mirror
+access-list 199 permit ip any any
+!
+route-map RTP permit 10
+ match ip address 101
+ set ip next-hop 10.1.1.6
+ set ip next-hop 10.1.1.10
+!
+route-map comcast permit 24
+!
+route-map CERMAK_IN permit 1
+!
+route-map CERMAK_OUT permit 1
+!
+route-map COMCAST_IN permit 5
+ match ip address prefix-list DCS_FROM_COMCAST
+route-map COMCAST_IN permit 10
+ match community COMCAST_INTERNAL COMCAST_CUSTOMERS
+route-map COMCAST_IN deny 1000
+!
+route-map COMCAST_OUT permit 100
+ set community  7922:888
+!
+route-map HE_Routes_IN permit 1
+!
+route-map HE_Routes_OUT permit 1
+ set as-path prepend  6643
+!
+route-map iBGP_Routes_IN permit 2
+ match ip address prefix-list iBGP_CERMAK
+!
+route-map iBGP_Routes_OUT permit 10
+ match ip address prefix-list iBGP_OUT
+!
+route-map Level3_Routes_IN permit 10
+ match as-path 15
+ set as-path prepend 6643 6643 6643 6643
+!
+route-map nLayer_Routes_IN deny 1
+route-map nLayer_Routes_IN permit 2
+ set as-path prepend  6643 6643 6643
+!
+route-map Level3_Routes_OUT permit 1
+ set as-path prepend  6643 6643 6643 6643 6643
+!
+route-map nLayer_Routes_OUT permit 1
+ set as-path prepend  6643 6643
+!
+route-map ORD_ASR2_Routes_IN permit 5
+ match as-path 15    
+!
+!
+!
+!
+!
+ip ssh  port 2222
+!
+!
+end
